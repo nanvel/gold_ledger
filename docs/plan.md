@@ -2,7 +2,8 @@
 
 - [ ] MVP
   - [x] Structure
-  - [ ] base ui
+  - [x] base ui
+  - [ ] login form
   - [ ] db
   - [ ] Login API
   - [ ] Base UI
@@ -15,5 +16,10 @@
   - [ ] Deploy per supplier?
   - [ ] DB backups
   - [ ] sentry
+- [ ] UI improvements
+  - [ ] icon
+  - [ ] mobile
+  - [ ] keep the tab that was selected last time
+  - [ ] pick up color scheme / theme switch
 - [ ] Cleanup
 - [ ] Company / Legal
