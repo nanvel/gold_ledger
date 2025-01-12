@@ -1,0 +1,12 @@
+version: '3'
+services:
+  postgresql:
+    image: postgres:alpine
+    environment:
+      POSTGRES_USER: gold_ledger
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: gold_ledger
+    ports:
+      - 5432:5432
+    volumes:
+      - ./scripts/init.db:/docker-entrypoint-initdb.d
