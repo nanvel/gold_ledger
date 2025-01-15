@@ -3,7 +3,8 @@
 - [ ] MVP
   - [x] Structure
   - [x] base ui
-  - [ ] login form
+  - [x] login form UI
+  - [ ] image upload UI (https://codepen.io/chenuin/pen/MdvyjG)
   - [ ] db
   - [ ] Login API
   - [ ] Base UI
