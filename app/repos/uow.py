@@ -18,3 +18,5 @@ class UnitOfFork:
             self._session.commit()
         else:
             self._session.rollback()
+
+        self._session.close()

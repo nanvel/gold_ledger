@@ -3,6 +3,8 @@ import os
 
 import pytest
 from fastapi.testclient import TestClient
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
 
 from app.api.app import create_app
 from app.container import Container
@@ -30,25 +32,33 @@ def data():
 
 
 @pytest.fixture
-def session():
+def session_factory():
     settings = load_settings()
 
-    for session_factory in init_db(settings.db_uri):
-        session = session_factory()
-        session.begin_nested()
-        yield session
-        session.rollback()
+    engine = create_engine(settings.db_uri)
+    with engine.connect() as connection:
+        with connection.begin_nested() as transaction:
+            session_factory = sessionmaker(bind=connection)
+            yield session_factory
+            transaction.rollback()
 
 
 @pytest.fixture
-def container(session):
+def session(session_factory):
+    session = session_factory()
+    yield session
+    session.close()
+
+
+@pytest.fixture
+def container(session_factory):
     container = Container()
+
     container.config.from_dict(load_settings().model_dump())
+    assert "test" in container.config()["db_uri"]
 
-    with container.db.override(lambda: session):
+    with container.db.override(session_factory):
         yield container
-
-    session.rollback()
 
 
 @pytest.fixture
