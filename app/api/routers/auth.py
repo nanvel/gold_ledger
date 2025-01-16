@@ -9,7 +9,7 @@ from passlib.context import CryptContext
 
 from app.container import Container
 from app.models import User, UserRole
-from app.repos.users import UsersRepo
+from app.repos.uow import UnitOfFork
 
 router = APIRouter(
     prefix="/auth",
@@ -29,12 +29,12 @@ class TokenResponse(BaseModel):
 @inject
 def create_access_token(
     form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
-    users_repo: UsersRepo = Depends(Provide[Container.users_repo]),
+    uow: UnitOfFork = Depends(Provide[Container.uow]),
     crypt_context: CryptContext = Depends(Provide[Container.crypt_context]),
     secret_key: str = Depends(Provide[Container.config.secret_key]),
     jwt_algorithm: str = Depends(Provide[Container.jwt_algorithm]),
 ) -> TokenResponse:
-    user = users_repo.by_username(form_data.username)
+    user = uow.users.by_username(form_data.username)
 
     if user and crypt_context.verify(form_data.password, user.password_hash):
         return TokenResponse(
@@ -64,7 +64,7 @@ class RegistrationItem(BaseModel):
 @inject
 def get_current_user(
     token: Annotated[str, Depends(oauth2_scheme)],
-    users_repo: UsersRepo = Depends(Provide[Container.users_repo]),
+    uow: UnitOfFork = Depends(Provide[Container.uow]),
     secret_key: str = Depends(Provide[Container.config.secret_key]),
     jwt_algorithm: str = Depends(Provide[Container.jwt_algorithm]),
 ):
@@ -82,7 +82,7 @@ def get_current_user(
             raise credentials_exception
     except JWTError:
         raise credentials_exception
-    user = users_repo.by_id(user_id)
+    user = uow.users.by_id(user_id)
     if user is None or user.token_version != token_version:
         raise credentials_exception
 
