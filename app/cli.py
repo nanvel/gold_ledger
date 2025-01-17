@@ -30,10 +30,11 @@ def create_admin(username: str, password: str):
     container.init_resources()
 
     try:
-        container.create_user()(
+        user = container.create_user()(
             username=username,
             password=password,
             role=UserRole.ADMIN.value,
         )
+        print(user)
     finally:
         container.shutdown_resources()

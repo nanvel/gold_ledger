@@ -26,3 +26,13 @@ dev = [
     "black>=24.10.0",
     "pytest>=8.3.4",
 ]
+
+[tool.hatch.build.targets.wheel]
+packages = ["app"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project.scripts]
+gold_ledger = "app.cli:app"
