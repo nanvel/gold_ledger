@@ -4,13 +4,16 @@
   - [x] Structure
   - [x] base ui
   - [x] login form UI
-  - [ ] image upload UI (https://codepen.io/chenuin/pen/MdvyjG)
-  - [ ] db
-  - [ ] Login API
-  - [ ] Base UI
-    - [ ] tailwind and daisy-ui 
+  - [x] db
+  - [x] Login API
+  - [x] Base UI
+    - [x] tailwind and daisy-ui
+  - [ ] Cli
+    - [ ] create admin
+    - [ ] reset password
   - [ ] Login UI
   - [ ] plan update
+- [ ] image upload UI (https://codepen.io/chenuin/pen/MdvyjG)
 - [ ] Deploy
   - [ ] Pulumi 
 - [ ] Security

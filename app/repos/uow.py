@@ -13,6 +13,8 @@ class UnitOfFork:
         self._session.begin()
         self.users = UsersRepo(self._session)
 
+        return self
+
     def __exit__(self, exc_type, exc_val, exc_tb):
         if exc_type is None:
             self._session.commit()

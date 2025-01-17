@@ -3,10 +3,17 @@ from passlib.context import CryptContext
 
 from app.resources.database import init_db
 from app.repos.uow import UnitOfFork
+from app.use_cases.create_user import CreateUser
 
 
 class Container(containers.DeclarativeContainer):
     config = providers.Configuration()
+
+    wiring_config = containers.WiringConfiguration(
+        modules=[
+            "app.api.routers.auth",
+        ]
+    )
 
     jwt_algorithm = providers.Object("HS256")
     crypt_context = providers.Singleton(
@@ -18,3 +25,9 @@ class Container(containers.DeclarativeContainer):
     db = providers.Resource(init_db, db_uri=config.db_uri)
 
     uow = providers.Singleton(UnitOfFork, db=db)
+
+    create_user = providers.Factory(
+        CreateUser,
+        uow=uow,
+        crypt_context=crypt_context,
+    )
