@@ -38,3 +38,19 @@ def create_admin(username: str, password: str):
         print(user)
     finally:
         container.shutdown_resources()
+
+
+@app.command()
+def reset_password(username: str, password: str):
+    container = Container()
+    container.config.from_dict(load_settings().model_dump())
+    container.init_resources()
+
+    try:
+        user = container.reset_password()(
+            username=username,
+            password=password,
+        )
+        print(user)
+    finally:
+        container.shutdown_resources()

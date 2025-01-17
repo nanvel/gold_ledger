@@ -9,7 +9,7 @@
   - [x] Base UI
     - [x] tailwind and daisy-ui
   - [ ] Cli
-    - [ ] create admin
+    - [x] create admin
     - [ ] reset password
   - [ ] Login UI
   - [ ] plan update

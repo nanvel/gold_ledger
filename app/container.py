@@ -4,6 +4,7 @@ from passlib.context import CryptContext
 from app.resources.database import init_db
 from app.repos.uow import UnitOfFork
 from app.use_cases.create_user import CreateUser
+from app.use_cases.reset_password import ResetPassword
 
 
 class Container(containers.DeclarativeContainer):
@@ -28,6 +29,11 @@ class Container(containers.DeclarativeContainer):
 
     create_user = providers.Factory(
         CreateUser,
+        uow=uow,
+        crypt_context=crypt_context,
+    )
+    reset_password = providers.Factory(
+        ResetPassword,
         uow=uow,
         crypt_context=crypt_context,
     )

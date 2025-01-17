@@ -23,6 +23,16 @@ class UsersRepo:
 
         return record.id
 
+    def update(self, user: User):
+        record = self._session.query(UserTable).where(UserTable.id == user.id).first()
+        if record:
+            record.username = user.username
+            record.password_hash = user.password_hash
+            record.role = user.role.value
+            record.token_version = user.token_version
+
+            self._session.commit()
+
     def by_id(self, user_id: int) -> Optional[User]:
         record = self._session.query(UserTable).where(UserTable.id == user_id).first()
         if record:
