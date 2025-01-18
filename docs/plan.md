@@ -12,8 +12,10 @@
     - [x] create admin
     - [x] reset password
     - [x] container wrapper for cli
-  - [ ] Login UI
-  - [ ] Create store UI
+  - [x] Login UI
+  - [ ] Side bar
+    - [ ] Log out btn 
+  - [ ] Register store UI
   - [ ] Add a user to store
   - [ ] Create product
   - [ ] List products
