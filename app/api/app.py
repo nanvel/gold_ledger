@@ -14,10 +14,10 @@ from .routers import auth
 
 def create_app(container: Container):
     @asynccontextmanager
-    async def lifespan():
-        await container.init_resources()
+    async def lifespan(a: FastAPI):
+        a.container.init_resources()
         yield
-        await container.shutdown_resources()
+        a.container.shutdown_resources()
 
     app = FastAPI(title="Gold Ledger API", version="0.1.0", lifespan=lifespan)
     app.container = container

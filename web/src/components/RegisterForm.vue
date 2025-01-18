@@ -11,13 +11,16 @@
       </h2>
     </div>
 
+    <div
+      role="tablist"
+      class="tabs tabs-boxed mt-10 sm:mx-auto sm:w-full sm:max-w-sm"
+    >
+      <a role="tab" class="tab tab-active">Retailer</a>
+      <a role="tab" class="tab">Supplier</a>
+    </div>
+
     <div class="mt-2 sm:mx-auto sm:w-full sm:max-w-sm">
-      <form
-        class="space-y-4"
-        action="#"
-        method="POST"
-        v-on:submit.prevent="onLogin"
-      >
+      <form class="space-y-4" action="#" method="POST">
         <div class="form-control w-full">
           <div class="label"><span class="label-text">Email address</span></div>
           <input
@@ -27,13 +30,13 @@
             autocomplete="email"
             required
             class="input input-bordered w-full max-w-sm input-sm"
-            v-model="username"
           />
         </div>
 
         <div class="form-control w-full">
           <div class="label">
-            <span class="label-text">Password</span>
+            <span class="label-text">Password</span
+            ><span class="label-text-alt">Forgot password?</span>
           </div>
           <input
             type="password"
@@ -42,7 +45,6 @@
             autocomplete="current-password"
             required
             class="input input-bordered w-full max-w-sm input-sm"
-            v-model="password"
           />
         </div>
 
@@ -57,28 +59,14 @@
       </form>
 
       <p class="mt-10 text-center text-sm/6">
-        Not a member?
-        <RouterLink
-          to="/register"
-          v-on:click="onMenuClick"
-          class="font-semibold"
-          >Register a store</RouterLink
+        Have a account?
+        <RouterLink to="/login" v-on:click="onMenuClick" class="font-semibold"
+          >Sign in</RouterLink
         >
       </p>
     </div>
   </div>
 </template>
-<script setup>
-import { ref } from "vue";
-import { useAuthStore } from "../stores/index.js";
-
-const username = ref("");
-const password = ref("");
-const { login } = useAuthStore();
-
-const onLogin = async () => {
-  await login(username.value, password.value);
-};
-
+<script setup lang="ts">
 import { RouterLink } from "vue-router";
 </script>
