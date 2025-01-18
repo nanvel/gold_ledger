@@ -1,15 +1,34 @@
-import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
+import { useAuthStore } from "@/stores/auth";
+import { createRouter, createWebHistory } from "vue-router";
+import HomeView from "@/views/HomeView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: '/',
-      name: 'home',
+      path: "/",
+      name: "home",
       component: HomeView,
     },
   ],
-})
+});
 
-export default router
+router.beforeEach(async (to) => {
+  // redirect to login page if not logged in and trying to access a restricted page
+  const loginPath = "/login";
+  const registerPath = "/register";
+  const publicPages = [loginPath, registerPath];
+  const authRequired = !publicPages.includes(to.path);
+  const { loggedIn, setReturnUrl } = useAuthStore();
+
+  if (loggedIn && (to.path === loginPath || to.path === registerPath)) {
+    return "/";
+  }
+
+  if (authRequired && !loggedIn) {
+    setReturnUrl(to.fullPath);
+    return loginPath;
+  }
+});
+
+export default router;

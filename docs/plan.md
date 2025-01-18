@@ -8,7 +8,7 @@
   - [x] Login API
   - [x] Base UI
     - [x] tailwind and daisy-ui
-  - [ ] Cli
+  - [x] Cli
     - [x] create admin
     - [x] reset password
     - [x] container wrapper for cli
@@ -33,3 +33,4 @@
   - [ ] pick up color scheme / theme switch
 - [ ] Cleanup
 - [ ] Company / Legal
+- [ ] Landing page
