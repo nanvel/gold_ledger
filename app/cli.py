@@ -8,6 +8,19 @@ from app.settings import load_settings
 app = typer.Typer()
 
 
+class _Container:
+    def __init__(self):
+        self._container = Container()
+        self._container.config.from_dict(load_settings().model_dump())
+
+    def __enter__(self):
+        self._container.init_resources()
+        return self._container
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self._container.shutdown_resources()
+
+
 @app.callback()
 def callback():
     """Gold Ledger."""
@@ -25,32 +38,20 @@ def dev_server():
 
 @app.command()
 def create_admin(username: str, password: str):
-    container = Container()
-    container.config.from_dict(load_settings().model_dump())
-    container.init_resources()
-
-    try:
+    with _Container() as container:
         user = container.create_user()(
             username=username,
             password=password,
             role=UserRole.ADMIN.value,
         )
-        print(user)
-    finally:
-        container.shutdown_resources()
+        typer.echo(user)
 
 
 @app.command()
 def reset_password(username: str, password: str):
-    container = Container()
-    container.config.from_dict(load_settings().model_dump())
-    container.init_resources()
-
-    try:
+    with _Container() as container:
         user = container.reset_password()(
             username=username,
             password=password,
         )
-        print(user)
-    finally:
-        container.shutdown_resources()
+        typer.echo(user)

@@ -19,6 +19,7 @@ dependencies = [
     "sqlalchemy>=2.0.37",
     "typer>=0.15.1",
     "uvicorn>=0.34.0",
+    "rich>=13.9.4",
 ]
 
 [dependency-groups]

@@ -10,8 +10,14 @@
     - [x] tailwind and daisy-ui
   - [ ] Cli
     - [x] create admin
-    - [ ] reset password
+    - [x] reset password
+    - [x] container wrapper for cli
   - [ ] Login UI
+  - [ ] Create store UI
+  - [ ] Add a user to store
+  - [ ] Create product
+  - [ ] List products
+  - [ ] Filter products
   - [ ] plan update
 - [ ] image upload UI (https://codepen.io/chenuin/pen/MdvyjG)
 - [ ] Deploy
