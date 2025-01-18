@@ -1,7 +1,11 @@
+from .retailer_stores import RetailerStoresRepo
+from .supplier_stores import SupplierStoresRepo
 from .users import UsersRepo
 
 
 class UnitOfFork:
+    retailer_stores: RetailerStoresRepo
+    supplier_stores: SupplierStoresRepo
     users: UsersRepo
 
     def __init__(self, db):
@@ -11,6 +15,8 @@ class UnitOfFork:
     def __enter__(self):
         self._session = self._db()
         self._session.begin()
+        self.retailer_stores = RetailerStoresRepo(self._session)
+        self.supplier_stores = SupplierStoresRepo(self._session)
         self.users = UsersRepo(self._session)
 
         return self

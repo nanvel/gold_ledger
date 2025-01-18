@@ -16,6 +16,8 @@ class CreateUser:
             password_hash=self._crypt_context.hash(password),
             role=UserRole(role),
             token_version=0,
+            supplier_store_id=None,
+            retailer_store_id=None,
         )
         with self._uow:
             user_id = self._uow.users.create(user)

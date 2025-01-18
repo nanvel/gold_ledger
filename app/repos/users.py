@@ -15,6 +15,8 @@ class UsersRepo:
             username=user.username,
             password_hash=user.password_hash,
             role=user.role.value,
+            supplier_store_id=user.supplier_store_id,
+            retailer_store_id=user.retailer_store_id,
         )
 
         self._session.add(record)
@@ -30,6 +32,8 @@ class UsersRepo:
             record.password_hash = user.password_hash
             record.role = user.role.value
             record.token_version = user.token_version
+            record.supplier_store_id = user.supplier_store_id
+            record.retailer_store_id = user.retailer_store_id
 
             self._session.commit()
 
@@ -42,6 +46,8 @@ class UsersRepo:
                 password_hash=record.password_hash,
                 role=UserRole(record.role),
                 token_version=record.token_version,
+                supplier_store_id=record.supplier_store_id,
+                retailer_store_id=record.retailer_store_id,
             )
 
     def by_username(self, username: str) -> Optional[User]:
@@ -55,4 +61,6 @@ class UsersRepo:
                 password_hash=record.password_hash,
                 role=UserRole(record.role),
                 token_version=record.token_version,
+                supplier_store_id=record.supplier_store_id,
+                retailer_store_id=record.retailer_store_id,
             )

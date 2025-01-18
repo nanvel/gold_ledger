@@ -1,4 +1,3 @@
-from pydantic import BaseModel, EmailStr
 from typing import Annotated
 
 from dependency_injector.wiring import Provide, inject
@@ -6,6 +5,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from jose import jwt, JWTError
 from passlib.context import CryptContext
+from pydantic import BaseModel
 
 from app.container import Container
 from app.models import User, UserRole
@@ -49,17 +49,13 @@ def create_access_token(
                 algorithm=jwt_algorithm,
             ),
             token_type="bearer",
-            role=user.role,
+            role=user.role.value,
         )
 
     raise HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="User authentication failed.",
     )
-
-
-class RegistrationItem(BaseModel):
-    email: EmailStr
 
 
 @inject

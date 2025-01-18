@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from typing import Optional
 
 from .user_role import UserRole
 
@@ -10,3 +11,5 @@ class User:
     password_hash: str
     role: UserRole
     token_version: int
+    supplier_store_id: Optional[int]
+    retailer_store_id: Optional[int]
