@@ -13,6 +13,7 @@ class Container(containers.DeclarativeContainer):
     wiring_config = containers.WiringConfiguration(
         modules=[
             "app.api.routers.auth",
+            "app.api.routers.me",
             "app.api.routers.register",
         ]
     )

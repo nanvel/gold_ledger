@@ -17,14 +17,17 @@
     - [x] dark mode 
     - [x] Log out btn 
   - [x] Register store UI
-  - [ ] Register store API
-    - [ ] store models
-    - [ ] store db
-  - [ ] Add a user to store
+  - [x] Register store API
+    - [x] store models
+    - [x] store db
+  - [ ] fetch store info / No store
+  - [ ] retailers search
   - [ ] Create product
   - [ ] List products
-  - [ ] Filter products
-  - [ ] plan update
+- [ ] Deploy
+- [ ] Add a user to store
+- [ ] Filter products
+- [ ] plan update
 - [ ] image upload UI (https://codepen.io/chenuin/pen/MdvyjG)
 - [ ] Deploy
   - [ ] Pulumi 

@@ -101,7 +101,7 @@
       </form>
 
       <p class="mt-10 text-center text-sm/6">
-        Have a account?
+        Have an account?
         <RouterLink to="/login" class="font-semibold">Sign in</RouterLink>
       </p>
     </div>

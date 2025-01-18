@@ -11,7 +11,7 @@ class SupplierStoresRepo:
         self._session = session
 
     def by_id(self, store_id: int) -> Optional[SupplierStore]:
-        record = self._session.query(SupplierStoreTable).filter_by(id=store_id)
+        record = self._session.query(SupplierStoreTable).filter_by(id=store_id).first()
         if record:
             return SupplierStore(
                 id=record.id,

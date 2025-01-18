@@ -13,7 +13,7 @@ router = APIRouter()
 
 
 class RegisterStoreForm(BaseModel):
-    type: str
+    type: StoreType
     name: str
     email: EmailStr
     password: str

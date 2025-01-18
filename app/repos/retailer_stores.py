@@ -11,7 +11,7 @@ class RetailerStoresRepo:
         self._session = session
 
     def by_id(self, store_id: int) -> Optional[RetailerStore]:
-        record = self._session.query(RetailerStoreTable).filter_by(id=store_id)
+        record = self._session.query(RetailerStoreTable).filter_by(id=store_id).first()
         if record:
             return RetailerStore(
                 id=record.id,

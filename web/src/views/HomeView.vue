@@ -1,8 +1,3 @@
-<script setup>
-import DarkModeToggle from "@/components/DarkModeToggle.vue";
-import LogOutButton from "@/components/LogOutButton.vue";
-</script>
-
 <template>
   <div class="drawer lg:drawer-open">
     <input id="my-drawer-2" type="checkbox" class="drawer-toggle" />
@@ -19,8 +14,8 @@ import LogOutButton from "@/components/LogOutButton.vue";
         class="drawer-overlay"
       ></label>
       <ul class="menu bg-base-200 text-base-content min-h-full w-80 p-4">
-        <li><a>Sidebar Item 1</a></li>
-        <li><a>Sidebar Item 2</a></li>
+        <li><a>Retailers</a></li>
+        <li><a>Products</a></li>
         <li><LogOutButton /></li>
         <li>
           <DarkModeToggle />
@@ -29,3 +24,15 @@ import LogOutButton from "@/components/LogOutButton.vue";
     </div>
   </div>
 </template>
+
+<script setup>
+import DarkModeToggle from "@/components/DarkModeToggle.vue";
+import LogOutButton from "@/components/LogOutButton.vue";
+import { onMounted } from "vue";
+import { httpClient } from "@/services/http.js";
+
+onMounted(async () => {
+  const resp = await httpClient.get("/api/me");
+  console.log(resp.data);
+});
+</script>
