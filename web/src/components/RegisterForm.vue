@@ -15,12 +15,27 @@
       role="tablist"
       class="tabs tabs-boxed mt-10 sm:mx-auto sm:w-full sm:max-w-sm"
     >
-      <a role="tab" class="tab tab-active">Retailer</a>
-      <a role="tab" class="tab">Supplier</a>
+      <a
+        role="tab"
+        :class="{ tab: true, 'tab-active': storeType === 'retailer' }"
+        v-on:click="storeType = 'retailer'"
+        >Retailer</a
+      >
+      <a
+        role="tab"
+        :class="{ tab: true, 'tab-active': storeType === 'supplier' }"
+        v-on:click="storeType = 'supplier'"
+        >Supplier</a
+      >
     </div>
 
     <div class="mt-2 sm:mx-auto sm:w-full sm:max-w-sm">
-      <form class="space-y-4" action="#" method="POST">
+      <form
+        class="space-y-4"
+        action="#"
+        method="POST"
+        v-on:submit.prevent="onRegister"
+      >
         <div class="form-control w-full">
           <div class="label"><span class="label-text">Store name</span></div>
           <input
@@ -29,6 +44,7 @@
             id="name"
             required
             class="input input-bordered w-full max-w-sm input-sm"
+            v-model="name"
           />
         </div>
 
@@ -41,6 +57,7 @@
             autocomplete="email"
             required
             class="input input-bordered w-full max-w-sm input-sm"
+            v-model="email"
           />
         </div>
 
@@ -54,6 +71,7 @@
             id="password"
             required
             class="input input-bordered w-full max-w-sm input-sm"
+            v-model="password"
           />
         </div>
 
@@ -67,6 +85,7 @@
             id="password-repeat"
             required
             class="input input-bordered w-full max-w-sm input-sm"
+            v-model="passwordRepeat"
           />
         </div>
 
@@ -74,6 +93,7 @@
           <button
             type="submit"
             class="btn btn-primary btn-sm sm:mx-auto sm:w-full sm:max-w-sm mt-4"
+            :disabled="loading"
           >
             Register
           </button>
@@ -82,13 +102,56 @@
 
       <p class="mt-10 text-center text-sm/6">
         Have a account?
-        <RouterLink to="/login" v-on:click="onMenuClick" class="font-semibold"
-          >Sign in</RouterLink
-        >
+        <RouterLink to="/login" class="font-semibold">Sign in</RouterLink>
       </p>
     </div>
   </div>
 </template>
 <script setup lang="ts">
-import { RouterLink } from "vue-router";
+import { ref } from "vue";
+import { httpClient } from "@/services/http.js";
+import { useAuthStore } from "@/stores/index.js";
+import { RouterLink, useRouter } from "vue-router";
+import { useToast } from "vue-toastification";
+
+const storeType = ref("retailer");
+const email = ref("");
+const password = ref("");
+const passwordRepeat = ref("");
+const name = ref("");
+const loading = ref(false);
+
+const { login } = useAuthStore();
+const toast = useToast();
+
+const onRegister = async () => {
+  if (loading.value) {
+    return;
+  }
+
+  if (password.value !== passwordRepeat.value) {
+    toast.error("Passwords do not match.");
+
+    return;
+  }
+
+  loading.value = true;
+  try {
+    const res = await httpClient.post("/api/register", {
+      type: storeType.value,
+      name: name.value,
+      email: email.value,
+      password: password.value,
+    });
+
+    if (res.success) {
+      toast.success("The store was created.");
+      await login(email.value, password.value);
+    } else {
+      toast.error("An error occurred.");
+    }
+  } finally {
+    loading.value = false;
+  }
+};
 </script>

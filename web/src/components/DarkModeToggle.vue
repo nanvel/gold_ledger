@@ -61,7 +61,6 @@ const toggleTheme = () => {
 
 onMounted(() => {
   const localTheme = localStorage.getItem("theme");
-  console.log(localTheme, theme.value);
   if (localTheme !== theme.value) {
     toggleTheme();
   }

@@ -50,6 +50,7 @@
           <button
             type="submit"
             class="btn btn-primary btn-sm sm:mx-auto sm:w-full sm:max-w-sm mt-4"
+            :disabled="loading"
           >
             Sign in
           </button>
@@ -58,10 +59,7 @@
 
       <p class="mt-10 text-center text-sm/6">
         Not a member?
-        <RouterLink
-          to="/register"
-          v-on:click="onMenuClick"
-          class="font-semibold"
+        <RouterLink to="/register" class="font-semibold"
           >Register a store</RouterLink
         >
       </p>
@@ -70,15 +68,23 @@
 </template>
 <script setup>
 import { ref } from "vue";
-import { useAuthStore } from "../stores/index.js";
+import { useAuthStore } from "@/stores/index.js";
+import { RouterLink } from "vue-router";
 
+const loading = ref(false);
 const username = ref("");
 const password = ref("");
 const { login } = useAuthStore();
 
 const onLogin = async () => {
-  await login(username.value, password.value);
+  if (loading.value) {
+    return;
+  }
+  loading.value = true;
+  try {
+    await login(username.value, password.value);
+  } finally {
+    loading.value = false;
+  }
 };
-
-import { RouterLink } from "vue-router";
 </script>
