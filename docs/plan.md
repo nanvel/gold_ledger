@@ -13,7 +13,8 @@
     - [x] reset password
     - [x] container wrapper for cli
   - [x] Login UI
-  - [ ] Side bar
+  - [ ] Sidebar
+    - [x] dark mode 
     - [ ] Log out btn 
   - [ ] Register store UI
   - [ ] Add a user to store

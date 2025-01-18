@@ -3,5 +3,7 @@ import LoginForm from "@/components/LoginForm.vue";
 </script>
 
 <template>
-  <LoginForm />
+  <div class="h-screen overflow-scroll">
+    <LoginForm class="h-screen" />
+  </div>
 </template>

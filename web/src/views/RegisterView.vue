@@ -3,5 +3,7 @@ import RegisterForm from "@/components/RegisterForm.vue";
 </script>
 
 <template>
-  <RegisterForm />
+  <div class="h-screen overflow-scroll">
+    <RegisterForm />
+  </div>
 </template>

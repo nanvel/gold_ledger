@@ -7,7 +7,7 @@
         alt="Your Company"
       />
       <h2 class="mt-10 text-center text-2xl/9 font-bold tracking-tight">
-        Sign in to your account
+        Register a store
       </h2>
     </div>
 
@@ -22,6 +22,17 @@
     <div class="mt-2 sm:mx-auto sm:w-full sm:max-w-sm">
       <form class="space-y-4" action="#" method="POST">
         <div class="form-control w-full">
+          <div class="label"><span class="label-text">Store name</span></div>
+          <input
+            type="text"
+            name="name"
+            id="name"
+            required
+            class="input input-bordered w-full max-w-sm input-sm"
+          />
+        </div>
+
+        <div class="form-control w-full">
           <div class="label"><span class="label-text">Email address</span></div>
           <input
             type="email"
@@ -35,14 +46,25 @@
 
         <div class="form-control w-full">
           <div class="label">
-            <span class="label-text">Password</span
-            ><span class="label-text-alt">Forgot password?</span>
+            <span class="label-text">Password</span>
           </div>
           <input
             type="password"
             name="password"
             id="password"
-            autocomplete="current-password"
+            required
+            class="input input-bordered w-full max-w-sm input-sm"
+          />
+        </div>
+
+        <div class="form-control w-full">
+          <div class="label">
+            <span class="label-text">Repeat password</span>
+          </div>
+          <input
+            type="password"
+            name="passwordRepeat"
+            id="password-repeat"
             required
             class="input input-bordered w-full max-w-sm input-sm"
           />
@@ -53,7 +75,7 @@
             type="submit"
             class="btn btn-primary btn-sm sm:mx-auto sm:w-full sm:max-w-sm mt-4"
           >
-            Sign in
+            Register
           </button>
         </div>
       </form>
