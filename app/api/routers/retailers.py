@@ -1,0 +1,40 @@
+from typing import Optional, Tuple
+
+from dependency_injector.wiring import inject, Provide
+from fastapi import APIRouter, Depends
+from pydantic import BaseModel
+
+from app.container import Container
+from app.models import RetailerOrderBy
+from app.repos.uow import UnitOfFork
+from app.repos.retailer_stores import RetailStoreSearchItem
+from .auth import get_active_user
+
+router = APIRouter()
+
+
+class ResponseItem(BaseModel):
+    items: Tuple[RetailStoreSearchItem, ...]
+    total: int
+
+
+@router.get("/retailers", dependencies=[Depends(get_active_user)])
+@inject
+def filter_retailer_stores(
+    uow: UnitOfFork = Depends(Provide[Container.uow]),
+    q: Optional[str] = None,
+    offset: int = 0,
+    limit: int = 20,
+    order_by: RetailerOrderBy = RetailerOrderBy.CREATED,
+    reverse: bool = True,
+) -> ResponseItem:
+    with uow:
+        total, items = uow.retailer_stores.filter(
+            q=q,
+            order_by=order_by,
+            reverse=reverse,
+            offset=offset,
+            limit=limit,
+        )
+
+    return ResponseItem(items=items, total=total)

@@ -22,6 +22,7 @@
     - [x] store db
   - [x] fetch store info / No store
   - [ ] retailers search
+    - [ ] api (simple icontains) 
   - [ ] Create product
   - [ ] List products
 - [ ] Deploy
@@ -43,3 +44,5 @@
 - [ ] Cleanup
 - [ ] Company / Legal
 - [ ] Landing page
+- [ ] pg full text search
+- [ ] retailer_stores -> retailers, supplier_stores - > suppliers

@@ -28,7 +28,6 @@ def get_me(
     uow: UnitOfFork = Depends(Provide[Container.uow]),
 ) -> ResponseItem:
     store_type = None
-    print(user)
     if user.supplier_store_id is not None:
         store_type = StoreType.SUPPLIER
         with uow:

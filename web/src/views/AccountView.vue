@@ -7,7 +7,7 @@
         {{ myEmail }}
       </div>
 
-      <button class="btn" v-on:click="logout">Log out</button>
+      <button class="btn btn-primary" v-on:click="logout">Log out</button>
 
       <h3 class="text-2xl font-semibold">Theme</h3>
       <div class="join join-horizontal mt-2">
@@ -32,8 +32,6 @@ import Navbar from "@/components/Navbar.vue";
 import { useAuthStore, useMeStore } from "@/stores/index.js";
 import { storeToRefs } from "pinia";
 
-const authStore = useAuthStore();
-
 const meStore = useMeStore();
 const { selectedTheme, myEmail } = storeToRefs(meStore);
 
@@ -48,6 +46,8 @@ const setTheme = (theme) => {
 };
 
 const logout = async () => {
+  const authStore = useAuthStore();
+
   await authStore.logout();
 };
 </script>

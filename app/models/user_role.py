@@ -5,16 +5,18 @@ from enum import Enum
 @dataclass(frozen=True)
 class UserRoleValue:
     value: int
-    name: str
+    label: str
     slug: str
 
 
 class UserRole(int, Enum):
-    ADMIN = UserRoleValue(value=99, name="Administrator", slug="admin")
-    SHOP_OWNER = UserRoleValue(value=2, name="Shop Owner", slug="shop_admin")
-    EMPLOYEE = UserRoleValue(value=1, name="Employee", slug="employee")
+    ADMIN = UserRoleValue(value=99, label="Administrator", slug="admin")
+    SHOP_OWNER = UserRoleValue(value=2, label="Shop Owner", slug="shop_admin")
+    EMPLOYEE = UserRoleValue(value=1, label="Employee", slug="employee")
 
-    def __new__(cls, *args, **kwargs):
-        obj = super().__new__(cls)
-        obj._value_ = args[0].value
+    def __new__(cls, arg):
+        obj = int.__new__(cls, arg.value)
+        obj._value_ = arg.value
+        obj.label = arg.label
+        obj.slug = arg.slug
         return obj

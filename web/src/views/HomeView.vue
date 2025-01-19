@@ -1,5 +1,5 @@
 <template>
-  <Navbar> Hi! </Navbar>
+  <Navbar> Dashboard ... </Navbar>
 </template>
 
 <script setup>

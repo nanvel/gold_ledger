@@ -25,11 +25,13 @@
             </svg>
           </label>
         </div>
-        <div class="mx-2 flex-1 px-2">{{ storeName }}</div>
+        <div class="mx-2 flex-1 px-2">
+          <RouterLink to="/">{{ storeName }}</RouterLink>
+        </div>
         <div class="hidden flex-none lg:block">
           <ul class="menu menu-horizontal">
             <!-- Navbar menu content here -->
-            <li><a>Retailers</a></li>
+            <li><RouterLink to="/retailers">Retailers</RouterLink></li>
             <li><a>Products</a></li>
             <li><RouterLink to="/account">Account</RouterLink></li>
           </ul>
@@ -47,7 +49,7 @@
       ></label>
       <ul class="menu bg-base-200 min-h-full w-80 p-4">
         <!-- Sidebar content here -->
-        <li><a>Retailers</a></li>
+        <li><RouterLink to="/retailers">Retailers</RouterLink></li>
         <li><a>Products</a></li>
         <li><RouterLink to="/account">Account</RouterLink></li>
       </ul>
