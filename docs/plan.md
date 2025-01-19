@@ -1,6 +1,6 @@
 # Plan
 
-- [ ] MVP
+- [x] MVP
   - [x] Structure
   - [x] base ui
   - [x] login form UI
@@ -29,9 +29,9 @@
       - [x] model
       - [x] api
       - [x] ui
-    - [ ] show common products
-      - [ ] api
-      - [ ] ui
+    - [x] show common products
+      - [x] api
+      - [x] ui
 - [ ] Deploy
 - [ ] Add a user to store
 - [ ] Filter products
