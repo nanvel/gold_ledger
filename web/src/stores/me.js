@@ -21,6 +21,10 @@ export const useMeStore = defineStore("me", () => {
   };
 
   const load = async () => {
+    if (myEmail.value) {
+      return;
+    }
+
     document.body.setAttribute("data-theme", selectedTheme.value);
 
     const resp = await httpClient.get(baseUrl, null, null);

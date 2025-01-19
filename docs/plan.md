@@ -21,10 +21,12 @@
     - [x] store models
     - [x] store db
   - [x] fetch store info / No store
-  - [ ] retailers search
-    - [ ] api (simple icontains) 
-  - [ ] Create product
-  - [ ] List products
+  - [x] retailers search
+    - [x] api (simple icontains)
+  - [ ] retailer page
+    - [ ] api
+    - [ ] Create product
+    - [ ] show common products
 - [ ] Deploy
 - [ ] Add a user to store
 - [ ] Filter products

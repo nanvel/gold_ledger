@@ -12,6 +12,7 @@ from app.container import Container
 from .routers import auth
 from .routers import me
 from .routers import register
+from .routers import retailer
 from .routers import retailers
 
 
@@ -30,6 +31,7 @@ def create_app(container: Container):
     app.include_router(auth.router, prefix="/api")
     app.include_router(me.router, prefix="/api")
     app.include_router(register.router, prefix="/api")
+    app.include_router(retailer.router, prefix="/api")
     app.include_router(retailers.router, prefix="/api")
 
     @app.get("/docs", include_in_schema=False)
