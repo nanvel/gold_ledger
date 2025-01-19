@@ -3,7 +3,7 @@
     <article class="prose lg:prose-xl py-4 px-2">
       <h2>Account</h2>
       <h3 class="text-2xl font-semibold">Session</h3>
-      <div class="p-2">
+      <div class="py-2">
         {{ myEmail }}
       </div>
 

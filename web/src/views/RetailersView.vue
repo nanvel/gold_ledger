@@ -3,6 +3,7 @@
     <article class="prose lg:prose-xl py-4 px-2">
       <h2>Retailers</h2>
     </article>
+
     <RetailersSearch />
   </Navbar>
 </template>
