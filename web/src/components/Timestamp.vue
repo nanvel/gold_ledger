@@ -1,7 +1,9 @@
 <template>
   {{ timeString }}{{ endTimeString }}
-  <span v-if="timeString.length">({{ durationString }})</span
-  ><span v-else>{{ durationString }}</span>
+  <template v-if="showDuration">
+    <span v-if="timeString.length">({{ durationString }})</span
+    ><span v-else>{{ durationString }}</span>
+  </template>
 </template>
 
 <script setup>

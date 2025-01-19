@@ -25,11 +25,13 @@
     - [x] api (simple icontains)
   - [ ] retailer page
     - [x] api
-    - [ ] Create product
+    - [x] Create product
       - [x] model
       - [x] api
-      - [ ] ui
+      - [x] ui
     - [ ] show common products
+      - [ ] api
+      - [ ] ui
 - [ ] Deploy
 - [ ] Add a user to store
 - [ ] Filter products

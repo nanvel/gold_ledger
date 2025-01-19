@@ -1,4 +1,5 @@
 from decimal import Decimal
+from typing import Optional, Tuple
 
 from dependency_injector.wiring import Provide, inject
 from fastapi import APIRouter, Depends, HTTPException, status
@@ -6,6 +7,7 @@ from pydantic import BaseModel
 
 from app.container import Container
 from app.models import Product, Timestamp, User
+from app.repos.products import ProductSearchItem
 from app.repos.uow import UnitOfFork
 from .auth import get_active_user
 
@@ -66,3 +68,34 @@ def create_product(
         )
 
     return ProductResponse(success=True)
+
+
+class ProductsResponse(BaseModel):
+    total: int
+    items: Tuple[ProductSearchItem, ...]
+
+
+@router.get("/products")
+@inject
+def get_products(
+    retailer_id: Optional[int] = None,
+    supplier_id: Optional[int] = None,
+    user: User = Depends(get_active_user),
+    uow: UnitOfFork = Depends(Provide[Container.uow]),
+    limit: int = 20,
+    offset: int = 0,
+) -> ProductsResponse:
+    if user.is_supplier:
+        supplier_id = user.supplier_store_id
+    else:
+        retailer_id = user.retailer_store_id
+
+    with uow:
+        total, items = uow.products.filter(
+            supplier_id=supplier_id,
+            retailer_id=retailer_id,
+            limit=limit,
+            offset=offset,
+        )
+
+    return ProductsResponse(total=total, items=items)

@@ -5,6 +5,8 @@
     </article>
 
     <AddProduct :retailer_id="retailerId" />
+
+    <ProductsTable :retailerId="retailerId" />
   </Navbar>
 </template>
 
@@ -14,6 +16,7 @@ import { onMounted, ref } from "vue";
 import { httpClient } from "@/services/http.js";
 import router from "@/router";
 import AddProduct from "@/components/AddProduct.vue";
+import ProductsTable from "@/components/ProductsTable.vue";
 
 const retailerName = ref(false);
 const retailerId = ref(parseInt(router.currentRoute.value.params.id));
