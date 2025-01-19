@@ -21,7 +21,9 @@ class ProductTable(Base):
     custom_fields: Mapped[dict] = mapped_column(type_=sa.JSON)
     picture: Mapped[dict] = mapped_column(type_=sa.JSON)
     supplier_id: Mapped[int] = mapped_column(sa.ForeignKey("supplier_stores.id"))
-    retailer_id: Mapped[int] = mapped_column(sa.ForeignKey("retailer_stores.id"))
+    retailer_id: Mapped[int] = mapped_column(
+        sa.ForeignKey("retailer_stores.id"), index=True
+    )
     creator_id: Mapped[int] = mapped_column(sa.ForeignKey("users.id"))
 
     created_at: Mapped[datetime] = mapped_column(server_default=func.now())
@@ -30,4 +32,12 @@ class ProductTable(Base):
         onupdate=func.now(),
     )
 
-    __table_args__ = (sa.PrimaryKeyConstraint("id"),)
+    __table_args__ = (
+        sa.PrimaryKeyConstraint("id"),
+        sa.Index(
+            "idx_products_supplier_retailer_created",
+            "supplier_id",
+            "retailer_id",
+            "created_at",
+        ),
+    )
