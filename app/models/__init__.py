@@ -1,3 +1,4 @@
+from .product import Product
 from .retailer_store import RetailerStore
 from .retailer_order_by import RetailerOrderBy
 from .supplier_store import SupplierStore
@@ -8,6 +9,7 @@ from .user_role import UserRole
 
 
 __all__ = (
+    "Product",
     "RetailerStore",
     "RetailerOrderBy",
     "SupplierStore",

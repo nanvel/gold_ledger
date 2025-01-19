@@ -24,8 +24,11 @@
   - [x] retailers search
     - [x] api (simple icontains)
   - [ ] retailer page
-    - [ ] api
+    - [x] api
     - [ ] Create product
+      - [ ] model
+      - [ ] api
+      - [ ] ui
     - [ ] show common products
 - [ ] Deploy
 - [ ] Add a user to store

@@ -1,16 +1,20 @@
 from dataclasses import dataclass
+from decimal import Decimal
+
+from .timestamp import Timestamp
 
 
 @dataclass
 class Product:
-    uuid: str
+    id: int
     name: str
-    date: str
-    weight: float
-    quality: str
-    rate_per_gram: float
-    total_amount: float
+    date: Timestamp
+    weight: Decimal
+    quality: Decimal
+    rate_per_gram: Decimal
+    total_amount: Decimal
     custom_fields: dict
-    picture: str
-    supplier: int
-    retailer: int
+    picture: dict
+    supplier_id: int
+    retailer_id: int
+    creator_id: int

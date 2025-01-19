@@ -11,6 +11,7 @@ from app.container import Container
 
 from .routers import auth
 from .routers import me
+from .routers import products
 from .routers import register
 from .routers import retailer
 from .routers import retailers

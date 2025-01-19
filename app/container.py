@@ -14,6 +14,7 @@ class Container(containers.DeclarativeContainer):
         modules=[
             "app.api.routers.auth",
             "app.api.routers.me",
+            "app.api.routers.products",
             "app.api.routers.register",
             "app.api.routers.retailer",
             "app.api.routers.retailers",

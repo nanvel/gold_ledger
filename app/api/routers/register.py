@@ -52,8 +52,6 @@ def register_store(
         )
         user = uow.users.by_id(user_id)
 
-        print(">>>>", item.type, item.type == StoreType.SUPPLIER)
-
         if item.type == StoreType.SUPPLIER:
             store = SupplierStore(id=0, name=item.name, admin_id=user.id)
             store_id = uow.supplier_stores.create(store)
