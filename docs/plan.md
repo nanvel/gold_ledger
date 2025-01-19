@@ -20,7 +20,7 @@
   - [x] Register store API
     - [x] store models
     - [x] store db
-  - [ ] fetch store info / No store
+  - [x] fetch store info / No store
   - [ ] retailers search
   - [ ] Create product
   - [ ] List products
