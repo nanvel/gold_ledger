@@ -1,0 +1,36 @@
+---
+- hosts:
+  - gl
+  vars_files:
+  - variables.yml
+  tasks:
+  - name: "apt requirements"
+    become: yes
+    apt:
+      name:
+      - nginx
+      state: latest
+    notify: nginx restart
+  - name: "directories"
+    become: yes
+    file:
+      path: "{{ item }}"
+      state: directory
+      owner: "{{ project_user }}"
+      mode: "u+rwx,g+rwx,o-rwx"
+      group: "{{ project_group }}"
+    with_items:
+    - "{{ static_root }}/app"
+    - "{{ static_root }}/landing"
+    - "{{ static_root }}/docs"
+  - name: "nginx configuration - app"
+    become: yes
+    template:
+      src: templates/nginx_app.j2
+      dest: "/etc/nginx/sites-enabled/{{ project_name }}-app"
+    notify: nginx restart
+  handlers:
+  - name: nginx restart
+    service:
+      name: nginx
+      state: restarted

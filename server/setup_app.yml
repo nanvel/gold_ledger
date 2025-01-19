@@ -1,0 +1,31 @@
+---
+- hosts:
+  - gl
+  vars_files:
+  - variables.yml
+  tasks:
+  - name: apt requirements
+    become: yes
+    apt:
+      name:
+        - git
+        - supervisor
+        - python3-dev
+        - build-essential
+        - zip
+      state: latest
+  - name: directories
+    become: yes
+    file:
+      path: "{{ item }}"
+      state: directory
+      owner: "{{ project_user }}"
+      mode: "u+rwx,g+rx,g-w,o-rwx"
+      group: "{{ project_group }}"
+    with_items:
+    - "{{ project_dir }}"
+  - name: supervisor
+    become: yes
+    template:
+      src: templates/supervisor.j2
+      dest: "/etc/supervisor/conf.d/{{ project_name }}.conf"

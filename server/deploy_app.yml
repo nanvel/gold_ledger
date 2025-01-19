@@ -1,0 +1,24 @@
+---
+- hosts:
+  - gl
+  vars_files:
+  - variables.yml
+  tasks:
+  - name: "repository pull"
+    git:
+      dest: "{{ project_dir }}"
+      repo: git@github.com:nanvel/gold_ledger.git
+      accept_hostkey: true
+      version: main
+      force: true
+    become: yes
+    become_user: "{{ project_user }}"
+    notify: supervisor restart
+  handlers:
+  - name: supervisor restart
+    become: true
+    supervisorctl:
+      name: "{{ item }}"
+      state: restarted
+    with_items:
+    - paapi-api

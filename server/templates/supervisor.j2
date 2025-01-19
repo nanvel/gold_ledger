@@ -1,0 +1,10 @@
+[program:{{ project_name }}-api]
+process_name={{ project_name }}-api
+directory={{ project_dir }}
+command={{ project_venv }}/bin/uvicorn pac.server:app --host 0.0.0.0 --port={{ api_port }}
+user={{ project_user }}
+group={{ project_group }}
+autostart=true
+autorestart=true
+environment=
+  DB_URI="postgresql://{{ pg_user }}:{{ pg_password }}@{{ pg_host }}:{{ pg_port }}/{{ pg_db }}",

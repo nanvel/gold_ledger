@@ -1,0 +1,30 @@
+---
+- hosts:
+  - gl
+  vars_files:
+  - variables.yml
+  tasks:
+  - name: Create DB User
+    become: yes
+    become_user: postgres
+    command: >
+      psql -c
+      "CREATE USER {{ pg_user }} WITH PASSWORD '{{ pg_password }}';"
+  - name: Create DB
+    become: yes
+    become_user: postgres
+    command: >
+      psql -c
+      'CREATE DATABASE {{ pg_db }};'
+  - name: Grant privileges
+    become: yes
+    become_user: postgres
+    command: >
+      psql -c
+      'GRANT ALL PRIVILEGES ON DATABASE {{ pg_db }} to {{ pg_user }};'
+  - name: Grant schema usage
+    become: yes
+    become_user: postgres
+    command: >
+      psql -c
+      'GRANT USAGE ON SCHEMA public TO {{ pg_user }};'

@@ -1,0 +1,23 @@
+---
+- hosts:
+  - gl
+  vars_files:
+  - variables.yml
+  tasks:
+  - name: apt requirements
+    become: yes
+    apt:
+      name:
+      - postgresql
+      state: latest
+  - name: "pg_hba.conf for postgres"
+    become: yes
+    lineinfile:
+      path: "/etc/postgresql/16/main/pg_hba.conf"
+      line: "local   {{ pg_db }}          {{ pg_user }}                                  password"
+      insertafter: '# "local"'
+      regexp: "^local   all             all"
+  - name: postgres restart
+    service:
+      name: postgresql
+      state: reloaded

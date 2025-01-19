@@ -1,0 +1,17 @@
+---
+ansible_python_interpreter: /usr/bin/python3
+
+project_user: gl
+project_group: www-data
+project_name: gl
+project_dir: '/home/{{ project_user }}/{{ project_name }}'
+project_venv: '/home/{{ project_user }}/{{ project_name }}/.venv'
+api_port: 8080
+
+static_root: '/var/www/{{ project_name }}'
+
+pg_user: gold_ledger
+pg_password: secret
+pg_host: localhost
+pg_port: 5432
+pg_db: gold_ledger

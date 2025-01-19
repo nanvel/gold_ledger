@@ -33,12 +33,13 @@
       - [x] api
       - [x] ui
 - [ ] Deploy
+  - [ ] Pulumi (175.41.137.51)
+  - [ ] ansible
+  - [ ] ssl
 - [ ] Add a user to store
 - [ ] Filter products
 - [ ] plan update
 - [ ] image upload UI (https://codepen.io/chenuin/pen/MdvyjG)
-- [ ] Deploy
-  - [ ] Pulumi 
 - [ ] Security
   - [ ] Deploy per supplier?
   - [ ] DB backups
