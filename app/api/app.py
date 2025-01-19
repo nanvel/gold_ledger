@@ -31,6 +31,7 @@ def create_app(container: Container):
 
     app.include_router(auth.router, prefix="/api")
     app.include_router(me.router, prefix="/api")
+    app.include_router(products.router, prefix="/api")
     app.include_router(register.router, prefix="/api")
     app.include_router(retailer.router, prefix="/api")
     app.include_router(retailers.router, prefix="/api")

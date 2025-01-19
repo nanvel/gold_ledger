@@ -26,8 +26,8 @@
   - [ ] retailer page
     - [x] api
     - [ ] Create product
-      - [ ] model
-      - [ ] api
+      - [x] model
+      - [x] api
       - [ ] ui
     - [ ] show common products
 - [ ] Deploy

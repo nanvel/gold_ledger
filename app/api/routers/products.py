@@ -14,11 +14,11 @@ router = APIRouter()
 
 class ProductForm(BaseModel):
     name: str
-    date: int
-    weight: str
-    quality: str
-    rate_per_gram: str
-    total_amount: str
+    date: str
+    weight: Decimal
+    quality: Decimal
+    rate_per_gram: Decimal
+    total_amount: Decimal
     retailer_id: int
 
 
@@ -33,8 +33,14 @@ def create_product(
     user: User = Depends(get_active_user),
     uow: UnitOfFork = Depends(Provide[Container.uow]),
 ) -> ProductResponse:
+    if not user.is_supplier:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="The user is not a supplier.",
+        )
+
     with uow:
-        retailer = uow.retailer_stores.by_id(item.retailer_store_id)
+        retailer = uow.retailer_stores.by_id(item.retailer_id)
 
         if retailer is None:
             raise HTTPException(
@@ -46,15 +52,15 @@ def create_product(
             Product(
                 id=0,
                 name=item.name,
-                date=Timestamp(item.date),
-                weight=Decimal(item.weight),
-                quality=Decimal(item.quality),
-                rate_per_gram=Decimal(item.rate_per_gram),
-                total_amount=Decimal(item.total_amount),
+                date=Timestamp.from_string(item.date),
+                weight=item.weight,
+                quality=item.quality,
+                rate_per_gram=item.rate_per_gram,
+                total_amount=item.total_amount,
                 custom_fields={},
                 picture={},
                 supplier_id=user.supplier_store_id,
-                retailer_id=item.retailer.id,
+                retailer_id=retailer.id,
                 creator_id=user.id,
             )
         )
