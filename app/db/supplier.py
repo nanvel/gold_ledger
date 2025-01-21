@@ -7,8 +7,8 @@ from sqlalchemy.sql import func
 from .base import Base
 
 
-class RetailerStoreTable(Base):
-    __tablename__ = "retailer_stores"
+class SupplierTable(Base):
+    __tablename__ = "suppliers"
 
     id: Mapped[int]
     name: Mapped[str] = mapped_column(unique=True)

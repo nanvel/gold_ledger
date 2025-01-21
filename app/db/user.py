@@ -17,11 +17,11 @@ class UserTable(Base):
     # increase to disable issued access tokens
     token_version: Mapped[int] = mapped_column(default=0, server_default="0")
 
-    supplier_store_id: Mapped[int] = mapped_column(
-        sa.ForeignKey("supplier_stores.id"), nullable=True
+    supplier_id: Mapped[int] = mapped_column(
+        sa.ForeignKey("suppliers.id"), nullable=True
     )
-    retailer_store_id: Mapped[int] = mapped_column(
-        sa.ForeignKey("retailer_stores.id"), nullable=True
+    retailer_id: Mapped[int] = mapped_column(
+        sa.ForeignKey("retailers.id"), nullable=True
     )
 
     created_at: Mapped[datetime] = mapped_column(server_default=func.now())

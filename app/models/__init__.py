@@ -1,7 +1,7 @@
 from .product import Product
-from .retailer_store import RetailerStore
+from .retailer import Retailer
 from .retailer_order_by import RetailerOrderBy
-from .supplier_store import SupplierStore
+from .supplier import Supplier
 from .store_type import StoreType
 from .timestamp import Timestamp
 from .user import User
@@ -10,9 +10,9 @@ from .user_role import UserRole
 
 __all__ = (
     "Product",
-    "RetailerStore",
+    "Retailer",
     "RetailerOrderBy",
-    "SupplierStore",
+    "Supplier",
     "StoreType",
     "Timestamp",
     "User",

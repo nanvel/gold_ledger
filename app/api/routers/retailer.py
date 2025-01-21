@@ -22,11 +22,11 @@ def get_retailer_info(
     user: User = Depends(get_active_user),
     uow: UnitOfFork = Depends(Provide[Container.uow]),
 ) -> ResponseItem:
-    if not user.supplier_store_id:
+    if not user.supplier_id:
         raise HTTPException(status_code=400, detail="Store is not a supplier.")
 
     with uow:
-        retailer = uow.retailer_stores.by_id(retailer_id)
+        retailer = uow.retailers.by_id(retailer_id)
 
     if not retailer:
         raise HTTPException(status_code=404, detail="Retailer not found.")

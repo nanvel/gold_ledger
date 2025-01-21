@@ -42,7 +42,7 @@ def create_product(
         )
 
     with uow:
-        retailer = uow.retailer_stores.by_id(item.retailer_id)
+        retailer = uow.retailers.by_id(item.retailer_id)
 
         if retailer is None:
             raise HTTPException(
@@ -61,7 +61,7 @@ def create_product(
                 total_amount=item.total_amount,
                 custom_fields={},
                 picture={},
-                supplier_id=user.supplier_store_id,
+                supplier_id=user.supplier_id,
                 retailer_id=retailer.id,
                 creator_id=user.id,
             )
@@ -86,9 +86,9 @@ def get_products(
     offset: int = 0,
 ) -> ProductsResponse:
     if user.is_supplier:
-        supplier_id = user.supplier_store_id
+        supplier_id = user.supplier_id
     else:
-        retailer_id = user.retailer_store_id
+        retailer_id = user.retailer_id
 
     with uow:
         total, items = uow.products.filter(

@@ -6,7 +6,7 @@ from passlib.context import CryptContext
 from pydantic import BaseModel
 
 from app.container import Container
-from app.models import RetailerStore, StoreType, SupplierStore, User, UserRole
+from app.models import Retailer, StoreType, Supplier, User, UserRole
 from app.repos.uow import UnitOfFork
 
 router = APIRouter()
@@ -46,19 +46,19 @@ def register_store(
                 password_hash=crypt_context.hash(item.password),
                 role=UserRole.SHOP_OWNER,
                 token_version=0,
-                supplier_store_id=None,
-                retailer_store_id=None,
+                supplier_id=None,
+                retailer_id=None,
             )
         )
         user = uow.users.by_id(user_id)
 
         if item.type == StoreType.SUPPLIER:
-            store = SupplierStore(id=0, name=item.name, admin_id=user.id)
-            store_id = uow.supplier_stores.create(store)
+            store = Supplier(id=0, name=item.name, admin_id=user.id)
+            store_id = uow.suppliers.create(store)
             user = replace(user, supplier_store_id=store_id)
         elif item.type == StoreType.RETAILER:
-            store = RetailerStore(id=0, name=item.name, admin_id=user.id)
-            store_id = uow.retailer_stores.create(store)
+            store = Retailer(id=0, name=item.name, admin_id=user.id)
+            store_id = uow.retailers.create(store)
             user = replace(user, retailer_store_id=store_id)
 
         uow.users.update(user)

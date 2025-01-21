@@ -3,41 +3,41 @@ from typing import Optional, Tuple
 
 from sqlalchemy.orm import Session
 
-from app.db import RetailerStoreTable
-from app.models import RetailerStore, RetailerOrderBy, Timestamp
+from app.db import RetailerTable
+from app.models import Retailer, RetailerOrderBy, Timestamp
 
 
 @dataclass(frozen=True)
-class RetailStoreSearchItem:
+class RetailerSearchItem:
     id: int
     name: str
     created_at: int
 
 
-class RetailerStoresRepo:
+class RetailersRepo:
     def __init__(self, session: Session):
         self._session = session
 
-    def by_id(self, store_id: int) -> Optional[RetailerStore]:
-        record = self._session.query(RetailerStoreTable).filter_by(id=store_id).first()
+    def by_id(self, retailer_id: int) -> Optional[Retailer]:
+        record = self._session.query(RetailerTable).filter_by(id=retailer_id).first()
         if record:
-            return RetailerStore(
+            return Retailer(
                 id=record.id,
                 name=record.name,
                 admin_id=record.admin_id,
             )
 
-    def create(self, store: RetailerStore) -> int:
-        supplier_store = RetailerStoreTable(
-            name=store.name,
-            admin_id=store.admin_id,
+    def create(self, retailer: Retailer) -> int:
+        record = RetailerTable(
+            name=retailer.name,
+            admin_id=retailer.admin_id,
         )
-        self._session.add(supplier_store)
+        self._session.add(record)
         self._session.commit()
 
-        self._session.refresh(supplier_store)
+        self._session.refresh(record)
 
-        return supplier_store.id
+        return record.id
 
     def filter(
         self,
@@ -46,18 +46,18 @@ class RetailerStoresRepo:
         reverse: bool = True,
         offset: int = 0,
         limit: int = 20,
-    ) -> Tuple[int, Tuple[RetailStoreSearchItem, ...]]:
-        query = self._session.query(RetailerStoreTable)
+    ) -> Tuple[int, Tuple[RetailerSearchItem, ...]]:
+        query = self._session.query(RetailerTable)
 
         if q:
-            query = query.filter(RetailerStoreTable.name.ilike(f"%{q}%"))
+            query = query.filter(RetailerTable.name.ilike(f"%{q}%"))
 
         total = query.count()
 
         if order_by == RetailerOrderBy.CREATED:
-            order_field = RetailerStoreTable.created_at
+            order_field = RetailerTable.created_at
         elif order_by == RetailerOrderBy.NANE:
-            order_field = RetailerStoreTable.name
+            order_field = RetailerTable.name
         else:
             raise ValueError(f"Unknown order_by value: {order_by}")
 
@@ -67,7 +67,7 @@ class RetailerStoresRepo:
         records = query.order_by(order_field).offset(offset).limit(limit)
 
         return total, tuple(
-            RetailStoreSearchItem(
+            RetailerSearchItem(
                 id=record.id,
                 name=record.name,
                 created_at=int(Timestamp.from_datetime(record.created_at)),

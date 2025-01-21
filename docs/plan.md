@@ -1,47 +1,27 @@
 # Plan
 
-- [x] MVP
-  - [x] Structure
-  - [x] base ui
-  - [x] login form UI
-  - [x] db
-  - [x] Login API
-  - [x] Base UI
-    - [x] tailwind and daisy-ui
-  - [x] Cli
-    - [x] create admin
-    - [x] reset password
-    - [x] container wrapper for cli
-  - [x] Login UI
-  - [x] Sidebar
-    - [x] dark mode 
-    - [x] Log out btn 
-  - [x] Register store UI
-  - [x] Register store API
-    - [x] store models
-    - [x] store db
-  - [x] fetch store info / No store
-  - [x] retailers search
-    - [x] api (simple icontains)
-  - [ ] retailer page
-    - [x] api
-    - [x] Create product
-      - [x] model
-      - [x] api
-      - [x] ui
-    - [x] show common products
-      - [x] api
-      - [x] ui
-- [ ] Deploy
-  - [ ] Pulumi (175.41.137.51)
-  - [ ] ansible
-  - [ ] ssl
-- [ ] Add a user to store
-- [ ] Filter products
-- [ ] plan update
-- [ ] image upload UI (https://codepen.io/chenuin/pen/MdvyjG)
+MVP v2:
+- [ ] remove store suffixes
+  - [ ] retailer_stores -> retailers, supplier_stores - > suppliers 
+- [ ] image upload
+  - [ ] image upload UI (https://codepen.io/chenuin/pen/MdvyjG) 
+- [ ] admin -> owner, users -> staff
+- [ ] list staff
+- [ ] add staff
+- [ ] disable/reenable staff
+- [ ] password change
+- [ ] show errors under fields in the form
+- [ ] download products as csv
+- [ ] action log on dashboard
+- [ ] cards view for products
+- [ ] filter products
+- [ ] pg full text search
+- [ ] change menu according to store type
+- [ ] filter vs search, reduce to one
+
+Other:
+
 - [ ] Security
-  - [ ] Deploy per supplier?
   - [ ] DB backups
   - [ ] sentry
 - [ ] UI improvements
@@ -49,8 +29,5 @@
   - [ ] mobile
   - [ ] keep the tab that was selected last time
   - [ ] pick up color scheme / theme switch
-- [ ] Cleanup
 - [ ] Company / Legal
 - [ ] Landing page
-- [ ] pg full text search
-- [ ] retailer_stores -> retailers, supplier_stores - > suppliers

@@ -1,10 +1,8 @@
 from dataclasses import dataclass
 
-from .user import User
-
 
 @dataclass
-class RetailerStore:
+class Retailer:
     id: int
     name: str
     admin_id: int

@@ -1,7 +1,7 @@
 [program:{{ project_name }}-api]
 process_name={{ project_name }}-api
 directory={{ project_dir }}
-command={{ project_venv }}/bin/uvicorn pac.server:app --host 0.0.0.0 --port={{ api_port }}
+command={{ project_venv }}/bin/uvicorn app.server:app --host 0.0.0.0 --port={{ api_port }}
 user={{ project_user }}
 group={{ project_group }}
 autostart=true

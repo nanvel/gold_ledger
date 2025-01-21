@@ -7,20 +7,20 @@ from pydantic import BaseModel
 from app.container import Container
 from app.models import RetailerOrderBy
 from app.repos.uow import UnitOfFork
-from app.repos.retailer_stores import RetailStoreSearchItem
+from app.repos.retailers import RetailerSearchItem
 from .auth import get_active_user
 
 router = APIRouter()
 
 
 class ResponseItem(BaseModel):
-    items: Tuple[RetailStoreSearchItem, ...]
+    items: Tuple[RetailerSearchItem, ...]
     total: int
 
 
 @router.get("/retailers", dependencies=[Depends(get_active_user)])
 @inject
-def filter_retailer_stores(
+def filter_retailers(
     uow: UnitOfFork = Depends(Provide[Container.uow]),
     q: Optional[str] = None,
     offset: int = 0,
@@ -29,7 +29,7 @@ def filter_retailer_stores(
     reverse: bool = True,
 ) -> ResponseItem:
     with uow:
-        total, items = uow.retailer_stores.filter(
+        total, items = uow.retailers.filter(
             q=q,
             order_by=order_by,
             reverse=reverse,

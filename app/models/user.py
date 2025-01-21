@@ -11,9 +11,9 @@ class User:
     password_hash: str
     role: UserRole
     token_version: int
-    supplier_store_id: Optional[int]
-    retailer_store_id: Optional[int]
+    supplier_id: Optional[int]
+    retailer_id: Optional[int]
 
     @property
     def is_supplier(self):
-        return self.supplier_store_id is not None
+        return self.supplier_id is not None

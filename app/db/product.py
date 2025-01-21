@@ -20,10 +20,8 @@ class ProductTable(Base):
     total_amount: Mapped[Decimal] = mapped_column(type_=sa.DECIMAL)
     custom_fields: Mapped[dict] = mapped_column(type_=sa.JSON)
     picture: Mapped[dict] = mapped_column(type_=sa.JSON)
-    supplier_id: Mapped[int] = mapped_column(sa.ForeignKey("supplier_stores.id"))
-    retailer_id: Mapped[int] = mapped_column(
-        sa.ForeignKey("retailer_stores.id"), index=True
-    )
+    supplier_id: Mapped[int] = mapped_column(sa.ForeignKey("suppliers.id"))
+    retailer_id: Mapped[int] = mapped_column(sa.ForeignKey("retailers.id"), index=True)
     creator_id: Mapped[int] = mapped_column(sa.ForeignKey("users.id"))
 
     created_at: Mapped[datetime] = mapped_column(server_default=func.now())
