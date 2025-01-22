@@ -36,6 +36,8 @@ class ImagesService:
             "ContentDisposition": "inline",
             "ContentType": content_type,
         }
+
+        f.seek(0)
         self._s3_client.upload_fileobj(
             f,
             self._s3_bucket,
@@ -43,6 +45,8 @@ class ImagesService:
             ExtraArgs=upload_kwargs,
         )
         upload_kwargs["ContentType"] = "image/jpeg"
+
+        thumb.seek(0)
         self._s3_client.upload_fileobj(
             thumb,
             self._s3_bucket,
