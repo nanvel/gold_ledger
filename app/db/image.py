@@ -13,6 +13,9 @@ class ImageTable(Base):
     id: Mapped[int]
     url: Mapped[str]
     thumb_url: Mapped[str]
+    size: Mapped[int]
+    width: Mapped[int]
+    height: Mapped[int]
 
     uploaded_by: Mapped[int] = mapped_column(sa.ForeignKey("users.id"))
     supplier_id: Mapped[int] = mapped_column(

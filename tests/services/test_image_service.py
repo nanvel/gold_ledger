@@ -1,4 +1,3 @@
-from io import BytesIO
 from unittest.mock import Mock
 
 from app.services.images import ImagesService
@@ -14,7 +13,7 @@ def test_image_service(data):
     )
 
     with open(data.rel("example.jpg"), "rb") as f:
-        result = service.upload(BytesIO(f.read()), file_name="example.jpg")
+        result = service.upload(f, file_name="example.jpg")
 
     assert result.id == 0
     assert result.url.startswith("https://bucket.s3.amazonaws.com/prefix/")

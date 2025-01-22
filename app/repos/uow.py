@@ -1,3 +1,4 @@
+from .images import ImagesRepo
 from .products import ProductsRepo
 from .retailers import RetailersRepo
 from .suppliers import SuppliersRepo
@@ -5,6 +6,7 @@ from .users import UsersRepo
 
 
 class UnitOfFork:
+    images: ImagesRepo
     products: ProductsRepo
     retailers: RetailersRepo
     suppliers: SuppliersRepo
@@ -17,6 +19,7 @@ class UnitOfFork:
     def __enter__(self):
         self._session = self._db()
         self._session.begin()
+        self.images = ImagesRepo(self._session)
         self.products = ProductsRepo(self._session)
         self.retailers = RetailersRepo(self._session)
         self.suppliers = SuppliersRepo(self._session)
