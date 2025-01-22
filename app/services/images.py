@@ -22,6 +22,8 @@ class ImagesService:
         s3_key = base_key + "." + ext
         thumb_s3_key = base_key + "-t.jpg"
 
+        size = f.seek(0, 2)
+        f.seek(0)
         img = PImage.open(f)
         content_type = f"image/{img.format.lower()}"
         width, height = img.size
@@ -52,7 +54,7 @@ class ImagesService:
             id=0,
             url=f"https://{self._s3_bucket}.s3.amazonaws.com/{s3_key}",
             thumb_url=f"https://{self._s3_bucket}.s3.amazonaws.com/{thumb_s3_key}",
-            size=f.getbuffer().nbytes,
+            size=size,
             width=width,
             height=height,
         )

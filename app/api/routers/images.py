@@ -1,6 +1,6 @@
 from dataclasses import replace
 from dependency_injector.wiring import inject, Provide
-from fastapi import Depends, FastAPI, UploadFile
+from fastapi import APIRouter, Depends, UploadFile
 
 from app.container import Container
 from app.models import Image, User
@@ -8,12 +8,12 @@ from app.repos.uow import UnitOfFork
 from app.services.images import ImagesService
 from .auth import get_active_user
 
-app = FastAPI()
+router = APIRouter()
 
 
-@app.post("/upload")
+@router.post("/images/upload")
 @inject
-async def upload_file(
+async def upload_image(
     file: UploadFile,
     user: User = Depends(get_active_user),
     uow: UnitOfFork = Depends(Provide[Container.uow]),
@@ -29,7 +29,7 @@ async def upload_file(
     )
 
     with uow:
-        image_id = uow.images.add(image)
+        image_id = uow.images.create(image)
 
     image = replace(image, id=image_id)
 

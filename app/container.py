@@ -15,6 +15,7 @@ class Container(containers.DeclarativeContainer):
     wiring_config = containers.WiringConfiguration(
         modules=[
             "app.api.routers.auth",
+            "app.api.routers.images",
             "app.api.routers.me",
             "app.api.routers.products",
             "app.api.routers.register",
@@ -38,7 +39,7 @@ class Container(containers.DeclarativeContainer):
         s3_client=s3_client,
         s3_bucket=config.s3_bucket,
         key_prefix="products",
-        thumd_size=320,
+        thumb_size=320,
     )
 
     uow = providers.Singleton(UnitOfFork, db=db)

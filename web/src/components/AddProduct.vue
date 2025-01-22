@@ -78,6 +78,14 @@
             step="0.1"
           />
         </label>
+        <div>
+          <input
+            type="file"
+            @change="onFileChanged($event)"
+            accept="image/*"
+            capture
+          />
+        </div>
       </form>
       <div class="modal-action">
         <form
@@ -110,6 +118,13 @@ const totalAmount = ref(0);
 const loading = ref(false);
 
 const toast = useToast();
+
+const onFileChanged = async (event) => {
+  const form = new FormData();
+  form.append("file", event.target.files[0]);
+  const result = await httpClient.post(`/api/images/upload`, null, null, form);
+  console.log(result);
+};
 
 const addProduct = async () => {
   loading.value = true;

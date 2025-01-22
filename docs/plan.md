@@ -27,6 +27,7 @@ MVP v2:
 - [ ] make sure only either supplier or retailer is specified
 - [ ] custom fields
 - [ ] limit number of users and products per hr
+- [ ] cancel button in modal 
 
 Other:
 
