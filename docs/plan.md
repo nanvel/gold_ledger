@@ -1,10 +1,16 @@
 # Plan
 
 MVP v2:
-- [ ] remove store suffixes
-  - [ ] retailer_stores -> retailers, supplier_stores - > suppliers 
+- [x] remove store suffixes
+  - [x] retailer_stores -> retailers, supplier_stores - > suppliers
+  - [x] migration
 - [ ] image upload
-  - [ ] image upload UI (https://codepen.io/chenuin/pen/MdvyjG) 
+  - [ ] test the service 
+  - [ ] make a simple thuml 
+  - [ ] db
+  - [ ] api 
+  - [ ] image upload UI (https://codepen.io/chenuin/pen/MdvyjG)
+  - [ ] pulumi bucket and permissions
 - [ ] admin -> owner, users -> staff
 - [ ] list staff
 - [ ] add staff
@@ -18,6 +24,9 @@ MVP v2:
 - [ ] pg full text search
 - [ ] change menu according to store type
 - [ ] filter vs search, reduce to one
+- [ ] make sure only either supplier or retailer is specified
+- [ ] custom fields
+- [ ] limit number of users and products per hr
 
 Other:
 

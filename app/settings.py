@@ -17,6 +17,9 @@ class Settings(BaseSettings):
 
     db_uri: str = "postgresql://gold_ledger:secret@127.0.0.1:5432/gold_ledger"
 
+    aws_region: str = "ap-southeast-1"
+    s3_bucket: str = "gold-ledger-dev"
+
 
 def load_settings() -> Settings:
     env = os.environ.get("ENV", "development")

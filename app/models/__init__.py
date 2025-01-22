@@ -1,3 +1,4 @@
+from .image import Image
 from .product import Product
 from .retailer import Retailer
 from .retailer_order_by import RetailerOrderBy
@@ -9,6 +10,7 @@ from .user_role import UserRole
 
 
 __all__ = (
+    "Image",
     "Product",
     "Retailer",
     "RetailerOrderBy",

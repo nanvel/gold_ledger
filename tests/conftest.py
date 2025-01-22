@@ -8,7 +8,6 @@ from sqlalchemy.orm import sessionmaker
 
 from app.api.app import create_app
 from app.container import Container
-from app.resources.database import init_db
 from app.settings import load_settings
 
 os.environ["ENV"] = "test"

@@ -4,7 +4,7 @@ from decimal import Decimal
 from .timestamp import Timestamp
 
 
-@dataclass
+@dataclass(frozen=True)
 class Product:
     id: int
     name: str
