@@ -22,3 +22,5 @@ def test_image_service(data):
     assert result.size == 179903
     assert result.width == 1920
     assert result.height == 1100
+
+    assert client.upload_fileobj.call_count == 2

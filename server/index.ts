@@ -62,3 +62,57 @@ const wwwRecord = new aws.route53.Record("glRecordWww", {
 });
 
 export const serverIp = eip.publicIp;
+
+const bucket = new aws.s3.Bucket("gold-ledger-staging");
+
+const glBucketOwnershipControls = new aws.s3.BucketOwnershipControls(
+  "aclBucketOwnershipControls",
+  {
+    bucket: bucket.id,
+    rule: {
+      objectOwnership: "BucketOwnerPreferred",
+    },
+  },
+);
+const glBucketPublicAccessBlock = new aws.s3.BucketPublicAccessBlock(
+  "aclBucketPublicAccessBlock",
+  {
+    bucket: bucket.id,
+    blockPublicAcls: false,
+    blockPublicPolicy: false,
+    ignorePublicAcls: false,
+    restrictPublicBuckets: false,
+  },
+);
+const glBucketAclV2 = new aws.s3.BucketAclV2(
+  "aclBucketAclV2",
+  {
+    bucket: bucket.id,
+    acl: "private",
+  },
+  {
+    dependsOn: [glBucketOwnershipControls, glBucketPublicAccessBlock],
+  },
+);
+
+export const bucketName = bucket.id;
+
+const serverUser = new aws.iam.User("glServerUser", {
+  path: "/system/",
+});
+
+const userPolicyStatement = pulumi.interpolate`{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": ["s3:GetObject", "s3:PutObject", "s3:PutObjectAcl"],
+      "Effect": "Allow",
+      "Resource": ["${bucket.arn}/*"]
+    }
+  ]
+}`;
+
+const serverUserPolicy = new aws.iam.UserPolicy("serverUserPolicy", {
+  user: serverUser.name,
+  policy: userPolicyStatement,
+});
