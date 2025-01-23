@@ -13,3 +13,13 @@ class Image:
     uploaded_by: Optional[int] = None
     supplier_id: Optional[int] = None
     retailer_id: Optional[int] = None
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "url": self.url,
+            "thumb_url": self.thumb_url,
+            "size": self.size,
+            "width": self.width,
+            "height": self.height,
+        }

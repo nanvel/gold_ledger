@@ -20,7 +20,12 @@ export const useAuthStore = defineStore("auth", () => {
     const body = new URLSearchParams();
     body.append("username", username);
     body.append("password", password);
-    const resp = await httpClient.post(`${baseUrl}/token`, null, body);
+    const resp = await httpClient.post(
+      `${baseUrl}/token`,
+      null,
+      body,
+      "application/x-www-form-urlencoded",
+    );
 
     authToken.value = resp.access_token;
 

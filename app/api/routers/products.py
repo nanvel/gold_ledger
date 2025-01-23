@@ -22,6 +22,7 @@ class ProductForm(BaseModel):
     rate_per_gram: Decimal
     total_amount: Decimal
     retailer_id: int
+    image_id: Optional[int]
 
 
 class ProductResponse(BaseModel):
@@ -50,6 +51,23 @@ def create_product(
                 detail="The retailer store was not found.",
             )
 
+        if item.image_id:
+            image = uow.images.by_id(item.image_id)
+
+            if image is None or not image.supplier_id:
+                raise HTTPException(
+                    status_code=status.HTTP_404_NOT_FOUND,
+                    detail="The image was not found.",
+                )
+
+            if image.supplier_id != user.supplier_id:
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail="The image does not belong to the store.",
+                )
+        else:
+            image = None
+
         uow.products.create(
             Product(
                 id=0,
@@ -60,7 +78,7 @@ def create_product(
                 rate_per_gram=item.rate_per_gram,
                 total_amount=item.total_amount,
                 custom_fields={},
-                picture={},
+                picture=image and image.to_dict() or {},
                 supplier_id=user.supplier_id,
                 retailer_id=retailer.id,
                 creator_id=user.id,

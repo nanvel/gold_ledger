@@ -9,7 +9,7 @@ export const httpClient = {
 };
 
 function request(method) {
-  return (url, data, body, file) => {
+  return (url, data, body, contentType) => {
     const requestOptions = {
       method,
       headers: authHeader(url),
@@ -20,11 +20,9 @@ function request(method) {
     }
     if (body) {
       requestOptions.body = body;
-      requestOptions.headers["Content-Type"] =
-        "application/x-www-form-urlencoded";
     }
-    if (file) {
-      requestOptions.body = file;
+    if (contentType) {
+      requestOptions.headers["Content-Type"] = contentType;
     }
     return fetch(url, requestOptions).then(handleResponse);
   };

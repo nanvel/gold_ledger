@@ -1,3 +1,5 @@
+from typing import Optional
+
 from sqlalchemy.orm import Session
 
 from app.db import ImageTable
@@ -25,3 +27,20 @@ class ImagesRepo:
         self._session.refresh(record)
 
         return record.id
+
+    def by_id(self, image_id: int) -> Optional[Image]:
+        record = (
+            self._session.query(ImageTable).where(ImageTable.id == image_id).first()
+        )
+        if record:
+            return Image(
+                id=record.id,
+                url=record.url,
+                thumb_url=record.thumb_url,
+                size=record.size,
+                width=record.width,
+                height=record.height,
+                uploaded_by=record.uploaded_by,
+                supplier_id=record.supplier_id,
+                retailer_id=record.retailer_id,
+            )
