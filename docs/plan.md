@@ -4,7 +4,7 @@ MVP v2:
 - [x] remove store suffixes
   - [x] retailer_stores -> retailers, supplier_stores - > suppliers
   - [x] migration
-- [ ] image upload
+- [x] image upload
   - [x] test the service 
   - [x] make a simple thuml 
   - [x] db
@@ -17,31 +17,36 @@ MVP v2:
   - [x] image loading
   - [x] image as a fk, don't allow to remove once product created
   - [x] handle image in the product handler
-  - [ ] AddProduct -> ProductModal
-- [ ] make name field in focus in form
-- [ ] reload after product added
-- [ ] clear fields on cancel or save
-- [ ] preset date
-- [ ] Account -> Settings
-- [ ] show errors under fields in the form
-- [ ] password change
+  - [x] AddProduct -> ProductModal
+- [x] filter vs search, reduce to one (filter)
+- [ ] form improvements
+  - [x] cancel button in modal 
+  - [x] fix date field
+  - [ ] show errors under fields in the form
+  - [ ] make name field in focus in form
+  - [ ] clear fields on cancel or save
+  - [ ] preset date
+- [ ] products list improvements
+  - [ ] reload after product added
+  - [ ] cards view
+  - [ ] download products as csv
+  - [ ] ordering
+  - [ ] filtering
+- [ ] Account -> Settings 
+  - [ ] change menu according to store type
+  - [ ] password change
 - [ ] staff
   - [ ] admin -> owner, users -> staff
   - [ ] list staff
   - [ ] add staff
   - [ ] disable/reenable staff
-- [ ] download products as csv
 - [ ] action log on dashboard
-- [ ] cards view for products
-- [ ] filter products
 - [ ] pg full text search
-- [ ] change menu according to store type
-- [ ] filter vs search, reduce to one
 - [ ] make sure only either supplier or retailer is specified
 - [ ] custom fields
 - [ ] limit number of users and products per hr
-- [ ] cancel button in modal
 - [ ] remove product before received?
+- [ ] highlight selected menu?
 
 Other:
 

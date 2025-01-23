@@ -56,14 +56,15 @@ async function handleResponse(response) {
       await logout();
     }
 
-    // get error message from body or default to response status
-    const error =
-      (data && (data.message || data.detail)) || response.status.toString();
-
     const toast = useToast();
-    toast.error(error);
+    // get error message from body or default to response status
+    if (response.status === 500) {
+      toast.error("Internal server error.");
+    } else {
+      toast.error(data?.message || response.status.toString());
+    }
 
-    return Promise.reject(error);
+    return Promise.reject(data);
   }
 
   return data;

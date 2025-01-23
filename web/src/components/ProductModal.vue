@@ -30,7 +30,8 @@
           <input
             type="date"
             class="input input-bordered w-full input-md text-lg"
-            v-model.lazy="date"
+            :value="dateToStr(date)"
+            @input="date = $event.target.valueAsDate"
           />
         </label>
         <label class="form-control w-full">
@@ -141,6 +142,16 @@ const formImageLoading = ref(false);
 
 const toast = useToast();
 
+const dateToStr = (d) => {
+  // alternative implementations in https://stackoverflow.com/q/23593052/1850609
+  return (
+    d &&
+    new Date(d.getTime() - d.getTimezoneOffset() * 60 * 1000)
+      .toISOString()
+      .split("T")[0]
+  );
+};
+
 const onFileChanged = async (event) => {
   formImageLoading.value = true;
   try {
@@ -161,7 +172,7 @@ const addProduct = async () => {
       `/api/products`,
       {
         name: name.value,
-        date: date.value,
+        date: dateToStr(date.value),
         weight: weight.value,
         quality: quality.value,
         rate_per_gram: ratePerGram.value,
