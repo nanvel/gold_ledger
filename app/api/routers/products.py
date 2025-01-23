@@ -1,3 +1,4 @@
+from dataclasses import replace
 from decimal import Decimal
 from typing import Optional, Tuple
 
@@ -68,22 +69,24 @@ def create_product(
         else:
             image = None
 
-        uow.products.create(
-            Product(
-                id=0,
-                name=item.name,
-                date=Timestamp.from_string(item.date),
-                weight=item.weight,
-                quality=item.quality,
-                rate_per_gram=item.rate_per_gram,
-                total_amount=item.total_amount,
-                custom_fields={},
-                picture=image and image.to_dict() or {},
-                supplier_id=user.supplier_id,
-                retailer_id=retailer.id,
-                creator_id=user.id,
-            )
+        product = Product(
+            id=0,
+            name=item.name,
+            date=Timestamp.from_string(item.date),
+            weight=item.weight,
+            quality=item.quality,
+            rate_per_gram=item.rate_per_gram,
+            total_amount=item.total_amount,
+            custom_fields={},
+            supplier_id=user.supplier_id,
+            retailer_id=retailer.id,
+            creator_id=user.id,
         )
+        product_id = uow.products.create(product)
+        product = replace(product, id=product_id)
+
+        if image:
+            uow.products.add_image(product, image)
 
     return ProductResponse(success=True)
 

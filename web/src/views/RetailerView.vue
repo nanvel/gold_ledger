@@ -4,7 +4,7 @@
       <h2>{{ retailerName }}</h2>
     </article>
 
-    <AddProduct :retailer_id="retailerId" />
+    <ProductModal :retailer_id="retailerId" />
 
     <ProductsTable :retailerId="retailerId" />
   </Navbar>
@@ -15,7 +15,7 @@ import Navbar from "@/components/Navbar.vue";
 import { onMounted, ref } from "vue";
 import { httpClient } from "@/services/http.js";
 import router from "@/router";
-import AddProduct from "@/components/AddProduct.vue";
+import ProductModal from "@/components/ProductModal.vue";
 import ProductsTable from "@/components/ProductsTable.vue";
 
 const retailerName = ref(false);

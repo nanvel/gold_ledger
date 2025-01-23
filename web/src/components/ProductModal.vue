@@ -104,14 +104,16 @@
         </label>
       </form>
       <div class="modal-action justify-between">
-        <form
-          method="dialog"
-          class="flex flex-row gap-4 justify-between"
-          v-on:submit.prevent="addProduct"
-        >
+        <form method="dialog">
           <button class="btn btn-secondary" :disabled="loading">Cancel</button>
         </form>
-        <button class="btn btn-primary" :disabled="loading">Save</button>
+        <button
+          class="btn btn-primary"
+          :disabled="loading"
+          v-on:click="addProduct"
+        >
+          Save
+        </button>
       </div>
     </div>
   </dialog>
@@ -170,7 +172,7 @@ const addProduct = async () => {
       null,
     );
     toast.success("Product added successfully.");
-    add_product.showModal();
+    add_product.close();
   } catch (error) {
     console.log(error);
     toast.error("Failed to add product.");

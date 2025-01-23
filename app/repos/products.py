@@ -4,8 +4,8 @@ from typing import Optional, Tuple
 
 from sqlalchemy.orm import Session
 
-from app.db import ProductTable
-from app.models import Product, Timestamp
+from app.db import ImageTable, ProductTable
+from app.models import Image, Product, Timestamp
 
 
 @dataclass(frozen=True)
@@ -33,7 +33,6 @@ class ProductsRepo:
             rate_per_gram=product.rate_per_gram,
             total_amount=product.total_amount,
             custom_fields=product.custom_fields,
-            picture=product.picture,
             supplier_id=product.supplier_id,
             retailer_id=product.retailer_id,
             creator_id=product.creator_id,
@@ -76,3 +75,16 @@ class ProductsRepo:
             )
             for record in records
         )
+
+    def add_image(self, product: Product, image: Image):
+        product = (
+            self._session.query(ProductTable)
+            .where(ProductTable.id == product.id)
+            .first()
+        )
+        image = self._session.query(ImageTable).where(ImageTable.id == image.id).first()
+
+        if product:
+            product.images.append(image)
+
+        self._session.commit()

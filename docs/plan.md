@@ -15,9 +15,11 @@ MVP v2:
   - [x] image preview
   - [x] image ui fixes
   - [x] image loading
-  - [ ] image as a fk, don't allow to remove once product created
-  - [ ] handle image in the product handler
+  - [x] image as a fk, don't allow to remove once product created
+  - [x] handle image in the product handler
+  - [ ] AddProduct -> ProductModal
 - [ ] make name field in focus in form
+- [ ] reload after product added
 - [ ] clear fields on cancel or save
 - [ ] preset date
 - [ ] Account -> Settings

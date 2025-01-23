@@ -10,7 +10,7 @@ from .base import Base
 from .image import ImageTable
 
 
-ProductImagesTable = sa.Table(
+product_image_association = sa.Table(
     "product_images",
     Base.metadata,
     sa.Column("product_id", sa.ForeignKey("products.id"), nullable=False),
@@ -34,7 +34,7 @@ class ProductTable(Base):
     retailer_id: Mapped[int] = mapped_column(sa.ForeignKey("retailers.id"), index=True)
     creator_id: Mapped[int] = mapped_column(sa.ForeignKey("users.id"))
 
-    images: Mapped[List[ImageTable]] = relationship(secondary=ProductImagesTable)
+    images: Mapped[List[ImageTable]] = relationship(secondary=product_image_association)
 
     created_at: Mapped[datetime] = mapped_column(server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(
