@@ -33,21 +33,21 @@ MVP v2:
     - [x] switch between views
     - [x] save table vs cards selection
   - [x] pagination
-- [ ] Account -> Settings
+- [x] Account -> Settings
   - [x] change name
   - [x] is_supplier / is_retailer / is_owner to me store
   - [x] admin_id -> owner_id
   - [x] rid of role
   - [x] change menu according to store type
-  - [ ] password change
+  - [x] password change
     - [x] api
-    - [ ] modal
-    - [ ] set min password length
+    - [x] modal
+    - [x] set min password length
 - [ ] staff
-  - [ ] admin -> owner, users -> staff
-  - [ ] list staff
-  - [ ] add staff
-  - [ ] disable/reenable staff
+  - [x] admin -> owner, users -> staff 
+  - [x] add staff api
+  - [x] list staff
+  - [ ] add staff modal
 - [ ] product page
 - [ ] retailers views
   - [ ] supplier page
@@ -86,6 +86,7 @@ Other:
 - [ ] Products
   - [ ] ordering
   - [ ] filtering
+- [ ] disable/reenable staff
 
 Questions:
 - validation of product fields?

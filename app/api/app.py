@@ -17,6 +17,7 @@ from .routers import products
 from .routers import register
 from .routers import retailer
 from .routers import retailers
+from .routers import staff
 
 
 def create_app(container: Container):
@@ -39,6 +40,7 @@ def create_app(container: Container):
     app.include_router(register.router, prefix="/api")
     app.include_router(retailer.router, prefix="/api")
     app.include_router(retailers.router, prefix="/api")
+    app.include_router(staff.router, prefix="/api")
 
     @app.get("/docs", include_in_schema=False)
     def custom_swagger_ui_html():

@@ -19,7 +19,7 @@
         <input
           type="radio"
           name="theme-buttons"
-          class="btn theme-controller join-item"
+          class="btn btn-sm theme-controller join-item"
           :aria-label="theme[1]"
           :value="theme[0]"
           :key="theme[0]"
@@ -30,18 +30,27 @@
       </div>
 
       <h3 class="text-2xl font-semibold" v-if="isOwner">Staff</h3>
+      <add-staff-modal
+        v-if="isOwner"
+        v-on:staff-added="staffListVersion += 1"
+      />
+      <staff-list v-if="isOwner" :key="staffListVersion" />
     </article>
   </Navbar>
 </template>
 
 <script setup>
+import { ref } from "vue";
 import Navbar from "@/components/Navbar.vue";
 import { useAuthStore, useMeStore } from "@/stores/index.js";
 import { storeToRefs } from "pinia";
 import changePasswordModal from "@/components/ChangePasswordModal.vue";
+import StaffList from "@/components/StaffList.vue";
+import AddStaffModal from "@/components/AddStaffModal.vue";
 
 const meStore = useMeStore();
 const { selectedTheme, myEmail, isOwner } = storeToRefs(meStore);
+const staffListVersion = ref(0);
 
 const themes = [
   ["light", "Light"],

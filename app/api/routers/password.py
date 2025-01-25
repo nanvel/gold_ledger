@@ -22,7 +22,7 @@ class Response(BaseModel):
     success: bool
 
 
-@router.post("/auth/change-password", status_code=201)
+@router.post("/change-password", status_code=200)
 @inject
 def change_password(
     item: ChangePasswordForm,

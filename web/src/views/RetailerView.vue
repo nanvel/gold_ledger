@@ -4,7 +4,7 @@
       <h2>{{ retailerName }}</h2>
     </article>
 
-    <ProductModal
+    <AddProductModal
       :retailer_id="retailerId"
       v-on:product-added="productsVersion = productsVersion + 1"
     />
@@ -22,7 +22,7 @@ import Navbar from "@/components/Navbar.vue";
 import { onMounted, ref } from "vue";
 import { httpClient } from "@/services/http.js";
 import router from "@/router";
-import ProductModal from "@/components/ProductModal.vue";
+import AddProductModal from "@/components/AddProductModal.vue";
 import ProductsList from "@/components/ProductsList.vue";
 
 const retailerName = ref(false);

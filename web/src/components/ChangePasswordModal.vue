@@ -123,7 +123,7 @@ const changePassword = async () => {
   loading.value = true;
   try {
     await httpClient.post(
-      `/api/auth/change-password`,
+      "/api/change-password",
       {
         old_password: oldPassword.value,
         new_password: newPassword.value,

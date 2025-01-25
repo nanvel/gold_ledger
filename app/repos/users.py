@@ -1,9 +1,17 @@
-from typing import Optional
+from dataclasses import dataclass
+from typing import Optional, Tuple
 
 from sqlalchemy.orm import Session
 
 from app.db import UserTable
 from app.models import User
+
+
+@dataclass(frozen=True)
+class UsersSearchItems:
+    id: int
+    email: str
+    created_at: int
 
 
 class UsersRepo:
@@ -60,3 +68,32 @@ class UsersRepo:
                 supplier_id=record.supplier_id,
                 retailer_id=record.retailer_id,
             )
+
+    def filter(
+        self,
+        supplier_id: Optional[int],
+        retailer_id: Optional[int],
+        limit: int,
+        offset: int,
+    ) -> Tuple[int, Tuple[UsersSearchItems, ...]]:
+        query = self._session.query(UserTable)
+
+        if supplier_id:
+            query = query.filter(UserTable.supplier_id == supplier_id)
+        if retailer_id:
+            query = query.filter(UserTable.retailer_id == retailer_id)
+
+        total = query.count()
+
+        records = (
+            query.order_by(UserTable.created_at.desc()).offset(offset).limit(limit)
+        )
+
+        return total, tuple(
+            UsersSearchItems(
+                id=record.id,
+                email=record.username,
+                created_at=int(record.created_at.timestamp()),
+            )
+            for record in records
+        )
