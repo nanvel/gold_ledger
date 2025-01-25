@@ -41,12 +41,17 @@ MVP v2:
   - [ ] add staff
   - [ ] disable/reenable staff
 - [ ] action log on dashboard
+  - [ ] activity log
+  - [ ] auto reload
+  - [ ] sound on updates
+  - [ ] outstanding payments per retailer
 - [ ] pg full text search
 - [ ] make sure only either supplier or retailer is specified
 - [ ] custom fields
 - [ ] limit number of users and products per hr
 - [ ] remove product before received?
 - [ ] highlight selected menu?
+- [ ] use slider for quality?
 
 Other:
 

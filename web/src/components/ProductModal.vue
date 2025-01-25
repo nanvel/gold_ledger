@@ -12,7 +12,7 @@
           ✕
         </button>
       </form>
-      <form v-on:submit.prevent="addProduct" class="space-y-2">
+      <form v-on:submit.prevent="addProduct" class="space-y-2 mt-4">
         <label class="form-control w-full">
           <div class="label">
             <span class="label-text">Name:</span>
@@ -104,6 +104,9 @@
           <div v-if="formImageLoading">Uploading ...</div>
         </label>
       </form>
+      <div v-if="error" class="mt-4 whitespace-pre-line text-error">
+        {{ error }}
+      </div>
       <div class="modal-action justify-between">
         <form method="dialog">
           <button class="btn btn-secondary" :disabled="loading">Cancel</button>
@@ -123,7 +126,6 @@
 <script setup>
 import { ref } from "vue";
 import { httpClient } from "@/services/http.js";
-import { useToast } from "vue-toastification";
 
 const props = defineProps({
   retailer_id: Number,
@@ -139,8 +141,7 @@ const loading = ref(false);
 const formImageId = ref(null);
 const formImageThumb = ref(null);
 const formImageLoading = ref(false);
-
-const toast = useToast();
+const error = ref("");
 
 const dateToStr = (d) => {
   // alternative implementations in https://stackoverflow.com/q/23593052/1850609
@@ -150,6 +151,16 @@ const dateToStr = (d) => {
       .toISOString()
       .split("T")[0]
   );
+};
+
+const parseError = (r) => {
+  if (r.detail) {
+    return r.detail.map((d) => `${d.loc.slice(-1)}: ${d.msg}.`).join("\n");
+  } else if (r.message) {
+    return r.message;
+  } else {
+    return "Internal server error.";
+  }
 };
 
 const onFileChanged = async (event) => {
@@ -168,7 +179,7 @@ const onFileChanged = async (event) => {
 const addProduct = async () => {
   loading.value = true;
   try {
-    await httpClient.post(
+    const resp = await httpClient.post(
       `/api/products`,
       {
         name: name.value,
@@ -181,12 +192,12 @@ const addProduct = async () => {
         image_id: formImageId.value,
       },
       null,
+      { showToast: false },
     );
-    toast.success("Product added successfully.");
     add_product.close();
-  } catch (error) {
+  } catch (e) {
+    error.value = parseError(e);
     console.log(error);
-    toast.error("Failed to add product.");
   } finally {
     loading.value = false;
   }

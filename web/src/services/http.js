@@ -9,7 +9,8 @@ export const httpClient = {
 };
 
 function request(method) {
-  return (url, data, body, contentType) => {
+  return (url, data, body, args) => {
+    const { contentType = null } = args || {};
     const requestOptions = {
       method,
       headers: authHeader(url),
@@ -24,7 +25,9 @@ function request(method) {
     if (contentType) {
       requestOptions.headers["Content-Type"] = contentType;
     }
-    return fetch(url, requestOptions).then(handleResponse);
+    return fetch(url, requestOptions).then((resp) =>
+      handleResponse(resp, args),
+    );
   };
 }
 
@@ -42,7 +45,8 @@ function authHeader(url) {
   }
 }
 
-async function handleResponse(response) {
+async function handleResponse(response, args) {
+  const { showToast = true } = args || {};
   const isJson = response.headers
     ?.get("content-type")
     ?.includes("application/json");
@@ -56,12 +60,14 @@ async function handleResponse(response) {
       await logout();
     }
 
-    const toast = useToast();
-    // get error message from body or default to response status
-    if (response.status === 500) {
-      toast.error("Internal server error.");
-    } else {
-      toast.error(data?.message || response.status.toString());
+    if (showToast) {
+      const toast = useToast();
+      // get error message from body or default to response status
+      if (response.status === 500) {
+        toast.error("Internal server error.");
+      } else {
+        toast.error(data?.message || response.status.toString());
+      }
     }
 
     return Promise.reject(data);
