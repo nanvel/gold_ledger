@@ -53,11 +53,11 @@ def register_store(
         user = uow.users.by_id(user_id)
 
         if item.type == StoreType.SUPPLIER:
-            store = Supplier(id=0, name=item.name, admin_id=user.id)
+            store = Supplier(id=0, name=item.name, owner_id=user.id)
             store_id = uow.suppliers.create(store)
             user = replace(user, supplier_store_id=store_id)
         elif item.type == StoreType.RETAILER:
-            store = Retailer(id=0, name=item.name, admin_id=user.id)
+            store = Retailer(id=0, name=item.name, owner_id=user.id)
             store_id = uow.retailers.create(store)
             user = replace(user, retailer_store_id=store_id)
 

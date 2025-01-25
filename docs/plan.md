@@ -25,15 +25,19 @@ MVP v2:
   - [x] show errors
   - [x] make name field in focus in form
   - [x] clear fields on cancel or save
-- [ ] products list improvements
+- [x] products list improvements
   - [x] reload after product added
   - [x] show latest first
   - [x] cards view
     - [x] return image in api
     - [x] switch between views
     - [x] save table vs cards selection
-  - [ ] pagination
-- [ ] Account -> Settings 
+  - [x] pagination
+- [ ] Account -> Settings
+  - [x] change name
+  - [ ] is_supplier / is_retailer / is_owner to me store
+  - [ ] admin_id -> owner_id
+  - [ ] rid of role
   - [ ] change menu according to store type
   - [ ] password change
 - [ ] staff

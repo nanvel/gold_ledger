@@ -5,4 +5,4 @@ from dataclasses import dataclass
 class Supplier:
     id: int
     name: str
-    admin_id: int
+    owner_id: int

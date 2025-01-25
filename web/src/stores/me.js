@@ -3,8 +3,6 @@ import { defineStore } from "pinia";
 import { ref } from "vue";
 import { httpClient } from "@/services/http.js";
 
-const baseUrl = `/api/me`;
-
 export const useMeStore = defineStore("me", () => {
   const selectedTheme = ref(
     localStorage.getItem("theme") || document.body.getAttribute("data-theme"),
@@ -27,7 +25,7 @@ export const useMeStore = defineStore("me", () => {
 
     document.body.setAttribute("data-theme", selectedTheme.value);
 
-    const resp = await httpClient.get(baseUrl, null, null);
+    const resp = await httpClient.get("/api/me", null, null);
 
     myEmail.value = resp.email;
     storeName.value = resp.store_name;

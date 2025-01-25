@@ -16,13 +16,13 @@ class SuppliersRepo:
             return Supplier(
                 id=record.id,
                 name=record.name,
-                admin_id=record.admin_id,
+                owner_id=record.owner_id,
             )
 
     def create(self, supplier: Supplier) -> int:
         record = SupplierTable(
             name=supplier.name,
-            admin_id=supplier.admin_id,
+            owner_id=supplier.owner_id,
         )
         self._session.add(record)
         self._session.commit()

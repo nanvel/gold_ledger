@@ -12,7 +12,7 @@ class RetailerTable(Base):
 
     id: Mapped[int]
     name: Mapped[str] = mapped_column(unique=True)
-    admin_id: Mapped[int] = mapped_column(sa.ForeignKey("users.id"))
+    owner_id: Mapped[int] = mapped_column(sa.ForeignKey("users.id"))
 
     created_at: Mapped[datetime] = mapped_column(server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(

@@ -5,7 +5,7 @@ from fastapi import APIRouter, Depends
 from pydantic import BaseModel
 
 from app.container import Container
-from app.models import StoreType, User
+from app.models import User
 from app.repos.uow import UnitOfFork
 from .auth import get_active_user
 
@@ -16,9 +16,10 @@ class ResponseItem(BaseModel):
     id: int
     email: str
     role: int
-    store_id: Optional[int]
+    supplier_id: Optional[int]
+    retailer_id: Optional[int]
     store_name: Optional[str]
-    store_type: Optional[str]
+    store_owner_id: Optional[int]
 
 
 @router.get("/me")
@@ -27,33 +28,21 @@ def get_me(
     user: User = Depends(get_active_user),
     uow: UnitOfFork = Depends(Provide[Container.uow]),
 ) -> ResponseItem:
-    store_type = None
     if user.supplier_id is not None:
-        store_type = StoreType.SUPPLIER
         with uow:
             store = uow.suppliers.by_id(user.supplier_id)
     elif user.retailer_id is not None:
-        store_type = StoreType.RETAILER
         with uow:
             store = uow.retailers.by_id(user.retailer_id)
     else:
         store = None
 
-    if store:
-        return ResponseItem(
-            id=user.id,
-            email=user.username,
-            role=user.role.value,
-            store_id=store.id,
-            store_name=store.name,
-            store_type=store_type.value,
-        )
-
     return ResponseItem(
         id=user.id,
         email=user.username,
         role=user.role.value,
-        store_id=None,
-        store_name=None,
-        store_type=None,
+        store_name=store and store.name or None,
+        supplier_id=user.supplier_id,
+        retailer_id=user.retailer_id,
+        store_owner_id=store and store.owner_id or None,
     )

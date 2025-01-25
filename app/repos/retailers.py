@@ -24,13 +24,13 @@ class RetailersRepo:
             return Retailer(
                 id=record.id,
                 name=record.name,
-                admin_id=record.admin_id,
+                owner_id=record.owner_id,
             )
 
     def create(self, retailer: Retailer) -> int:
         record = RetailerTable(
             name=retailer.name,
-            admin_id=retailer.admin_id,
+            owner_id=retailer.owner_id,
         )
         self._session.add(record)
         self._session.commit()

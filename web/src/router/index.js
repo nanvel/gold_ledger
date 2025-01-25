@@ -1,11 +1,11 @@
 import { useAuthStore } from "@/stores/auth";
 import { createRouter, createWebHistory } from "vue-router";
-import AccountView from "@/views/AccountView.vue";
 import HomeView from "@/views/HomeView.vue";
 import LoginView from "@/views/LoginView.vue";
 import RegisterView from "@/views/RegisterView.vue";
 import RetailerView from "@/views/RetailerView.vue";
 import RetailersView from "@/views/RetailersView.vue";
+import SettingsView from "@/views/SettingsView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -26,9 +26,9 @@ const router = createRouter({
       component: RegisterView,
     },
     {
-      path: "/account",
-      name: "account",
-      component: AccountView,
+      path: "/settings",
+      name: "settings",
+      component: SettingsView,
     },
     {
       path: "/retailers",
