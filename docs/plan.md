@@ -28,14 +28,11 @@ MVP v2:
 - [ ] products list improvements
   - [x] reload after product added
   - [x] show latest first
-  - [ ] cards view
+  - [x] cards view
     - [x] return image in api
     - [x] switch between views
     - [x] save table vs cards selection
   - [ ] pagination
-  - [ ] download products as csv
-  - [ ] ordering
-  - [ ] filtering
 - [ ] Account -> Settings 
   - [ ] change menu according to store type
   - [ ] password change
@@ -44,6 +41,11 @@ MVP v2:
   - [ ] list staff
   - [ ] add staff
   - [ ] disable/reenable staff
+- [ ] product page
+- [ ] retailers views
+  - [ ] supplier page
+  - [ ] products page
+  - [ ] submit payment
 - [ ] action log on dashboard
   - [ ] activity log
   - [ ] auto reload
@@ -70,9 +72,17 @@ Other:
   - [ ] show errors under fields in the form
 - [ ] Company / Legal
 - [ ] Landing page
+- [ ] download products as csv
+- [ ] Products
+  - [ ] ordering
+  - [ ] filtering
 
 Questions:
 - validation of product fields?
 - Dashboard: not received, paid, confirmed, outstanding per retailer?
 - Dashboard: updates for products
 - What is Date in product?
+- new domain?
+- icons in forms
+- separate page for new product instead of modal?
+- sent -> (canceled, received) -> paid -> payment confirmed

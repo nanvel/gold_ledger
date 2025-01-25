@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="join">
+    <div class="join mt-8">
       <button
         class="btn join-item"
         :disabled="productsView === 'table'"
@@ -26,10 +26,29 @@
       v-if="products?.length && !loading && productsView === 'cards'"
     />
   </div>
+  <div class="join mt-8" v-if="!loading && total > 0">
+    <button
+      class="join-item btn"
+      v-if="page > 1"
+      v-on:click="loadPage(page - 1)"
+    >
+      «
+    </button>
+    <button class="join-item btn">
+      Page {{ page }} / {{ pages }} <small>Total: {{ total }}</small>
+    </button>
+    <button
+      class="join-item btn"
+      v-if="page < pages"
+      v-on:click="loadPage(page + 1)"
+    >
+      »
+    </button>
+  </div>
 </template>
 
 <script setup>
-import { onMounted, ref, defineProps } from "vue";
+import { onMounted, ref, defineProps, computed } from "vue";
 import { httpClient } from "@/services/http.js";
 import ProductTable from "@/components/ProductTable.vue";
 import ProductCards from "@/components/ProductCards.vue";
@@ -41,16 +60,21 @@ const props = defineProps({
 
 const products = ref([]);
 const total = ref(0);
+const page = ref(1);
+const limit = ref(20);
 const loading = ref(false);
 const productsView = ref(localStorage.getItem("productsView") || "table");
+
+const pages = computed(() => Math.ceil(total.value / limit.value));
 
 const setProductsView = (view) => {
   productsView.value = view;
   localStorage.setItem("productsView", view);
 };
 
-onMounted(async () => {
-  let q = "?limit=20";
+const loadPage = async (p) => {
+  page.value = p;
+  let q = `?offset=${(page.value - 1) * limit.value}&limit=${limit.value}`;
   if (props.retailerId) {
     q += `&retailer_id=${props.retailerId}`;
   }
@@ -59,11 +83,15 @@ onMounted(async () => {
   }
   loading.value = true;
   try {
-    const resp = await httpClient.get(`/api/products?${q}`, null, null);
+    const resp = await httpClient.get(`/api/products${q}`, null, null);
     products.value = resp["items"];
     total.value = resp["total"];
   } finally {
     loading.value = false;
   }
+};
+
+onMounted(async () => {
+  await loadPage(1);
 });
 </script>
