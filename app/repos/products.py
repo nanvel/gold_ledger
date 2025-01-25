@@ -5,7 +5,7 @@ from typing import Optional, Tuple
 from sqlalchemy.orm import Session
 
 from app.db import ImageTable, ProductTable
-from app.models import Image, Product, Timestamp
+from app.models import Image, Product, ProductOrderBy, Timestamp
 
 
 @dataclass(frozen=True)
@@ -50,6 +50,8 @@ class ProductsRepo:
         retailer_id: Optional[int],
         limit: int,
         offset: int,
+        order_by: ProductOrderBy = ProductOrderBy.CREATED,
+        reverse: bool = True,
     ) -> Tuple[int, Tuple[ProductSearchItem, ...]]:
         query = self._session.query(ProductTable)
 
@@ -60,7 +62,16 @@ class ProductsRepo:
 
         total = query.count()
 
-        records = query.offset(offset).limit(limit)
+        order_by_field = (
+            ProductTable.created_at
+            if order_by == ProductOrderBy.CREATED
+            else ProductTable.id
+        )
+
+        if reverse:
+            order_by_field = order_by_field.desc()
+
+        records = query.order_by(order_by_field).offset(offset).limit(limit)
 
         return total, tuple(
             ProductSearchItem(

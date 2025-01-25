@@ -144,6 +144,8 @@ const formImageThumb = ref(null);
 const formImageLoading = ref(false);
 const error = ref("");
 
+const emit = defineEmits(["productAdded"]);
+
 const dateToStr = (d) => {
   // alternative implementations in https://stackoverflow.com/q/23593052/1850609
   return (
@@ -210,6 +212,7 @@ const addProduct = async () => {
     );
     add_product.close();
     clearFields();
+    emit("productAdded");
   } catch (e) {
     error.value = parseError(e);
     console.log(error);

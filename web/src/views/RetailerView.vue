@@ -4,9 +4,12 @@
       <h2>{{ retailerName }}</h2>
     </article>
 
-    <ProductModal :retailer_id="retailerId" />
+    <ProductModal
+      :retailer_id="retailerId"
+      v-on:product-added="productsVersion = productsVersion + 1"
+    />
 
-    <ProductsTable :retailerId="retailerId" />
+    <ProductsTable :retailerId="retailerId" :key="productsVersion" />
   </Navbar>
 </template>
 
@@ -20,6 +23,7 @@ import ProductsTable from "@/components/ProductsTable.vue";
 
 const retailerName = ref(false);
 const retailerId = ref(parseInt(router.currentRoute.value.params.id));
+const productsVersion = ref(0);
 
 onMounted(async () => {
   const resp = await httpClient.get(

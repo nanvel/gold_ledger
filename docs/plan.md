@@ -26,8 +26,10 @@ MVP v2:
   - [x] make name field in focus in form
   - [x] clear fields on cancel or save
 - [ ] products list improvements
-  - [ ] reload after product added
+  - [x] reload after product added
+  - [x] show latest first
   - [ ] cards view
+    - [ ] return image in api 
   - [ ] download products as csv
   - [ ] ordering
   - [ ] filtering
@@ -65,3 +67,9 @@ Other:
   - [ ] show errors under fields in the form
 - [ ] Company / Legal
 - [ ] Landing page
+
+Questions:
+- validation of product fields?
+- Dashboard: not received, paid, confirmed, outstanding per retailer?
+- Dashboard: updates for products
+- What is Date in product?

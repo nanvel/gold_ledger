@@ -3,9 +3,10 @@ from sqlalchemy.orm import sessionmaker
 
 
 def init_db(db_uri):
-    engine = create_engine(db_uri)
+    engine = create_engine(db_uri, echo=True)
     try:
         with engine.connect() as conn:
             yield sessionmaker(conn)
+            conn.commit()
     finally:
         engine.dispose()
