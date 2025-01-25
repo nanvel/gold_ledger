@@ -1,7 +1,7 @@
 <template>
-  <div class="flex flex-row space-x-2 space-y-2 flex-wrap">
+  <div class="flex flex-row flex-wrap justify-start">
     <div
-      class="card bg-base-100 w-96 shadow-xl"
+      class="card bg-base-100 border-neutral border-2 w-96 mx-2 my-2"
       v-for="product in props.products"
       :key="product.id"
     >
@@ -14,36 +14,36 @@
             :alt="product.name"
           />
           <div class="overflow-x-auto">
-  <table class="table table-zebra">
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Value</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>Date</td>
-        <td>{{ product.date }}</td>
-      </tr>
-    <tr>
-        <td>Weight</td>
-        <td>{{ product.weight }}</td>
-      </tr>
-    <tr>
-        <td>Quality</td>
-        <td>{{ product.quality }}</td>
-      </tr>
-    <tr>
-        <td>Rate per gram</td>
-        <td>{{ product.rate_per_gram }}</td>
-      </tr>
-    <tr>
-        <td>Total amount</td>
-        <td>{{ product.total_amount }}</td>
-      </tr>
-    </tbody>
-  </table>
+            <table class="table table-zebra">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Date</td>
+                  <td>{{ product.date }}</td>
+                </tr>
+              <tr>
+                  <td>Weight</td>
+                  <td>{{ product.weight }}</td>
+                </tr>
+              <tr>
+                  <td>Quality</td>
+                  <td>{{ product.quality }}</td>
+                </tr>
+              <tr>
+                  <td>Rate per gram</td>
+                  <td>{{ product.rate_per_gram }}</td>
+                </tr>
+              <tr>
+                  <td>Total amount</td>
+                  <td>{{ product.total_amount }}</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </p>
       </div>

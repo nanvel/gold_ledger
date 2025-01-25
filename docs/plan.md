@@ -43,13 +43,14 @@ MVP v2:
     - [x] api
     - [x] modal
     - [x] set min password length
-- [ ] staff
+- [x] staff
   - [x] admin -> owner, users -> staff 
   - [x] add staff api
   - [x] list staff
-  - [ ] add staff modal
-- [ ] product page
-- [ ] retailers views
+  - [x] add staff modal
+- [ ] products page
+  - [ ] product page
+- [ ] retailer views
   - [ ] supplier page
   - [ ] products page
   - [ ] submit payment

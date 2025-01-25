@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="flex flex-col space-y-2">
     <div class="join mt-8">
       <button
         class="btn join-item"

@@ -1,8 +1,5 @@
 <template>
-  <button
-    class="btn btn-wide btn-primary text-md"
-    onclick="add_product.showModal()"
-  >
+  <button class="btn btn-sm btn-primary" onclick="add_product.showModal()">
     Add a product sold
   </button>
   <dialog id="add_product" class="modal">
