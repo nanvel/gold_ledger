@@ -215,7 +215,7 @@ const addProduct = async () => {
     emit("productAdded");
   } catch (e) {
     error.value = parseError(e);
-    console.log(error);
+    console.log(e);
   } finally {
     loading.value = false;
   }

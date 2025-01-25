@@ -32,8 +32,16 @@ def change_password(
 ) -> Response:
     if not crypt_context.verify(item.old_password, user.password_hash):
         raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Invalid current password.",
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail=[
+                {
+                    "type": "invalid_password",
+                    "loc": ["body", "old_password"],
+                    "msg": "Old password is incorrect",
+                    "input": item.old_password,
+                    "ctx": {},
+                }
+            ],
         )
 
     with uow:

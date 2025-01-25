@@ -7,7 +7,12 @@
         {{ myEmail }}
       </div>
 
-      <button class="btn btn-primary" v-on:click="logout">Log out</button>
+      <div class="flex flex-row space-x-4">
+        <button class="btn btn-sm btn-primary" v-on:click="logout">
+          Log out
+        </button>
+        <change-password-modal />
+      </div>
 
       <h3 class="text-2xl font-semibold">Theme</h3>
       <div class="join join-horizontal mt-2">
@@ -33,6 +38,7 @@
 import Navbar from "@/components/Navbar.vue";
 import { useAuthStore, useMeStore } from "@/stores/index.js";
 import { storeToRefs } from "pinia";
+import changePasswordModal from "@/components/ChangePasswordModal.vue";
 
 const meStore = useMeStore();
 const { selectedTheme, myEmail, isOwner } = storeToRefs(meStore);

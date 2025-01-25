@@ -67,6 +67,7 @@ MVP v2:
 - [ ] use slider for quality?
 - [ ] validate and print errors for login/registration forms
 - [ ] use details for errors response, not message
+- [ ] validate login/register input inside js
 
 Other:
 
@@ -96,3 +97,4 @@ Questions:
 - separate page for new product instead of modal?
 - sent -> (canceled, received) -> paid -> payment confirmed
 - show not paid, confirmed, etc.
+- setup CI tests on github
