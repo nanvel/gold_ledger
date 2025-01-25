@@ -37,9 +37,12 @@ MVP v2:
   - [x] change name
   - [x] is_supplier / is_retailer / is_owner to me store
   - [x] admin_id -> owner_id
-  - [ ] rid of role
-  - [ ] change menu according to store type
+  - [x] rid of role
+  - [x] change menu according to store type
   - [ ] password change
+    - [x] api
+    - [ ] modal
+    - [ ] set min password length
 - [ ] staff
   - [ ] admin -> owner, users -> staff
   - [ ] list staff
@@ -62,6 +65,8 @@ MVP v2:
 - [ ] remove product before received?
 - [ ] highlight selected menu?
 - [ ] use slider for quality?
+- [ ] validate and print errors for login/registration forms
+- [ ] use details for errors response, not message
 
 Other:
 

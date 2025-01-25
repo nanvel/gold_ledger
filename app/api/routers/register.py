@@ -3,7 +3,7 @@ from dependency_injector.wiring import Provide, inject
 from pydantic import EmailStr
 from fastapi import APIRouter, Depends, HTTPException, status
 from passlib.context import CryptContext
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from app.container import Container
 from app.models import Retailer, StoreType, Supplier, User
@@ -16,7 +16,7 @@ class RegisterStoreForm(BaseModel):
     type: StoreType
     name: str
     email: EmailStr
-    password: str
+    password: str = Field(..., min_length=8)
 
 
 class StoreResponse(BaseModel):

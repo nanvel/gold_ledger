@@ -12,6 +12,7 @@ from app.container import Container
 from .routers import auth
 from .routers import images
 from .routers import me
+from .routers import password
 from .routers import products
 from .routers import register
 from .routers import retailer
@@ -33,6 +34,7 @@ def create_app(container: Container):
     app.include_router(auth.router, prefix="/api")
     app.include_router(images.router, prefix="/api")
     app.include_router(me.router, prefix="/api")
+    app.include_router(password.router, prefix="/api")
     app.include_router(products.router, prefix="/api")
     app.include_router(register.router, prefix="/api")
     app.include_router(retailer.router, prefix="/api")
