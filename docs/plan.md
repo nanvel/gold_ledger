@@ -1,69 +1,17 @@
 # Plan
 
-MVP v2:
-- [x] remove store suffixes
-  - [x] retailer_stores -> retailers, supplier_stores - > suppliers
-  - [x] migration
-- [x] image upload
-  - [x] test the service 
-  - [x] make a simple thuml 
-  - [x] db
-  - [x] api 
-  - [x] image upload UI (https://codepen.io/chenuin/pen/MdvyjG)
-  - [x] pulumi bucket and permissions
-  - [x] refactor header for http service
-  - [x] image preview
-  - [x] image ui fixes
-  - [x] image loading
-  - [x] image as a fk, don't allow to remove once product created
-  - [x] handle image in the product handler
-  - [x] AddProduct -> ProductModal
-- [x] filter vs search, reduce to one (filter)
-- [x] form improvements
-  - [x] cancel button in modal 
-  - [x] fix date field
-  - [x] show errors
-  - [x] make name field in focus in form
-  - [x] clear fields on cancel or save
-- [x] products list improvements
-  - [x] reload after product added
-  - [x] show latest first
-  - [x] cards view
-    - [x] return image in api
-    - [x] switch between views
-    - [x] save table vs cards selection
-  - [x] pagination
-- [x] Account -> Settings
-  - [x] change name
-  - [x] is_supplier / is_retailer / is_owner to me store
-  - [x] admin_id -> owner_id
-  - [x] rid of role
-  - [x] change menu according to store type
-  - [x] password change
-    - [x] api
-    - [x] modal
-    - [x] set min password length
-- [x] staff
-  - [x] admin -> owner, users -> staff 
-  - [x] add staff api
-  - [x] list staff
-  - [x] add staff modal
-- [ ] products page
-  - [x] products list
-  - [x] name
-    - [x] name in db
-    - [x] api
-    - [x] name change modal
-    - [x] show name
-  - [x] product page
-    - [x] repo 
-    - [x] api
+MVP v3:
+- [x] deploy
 - [ ] retailer views
   - [ ] supplier page
   - [ ] products page
+  - [ ] product page adjustment
   - [ ] submit payment
-- [ ] received and paid logic
-  - [ ] timeline on product page 
+    - [ ] db table
+    - [ ] Cash Payment: Enter amount and date
+    - [ ] Goods Payment: Enter Weight, Quality, Rate, and Total Amount
+- [ ] received product
+- [ ] paid / unpaid transactions
 - [ ] action log on dashboard
   - [ ] activity log
   - [ ] auto reload
@@ -79,6 +27,7 @@ MVP v2:
 - [ ] validate and print errors for login/registration forms
 - [ ] use details for errors response, not message
 - [ ] validate login/register input inside js
+- [ ] datetime -> date? (product and payment)
 
 Other:
 
@@ -98,6 +47,8 @@ Other:
   - [ ] ordering
   - [ ] filtering
 - [ ] disable/reenable staff
+- [ ] add message about 2 moths trial free
+- [ ] terms of use
 
 Questions:
 - validation of product fields?
@@ -110,3 +61,7 @@ Questions:
 - sent -> (canceled, received) -> paid -> payment confirmed
 - show not paid, confirmed, etc.
 - setup CI tests on github
+- do we need a photo for payment?
+- how the store id looks like?
+- Write terms of use?
+- Landing page
