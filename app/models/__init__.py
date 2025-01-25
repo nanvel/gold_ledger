@@ -1,4 +1,6 @@
 from .image import Image
+from .payment import Payment
+from .payment_type import PaymentType
 from .product import Product
 from .product_order_by import ProductOrderBy
 from .retailer import Retailer
@@ -11,6 +13,8 @@ from .user import User
 
 __all__ = (
     "Image",
+    "Payment",
+    "PaymentType",
     "Product",
     "ProductOrderBy",
     "Retailer",

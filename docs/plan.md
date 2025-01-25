@@ -7,7 +7,7 @@ MVP v3:
   - [ ] products page
   - [ ] product page adjustment
   - [ ] submit payment
-    - [ ] db table
+    - [x] db table
     - [ ] Cash Payment: Enter amount and date
     - [ ] Goods Payment: Enter Weight, Quality, Rate, and Total Amount
 - [ ] received product
