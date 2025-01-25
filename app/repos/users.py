@@ -3,7 +3,7 @@ from typing import Optional
 from sqlalchemy.orm import Session
 
 from app.db import UserTable
-from app.models import User, UserRole
+from app.models import User
 
 
 class UsersRepo:
@@ -14,7 +14,6 @@ class UsersRepo:
         record = UserTable(
             username=user.username,
             password_hash=user.password_hash,
-            role=user.role.value,
             supplier_id=user.supplier_id,
             retailer_id=user.retailer_id,
         )
@@ -30,7 +29,6 @@ class UsersRepo:
         if record:
             record.username = user.username
             record.password_hash = user.password_hash
-            record.role = user.role.value
             record.token_version = user.token_version
             record.supplier_id = user.supplier_id
             record.retailer_id = user.retailer_id
@@ -44,7 +42,6 @@ class UsersRepo:
                 id=record.id,
                 username=record.username,
                 password_hash=record.password_hash,
-                role=UserRole(record.role),
                 token_version=record.token_version,
                 supplier_id=record.supplier_id,
                 retailer_id=record.retailer_id,
@@ -59,7 +56,6 @@ class UsersRepo:
                 id=record.id,
                 username=record.username,
                 password_hash=record.password_hash,
-                role=UserRole(record.role),
                 token_version=record.token_version,
                 supplier_id=record.supplier_id,
                 retailer_id=record.retailer_id,

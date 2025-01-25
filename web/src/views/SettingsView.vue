@@ -23,6 +23,8 @@
           v-on:click.prevent="setTheme(theme[0])"
         />
       </div>
+
+      <h3 class="text-2xl font-semibold" v-if="isOwner">Staff</h3>
     </article>
   </Navbar>
 </template>
@@ -33,7 +35,7 @@ import { useAuthStore, useMeStore } from "@/stores/index.js";
 import { storeToRefs } from "pinia";
 
 const meStore = useMeStore();
-const { selectedTheme, myEmail } = storeToRefs(meStore);
+const { selectedTheme, myEmail, isOwner } = storeToRefs(meStore);
 
 const themes = [
   ["light", "Light"],

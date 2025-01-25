@@ -35,8 +35,8 @@ MVP v2:
   - [x] pagination
 - [ ] Account -> Settings
   - [x] change name
-  - [ ] is_supplier / is_retailer / is_owner to me store
-  - [ ] admin_id -> owner_id
+  - [x] is_supplier / is_retailer / is_owner to me store
+  - [x] admin_id -> owner_id
   - [ ] rid of role
   - [ ] change menu according to store type
   - [ ] password change
@@ -90,3 +90,4 @@ Questions:
 - icons in forms
 - separate page for new product instead of modal?
 - sent -> (canceled, received) -> paid -> payment confirmed
+- show not paid, confirmed, etc.

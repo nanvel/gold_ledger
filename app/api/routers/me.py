@@ -15,7 +15,6 @@ router = APIRouter()
 class ResponseItem(BaseModel):
     id: int
     email: str
-    role: int
     supplier_id: Optional[int]
     retailer_id: Optional[int]
     store_name: Optional[str]
@@ -40,7 +39,6 @@ def get_me(
     return ResponseItem(
         id=user.id,
         email=user.username,
-        role=user.role.value,
         store_name=store and store.name or None,
         supplier_id=user.supplier_id,
         retailer_id=user.retailer_id,

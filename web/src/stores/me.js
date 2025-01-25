@@ -1,16 +1,22 @@
 import { defineStore } from "pinia";
 
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import { httpClient } from "@/services/http.js";
 
 export const useMeStore = defineStore("me", () => {
   const selectedTheme = ref(
     localStorage.getItem("theme") || document.body.getAttribute("data-theme"),
   );
+  const myId = ref(null);
   const myEmail = ref(null);
   const storeName = ref("No Store Selected");
-  const storeId = ref(null);
-  const storeType = ref(null);
+  const storeOwnerId = ref(null);
+  const supplierId = ref(null);
+  const retailerId = ref(null);
+
+  const isSupplier = computed(() => supplierId.value !== null);
+  const isRetailer = computed(() => retailerId.value !== null);
+  const isOwner = computed(() => storeOwnerId.value === myId.value);
 
   const setTheme = (theme) => {
     localStorage.setItem("theme", theme);
@@ -27,18 +33,21 @@ export const useMeStore = defineStore("me", () => {
 
     const resp = await httpClient.get("/api/me", null, null);
 
+    myId.value = resp.id;
     myEmail.value = resp.email;
     storeName.value = resp.store_name;
-    storeId.value = resp.store_id;
-    storeType.value = resp.store_type;
+    storeOwnerId.value = resp.store_owner_id;
+    supplierId.value = resp.supplier_id;
+    retailerId.value = resp.retailer_id;
   };
 
   return {
     selectedTheme,
     myEmail,
-    storeType,
-    storeId,
     storeName,
+    isSupplier,
+    isRetailer,
+    isOwner,
     load,
     setTheme,
   };

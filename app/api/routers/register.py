@@ -6,7 +6,7 @@ from passlib.context import CryptContext
 from pydantic import BaseModel
 
 from app.container import Container
-from app.models import Retailer, StoreType, Supplier, User, UserRole
+from app.models import Retailer, StoreType, Supplier, User
 from app.repos.uow import UnitOfFork
 
 router = APIRouter()
@@ -44,7 +44,6 @@ def register_store(
                 id=0,
                 username=str(item.email),
                 password_hash=crypt_context.hash(item.password),
-                role=UserRole.SHOP_OWNER,
                 token_version=0,
                 supplier_id=None,
                 retailer_id=None,

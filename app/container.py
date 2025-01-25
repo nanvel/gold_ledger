@@ -5,7 +5,6 @@ from app.resources.database import init_db
 from app.resources.s3_client import init_s3
 from app.repos.uow import UnitOfFork
 from app.services.images import ImagesService
-from app.use_cases.create_user import CreateUser
 from app.use_cases.reset_password import ResetPassword
 
 
@@ -44,11 +43,6 @@ class Container(containers.DeclarativeContainer):
 
     uow = providers.Singleton(UnitOfFork, db=db)
 
-    create_user = providers.Factory(
-        CreateUser,
-        uow=uow,
-        crypt_context=crypt_context,
-    )
     reset_password = providers.Factory(
         ResetPassword,
         uow=uow,

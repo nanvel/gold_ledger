@@ -13,7 +13,6 @@ class UserTable(Base):
     id: Mapped[int]
     username: Mapped[str] = mapped_column(unique=True)
     password_hash: Mapped[str]
-    role: Mapped[int]
     # increase to disable issued access tokens
     token_version: Mapped[int] = mapped_column(default=0, server_default="0")
 

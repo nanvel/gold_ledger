@@ -8,7 +8,7 @@ from passlib.context import CryptContext
 from pydantic import BaseModel
 
 from app.container import Container
-from app.models import User, UserRole
+from app.models import User
 from app.repos.uow import UnitOfFork
 
 router = APIRouter(
@@ -22,7 +22,6 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/auth/token")
 class TokenResponse(BaseModel):
     access_token: str
     token_type: str
-    role: UserRole
 
 
 @router.post("/token", response_model=TokenResponse)
@@ -49,7 +48,6 @@ def create_access_token(
                 algorithm=jwt_algorithm,
             ),
             token_type="bearer",
-            role=user.role.value,
         )
 
     raise HTTPException(
@@ -89,23 +87,3 @@ def get_current_user(
 
 def get_active_user(user: Annotated[User, Depends(get_current_user)]):
     return user
-
-
-def get_employee_user(user: Annotated[User, Depends(get_current_user)]):
-    if user.role in {UserRole.ADMIN, UserRole.EMPLOYEE}:
-        return user
-
-    raise HTTPException(
-        status_code=status.HTTP_403_FORBIDDEN,
-        detail="User does not have enough privileges.",
-    )
-
-
-def get_admin_user(user: Annotated[User, Depends(get_current_user)]):
-    if user.role == UserRole.ADMIN:
-        return user
-
-    raise HTTPException(
-        status_code=status.HTTP_403_FORBIDDEN,
-        detail="User does not have enough privileges.",
-    )

@@ -2,7 +2,6 @@ import typer
 import uvicorn
 
 from app.container import Container
-from app.models import UserRole
 from app.settings import load_settings
 
 app = typer.Typer()
@@ -34,17 +33,6 @@ def dev_server():
         port=8000,
         reload=True,
     )
-
-
-@app.command()
-def create_admin(username: str, password: str):
-    with _Container() as container:
-        user = container.create_user()(
-            username=username,
-            password=password,
-            role=UserRole.ADMIN.value,
-        )
-        typer.echo(user)
 
 
 @app.command()
