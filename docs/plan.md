@@ -19,13 +19,12 @@ MVP v2:
   - [x] handle image in the product handler
   - [x] AddProduct -> ProductModal
 - [x] filter vs search, reduce to one (filter)
-- [ ] form improvements
+- [x] form improvements
   - [x] cancel button in modal 
   - [x] fix date field
-  - [ ] show errors under fields in the form
-  - [ ] make name field in focus in form
-  - [ ] clear fields on cancel or save
-  - [ ] preset date
+  - [x] show errors
+  - [x] make name field in focus in form
+  - [x] clear fields on cancel or save
 - [ ] products list improvements
   - [ ] reload after product added
   - [ ] cards view
@@ -63,5 +62,6 @@ Other:
   - [ ] mobile
   - [ ] keep the tab that was selected last time
   - [ ] pick up color scheme / theme switch
+  - [ ] show errors under fields in the form
 - [ ] Company / Legal
 - [ ] Landing page

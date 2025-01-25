@@ -21,6 +21,7 @@
             type="text"
             class="input input-bordered w-full input-md text-lg"
             v-model="name"
+            autofocus
           />
         </label>
         <label class="form-control w-full">
@@ -108,7 +109,7 @@
         {{ error }}
       </div>
       <div class="modal-action justify-between">
-        <form method="dialog">
+        <form method="dialog" v-on:submit="clearFields">
           <button class="btn btn-secondary" :disabled="loading">Cancel</button>
         </form>
         <button
@@ -153,6 +154,19 @@ const dateToStr = (d) => {
   );
 };
 
+const clearFields = () => {
+  name.value = "";
+  date.value = new Date();
+  weight.value = 0;
+  quality.value = 0;
+  ratePerGram.value = 0;
+  totalAmount.value = 0;
+  formImageId.value = null;
+  formImageThumb.value = null;
+  formImageLoading.value = false;
+  error.value = "";
+};
+
 const parseError = (r) => {
   if (r.detail) {
     return r.detail.map((d) => `${d.loc.slice(-1)}: ${d.msg}.`).join("\n");
@@ -195,6 +209,7 @@ const addProduct = async () => {
       { showToast: false },
     );
     add_product.close();
+    clearFields();
   } catch (e) {
     error.value = parseError(e);
     console.log(error);
