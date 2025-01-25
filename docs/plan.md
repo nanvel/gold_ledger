@@ -50,18 +50,20 @@ MVP v2:
   - [x] add staff modal
 - [ ] products page
   - [x] products list
-  - [ ] name
+  - [x] name
     - [x] name in db
     - [x] api
-    - [ ] name change modal
-    - [ ] show name
-  - [ ] product page
-    - [ ] timeline  
+    - [x] name change modal
+    - [x] show name
+  - [x] product page
+    - [x] repo 
+    - [x] api
 - [ ] retailer views
   - [ ] supplier page
   - [ ] products page
   - [ ] submit payment
 - [ ] received and paid logic
+  - [ ] timeline on product page 
 - [ ] action log on dashboard
   - [ ] activity log
   - [ ] auto reload

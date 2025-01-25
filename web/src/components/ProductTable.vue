@@ -12,7 +12,9 @@
       <tbody>
         <tr v-for="product in props.products" :key="product.id">
           <td>
-            {{ product.name }}
+            <RouterLink :to="`/products/${product.id}`">{{
+              product.name
+            }}</RouterLink>
           </td>
           <td>
             <timestamp :value="product.date" />
@@ -32,6 +34,7 @@
 <script setup>
 import { defineProps } from "vue";
 import Timestamp from "@/components/Timestamp.vue";
+import { RouterLink } from "vue-router";
 
 const props = defineProps({
   products: Array,

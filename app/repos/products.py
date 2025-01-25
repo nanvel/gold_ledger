@@ -29,6 +29,22 @@ class ProductSearchItem:
     images: Tuple[ProductImage, ...]
 
 
+@dataclass(frozen=True)
+class ProductDetailsItem:
+    id: int
+    name: str
+    date: int
+    weight: Decimal
+    quality: Decimal
+    rate_per_gram: Decimal
+    total_amount: Decimal
+    created_at: int
+    supplier_id: int
+    retailer_id: int
+    creator_id: int
+    images: Tuple[ProductImage, ...]
+
+
 class ProductsRepo:
     def __init__(self, session: Session):
         self._session = session
@@ -52,6 +68,33 @@ class ProductsRepo:
         self._session.refresh(record)
 
         return record.id
+
+    def by_id(self, product_id: int) -> Optional[ProductDetailsItem]:
+        record = self._session.query(ProductTable).filter_by(id=product_id).first()
+
+        if record:
+            return ProductDetailsItem(
+                id=record.id,
+                name=record.name,
+                date=int(Timestamp.from_datetime(record.date)),
+                weight=record.weight,
+                quality=record.quality,
+                rate_per_gram=record.rate_per_gram,
+                total_amount=record.total_amount,
+                created_at=int(Timestamp.from_datetime(record.created_at)),
+                supplier_id=record.supplier_id,
+                retailer_id=record.retailer_id,
+                creator_id=record.creator_id,
+                images=tuple(
+                    ProductImage(
+                        id=image.id,
+                        url=image.url,
+                        thumb_url=image.thumb_url,
+                        created_at=int(Timestamp.from_datetime(image.created_at)),
+                    )
+                    for image in record.images
+                ),
+            )
 
     def filter(
         self,

@@ -6,7 +6,7 @@
       :key="product.id"
     >
       <div class="card-body">
-        <h2 class="card-title">{{ product.name }}</h2>
+        <h2 class="card-title"><RouterLink :to="`/products/${product.id}`">{{ product.name }}</RouterLink></h2>
         <p>
           <img
             v-if="product.images?.length"
@@ -53,7 +53,7 @@
 
 <script setup>
 import { defineProps } from "vue";
-import Timestamp from "@/components/Timestamp.vue";
+import { RouterLink } from "vue-router";
 
 const props = defineProps({
   products: Array,

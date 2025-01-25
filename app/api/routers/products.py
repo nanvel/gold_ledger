@@ -8,7 +8,7 @@ from pydantic import BaseModel
 
 from app.container import Container
 from app.models import Product, Timestamp, User
-from app.repos.products import ProductSearchItem
+from app.repos.products import ProductDetailsItem, ProductSearchItem
 from app.repos.uow import UnitOfFork
 from .auth import get_active_user
 
@@ -120,3 +120,25 @@ def get_products(
         )
 
     return ProductsResponse(total=total, items=items)
+
+
+@router.get("/products/{product_id}")
+@inject
+def get_product(
+    product_id: int,
+    user: User = Depends(get_active_user),
+    uow: UnitOfFork = Depends(Provide[Container.uow]),
+) -> ProductDetailsItem:
+    with uow:
+        product = uow.products.by_id(product_id)
+
+        if not product or (
+            product.supplier_id != user.supplier_id
+            and product.retailer_id != user.retailer_id
+        ):
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="The product was not found.",
+            )
+
+        return product

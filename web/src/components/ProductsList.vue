@@ -2,14 +2,14 @@
   <div class="flex flex-col space-y-2">
     <div class="join mt-8">
       <button
-        class="btn join-item"
+        class="btn btn-sm join-item"
         :disabled="productsView === 'table'"
         v-on:click="setProductsView('table')"
       >
         Table
       </button>
       <button
-        class="btn join-item"
+        class="btn btn-sm join-item"
         :disabled="productsView === 'cards'"
         v-on:click="setProductsView('cards')"
       >
