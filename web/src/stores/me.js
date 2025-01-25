@@ -48,6 +48,8 @@ export const useMeStore = defineStore("me", () => {
     isSupplier,
     isRetailer,
     isOwner,
+    supplierId,
+    retailerId,
     load,
     setTheme,
   };

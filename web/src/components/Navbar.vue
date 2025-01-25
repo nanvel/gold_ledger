@@ -34,7 +34,7 @@
             <li v-if="isSupplier">
               <RouterLink to="/retailers">Retailers</RouterLink>
             </li>
-            <li><a>Products</a></li>
+            <li><RouterLink to="/products">Products</RouterLink></li>
             <li><RouterLink to="/settings">Settings</RouterLink></li>
           </ul>
         </div>
@@ -54,7 +54,7 @@
         <li v-if="isSupplier">
           <RouterLink to="/retailers">Retailers</RouterLink>
         </li>
-        <li><a>Products</a></li>
+        <li><RouterLink to="/products">Products</RouterLink></li>
         <li><RouterLink to="/settings">Settings</RouterLink></li>
       </ul>
     </div>
