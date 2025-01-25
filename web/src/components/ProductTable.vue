@@ -17,7 +17,7 @@
             }}</RouterLink>
           </td>
           <td>
-            <timestamp :value="product.date" />
+            {{ product.date }}
           </td>
           <td>
             {{ product.total_amount }}

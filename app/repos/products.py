@@ -20,11 +20,12 @@ class ProductImage:
 class ProductSearchItem:
     id: int
     name: str
-    date: int
+    date: str
     weight: Decimal
     quality: Decimal
     rate_per_gram: Decimal
     total_amount: Decimal
+    payment_due_date: str
     created_at: int
     images: Tuple[ProductImage, ...]
 
@@ -33,11 +34,12 @@ class ProductSearchItem:
 class ProductDetailsItem:
     id: int
     name: str
-    date: int
+    date: str
     weight: Decimal
     quality: Decimal
     rate_per_gram: Decimal
     total_amount: Decimal
+    payment_due_date: str
     created_at: int
     supplier_id: int
     retailer_id: int
@@ -52,11 +54,12 @@ class ProductsRepo:
     def create(self, product: Product):
         record = ProductTable(
             name=product.name,
-            date=product.date.to_datetime(),
+            date=product.date,
             weight=product.weight,
             quality=product.quality,
             rate_per_gram=product.rate_per_gram,
             total_amount=product.total_amount,
+            payment_due_date=product.payment_due_date,
             custom_fields=product.custom_fields,
             supplier_id=product.supplier_id,
             retailer_id=product.retailer_id,
@@ -76,11 +79,12 @@ class ProductsRepo:
             return ProductDetailsItem(
                 id=record.id,
                 name=record.name,
-                date=int(Timestamp.from_datetime(record.date)),
+                date=record.date.isoformat(),
                 weight=record.weight,
                 quality=record.quality,
                 rate_per_gram=record.rate_per_gram,
                 total_amount=record.total_amount,
+                payment_due_date=record.payment_due_date.isoformat(),
                 created_at=int(Timestamp.from_datetime(record.created_at)),
                 supplier_id=record.supplier_id,
                 retailer_id=record.retailer_id,
@@ -129,11 +133,12 @@ class ProductsRepo:
             ProductSearchItem(
                 id=record.id,
                 name=record.name,
-                date=int(Timestamp.from_datetime(record.date)),
+                date=record.date.isoformat(),
                 weight=record.weight,
                 quality=record.quality,
                 rate_per_gram=record.rate_per_gram,
                 total_amount=record.total_amount,
+                payment_due_date=record.payment_due_date.isoformat(),
                 created_at=int(Timestamp.from_datetime(record.created_at)),
                 images=tuple(
                     ProductImage(
