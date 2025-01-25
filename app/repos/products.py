@@ -9,15 +9,24 @@ from app.models import Image, Product, ProductOrderBy, Timestamp
 
 
 @dataclass(frozen=True)
+class ProductImage:
+    id: int
+    url: str
+    thumb_url: str
+    created_at: int
+
+
+@dataclass(frozen=True)
 class ProductSearchItem:
     id: int
     name: str
     date: int
     weight: Decimal
-    qualify: Decimal
+    quality: Decimal
     rate_per_gram: Decimal
     total_amount: Decimal
     created_at: int
+    images: Tuple[ProductImage, ...]
 
 
 class ProductsRepo:
@@ -79,10 +88,19 @@ class ProductsRepo:
                 name=record.name,
                 date=int(Timestamp.from_datetime(record.date)),
                 weight=record.weight,
-                qualify=record.quality,
+                quality=record.quality,
                 rate_per_gram=record.rate_per_gram,
                 total_amount=record.total_amount,
                 created_at=int(Timestamp.from_datetime(record.created_at)),
+                images=tuple(
+                    ProductImage(
+                        id=image.id,
+                        url=image.url,
+                        thumb_url=image.thumb_url,
+                        created_at=int(Timestamp.from_datetime(image.created_at)),
+                    )
+                    for image in record.images
+                ),
             )
             for record in records
         )

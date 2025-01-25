@@ -29,7 +29,10 @@ MVP v2:
   - [x] reload after product added
   - [x] show latest first
   - [ ] cards view
-    - [ ] return image in api 
+    - [x] return image in api
+    - [x] switch between views
+    - [x] save table vs cards selection
+  - [ ] pagination
   - [ ] download products as csv
   - [ ] ordering
   - [ ] filtering

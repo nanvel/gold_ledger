@@ -9,7 +9,11 @@
       v-on:product-added="productsVersion = productsVersion + 1"
     />
 
-    <ProductsTable :retailerId="retailerId" :key="productsVersion" />
+    <ProductsList
+      :retailerId="retailerId"
+      :key="productsVersion"
+      class="mt-8"
+    />
   </Navbar>
 </template>
 
@@ -19,7 +23,7 @@ import { onMounted, ref } from "vue";
 import { httpClient } from "@/services/http.js";
 import router from "@/router";
 import ProductModal from "@/components/ProductModal.vue";
-import ProductsTable from "@/components/ProductsTable.vue";
+import ProductsList from "@/components/ProductsList.vue";
 
 const retailerName = ref(false);
 const retailerId = ref(parseInt(router.currentRoute.value.params.id));
