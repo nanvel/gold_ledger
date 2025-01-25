@@ -10,6 +10,7 @@ export const useMeStore = defineStore("me", () => {
   const myId = ref(null);
   const myEmail = ref(null);
   const myName = ref(null);
+  const storeId = ref(null);
   const storeName = ref("No Store Selected");
   const storeOwnerId = ref(null);
   const supplierId = ref(null);
@@ -41,7 +42,7 @@ export const useMeStore = defineStore("me", () => {
     myId.value = resp.id;
     myEmail.value = resp.email;
     myName.value = resp.name;
-    storeName.value = resp.store_name;
+    storeName.value = `${resp.supplier_id || resp.retailer_id} : ${resp.store_name}`;
     storeOwnerId.value = resp.store_owner_id;
     supplierId.value = resp.supplier_id;
     retailerId.value = resp.retailer_id;

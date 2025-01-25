@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import date, datetime
 from decimal import Decimal
 from typing import List
 
@@ -24,11 +24,12 @@ class ProductTable(Base):
 
     id: Mapped[int]
     name: Mapped[str]
-    date: Mapped[datetime]
+    date: Mapped[date]
     weight: Mapped[Decimal] = mapped_column(type_=sa.DECIMAL)
     quality: Mapped[Decimal] = mapped_column(type_=sa.DECIMAL)
     rate_per_gram: Mapped[Decimal] = mapped_column(type_=sa.DECIMAL)
     total_amount: Mapped[Decimal] = mapped_column(type_=sa.DECIMAL)
+    payment_due_date: Mapped[date] = mapped_column(server_default="2025-12-31")
     custom_fields: Mapped[dict] = mapped_column(type_=sa.JSON)
     supplier_id: Mapped[int] = mapped_column(sa.ForeignKey("suppliers.id"))
     retailer_id: Mapped[int] = mapped_column(sa.ForeignKey("retailers.id"), index=True)

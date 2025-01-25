@@ -2,6 +2,13 @@
 
 MVP v3:
 - [x] deploy
+- [x] session -> account
+- [x] show shop id
+- [ ] convert to date
+- [ ] due date
+- [ ] search by id if only number provided
+- [ ] error messages in login/register form
+- [ ] Products, Payments, Settings
 - [ ] retailer views
   - [ ] supplier page
   - [ ] products page

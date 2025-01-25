@@ -2,7 +2,7 @@
   <Navbar>
     <article class="prose lg:prose-xl py-4 px-2">
       <h2>Settings</h2>
-      <h3 class="text-2xl font-semibold">Session</h3>
+      <h3 class="text-2xl font-semibold">Account</h3>
       <div class="py-2">
         <template v-if="myName?.length">{{ myName }} |</template> {{ myEmail }}
       </div>
