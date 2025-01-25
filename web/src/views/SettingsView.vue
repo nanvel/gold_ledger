@@ -4,7 +4,7 @@
       <h2>Settings</h2>
       <h3 class="text-2xl font-semibold">Session</h3>
       <div class="py-2">
-        {{ myEmail }}
+        <template v-if="myName?.length">{{ myName }} |</template> {{ myEmail }}
       </div>
 
       <div class="flex flex-row space-x-4">
@@ -12,6 +12,7 @@
           Log out
         </button>
         <change-password-modal />
+        <change-name-modal :name="myName" v-on:name-changed="meStore.setName" />
       </div>
 
       <h3 class="text-2xl font-semibold">Theme</h3>
@@ -47,9 +48,10 @@ import { storeToRefs } from "pinia";
 import changePasswordModal from "@/components/ChangePasswordModal.vue";
 import StaffList from "@/components/StaffList.vue";
 import AddStaffModal from "@/components/AddStaffModal.vue";
+import changeNameModal from "@/components/ChangeNameModal.vue";
 
 const meStore = useMeStore();
-const { selectedTheme, myEmail, isOwner } = storeToRefs(meStore);
+const { selectedTheme, myEmail, myName, isOwner } = storeToRefs(meStore);
 const staffListVersion = ref(0);
 
 const themes = [

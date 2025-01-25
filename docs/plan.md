@@ -51,11 +51,12 @@ MVP v2:
 - [ ] products page
   - [x] products list
   - [ ] name
-    - [ ] name in db
-    - [ ] api
+    - [x] name in db
+    - [x] api
     - [ ] name change modal
     - [ ] show name
   - [ ] product page
+    - [ ] timeline  
 - [ ] retailer views
   - [ ] supplier page
   - [ ] products page

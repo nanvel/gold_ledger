@@ -8,6 +8,7 @@ class User:
     username: str
     password_hash: str
     token_version: int
+    name: Optional[str]
     supplier_id: Optional[int]
     retailer_id: Optional[int]
 

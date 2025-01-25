@@ -9,6 +9,7 @@ export const useMeStore = defineStore("me", () => {
   );
   const myId = ref(null);
   const myEmail = ref(null);
+  const myName = ref(null);
   const storeName = ref("No Store Selected");
   const storeOwnerId = ref(null);
   const supplierId = ref(null);
@@ -24,6 +25,10 @@ export const useMeStore = defineStore("me", () => {
     selectedTheme.value = theme;
   };
 
+  const setName = (name) => {
+    myName.value = name;
+  };
+
   const load = async () => {
     if (myEmail.value) {
       return;
@@ -35,6 +40,7 @@ export const useMeStore = defineStore("me", () => {
 
     myId.value = resp.id;
     myEmail.value = resp.email;
+    myName.value = resp.name;
     storeName.value = resp.store_name;
     storeOwnerId.value = resp.store_owner_id;
     supplierId.value = resp.supplier_id;
@@ -44,6 +50,7 @@ export const useMeStore = defineStore("me", () => {
   return {
     selectedTheme,
     myEmail,
+    myName,
     storeName,
     isSupplier,
     isRetailer,
@@ -52,5 +59,6 @@ export const useMeStore = defineStore("me", () => {
     retailerId,
     load,
     setTheme,
+    setName,
   };
 });

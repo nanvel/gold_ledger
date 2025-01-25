@@ -17,8 +17,6 @@
           </div>
           <input
             type="email"
-            name="name"
-            id="name"
             required
             class="input input-bordered w-full input-md"
             v-model="email"
@@ -34,8 +32,6 @@
           </div>
           <input
             type="password"
-            name="password"
-            id="password"
             required
             class="input input-bordered w-full input-md text-lg"
             v-model="password"
@@ -51,8 +47,6 @@
           </div>
           <input
             type="password"
-            name="password"
-            id="password"
             required
             class="input input-bordered w-full input-md text-lg"
             v-model="passwordRepeat"

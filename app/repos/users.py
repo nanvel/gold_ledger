@@ -11,6 +11,7 @@ from app.models import User
 class UsersSearchItems:
     id: int
     email: str
+    name: str
     created_at: int
 
 
@@ -24,6 +25,7 @@ class UsersRepo:
             password_hash=user.password_hash,
             supplier_id=user.supplier_id,
             retailer_id=user.retailer_id,
+            name=user.name,
         )
 
         self._session.add(record)
@@ -40,6 +42,7 @@ class UsersRepo:
             record.token_version = user.token_version
             record.supplier_id = user.supplier_id
             record.retailer_id = user.retailer_id
+            record.name = user.name
 
             self._session.commit()
 
@@ -53,6 +56,7 @@ class UsersRepo:
                 token_version=record.token_version,
                 supplier_id=record.supplier_id,
                 retailer_id=record.retailer_id,
+                name=record.name,
             )
 
     def by_username(self, username: str) -> Optional[User]:
@@ -67,6 +71,7 @@ class UsersRepo:
                 token_version=record.token_version,
                 supplier_id=record.supplier_id,
                 retailer_id=record.retailer_id,
+                name=record.name,
             )
 
     def filter(
@@ -93,6 +98,7 @@ class UsersRepo:
             UsersSearchItems(
                 id=record.id,
                 email=record.username,
+                name=record.name,
                 created_at=int(record.created_at.timestamp()),
             )
             for record in records

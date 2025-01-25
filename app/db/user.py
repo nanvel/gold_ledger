@@ -15,6 +15,7 @@ class UserTable(Base):
     password_hash: Mapped[str]
     # increase to disable issued access tokens
     token_version: Mapped[int] = mapped_column(default=0, server_default="0")
+    name: Mapped[str] = mapped_column(nullable=True)
 
     supplier_id: Mapped[int] = mapped_column(
         sa.ForeignKey("suppliers.id"), nullable=True

@@ -17,8 +17,6 @@
           </div>
           <input
             type="password"
-            name="password"
-            id="password"
             required
             class="input input-bordered w-full input-md text-lg"
             v-model="oldPassword"
@@ -34,8 +32,6 @@
           </div>
           <input
             type="password"
-            name="password"
-            id="password"
             required
             class="input input-bordered w-full input-md text-lg"
             v-model="newPassword"
@@ -51,8 +47,6 @@
           </div>
           <input
             type="password"
-            name="password"
-            id="password"
             required
             class="input input-bordered w-full input-md text-lg"
             v-model="newPasswordRepeat"
