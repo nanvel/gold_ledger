@@ -6,9 +6,9 @@ MVP v3:
 - [x] show shop id
 - [x] convert to date
 - [x] due date
-- [ ] change store name
-  - [ ] api
-  - [ ] modal
+- [x] change store name
+  - [x] api
+  - [x] modal
 - [ ] make input component
 - [ ] search by id if only number provided
 - [ ] error messages in login/register form

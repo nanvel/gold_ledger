@@ -10,7 +10,7 @@ export const useMeStore = defineStore("me", () => {
   const myId = ref(null);
   const myEmail = ref(null);
   const myName = ref(null);
-  const storeName = ref("No Store Selected");
+  const storeName = ref(null);
   const storeOwnerId = ref(null);
   const supplierId = ref(null);
   const retailerId = ref(null);

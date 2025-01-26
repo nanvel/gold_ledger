@@ -8,6 +8,20 @@ export const httpClient = {
   delete: request("DELETE"),
 };
 
+export const parseError = (message, field) => {
+  if (!message?.detail && !field) {
+    return "An error occurred";
+  }
+  const detail = message?.detail;
+  const isString = typeof detail === "string" || detail instanceof String;
+  if (!field && isString) {
+    return detail;
+  }
+  if (field && !isString) {
+    return detail.find((d) => d.loc[1] === field)?.msg;
+  }
+};
+
 function request(method) {
   return (url, data, body, args) => {
     const { contentType = null } = args || {};

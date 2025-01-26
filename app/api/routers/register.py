@@ -14,9 +14,9 @@ router = APIRouter()
 
 class RegisterStoreForm(BaseModel):
     type: StoreType
-    name: str
     email: EmailStr
-    password: str = Field(..., min_length=8)
+    name: str = Field(..., min_length=2, max_length=64)
+    password: str = Field(..., min_length=8, max_length=64)
 
 
 class StoreResponse(BaseModel):

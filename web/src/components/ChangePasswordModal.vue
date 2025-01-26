@@ -8,53 +8,24 @@
   <dialog id="change_password" class="modal">
     <div class="modal-box">
       <form v-on:submit.prevent="changePassword" class="space-y-2">
-        <label class="form-control w-full">
-          <div class="label">
-            <span class="label-text">Old password:</span>
-            <span class="label-text text-error" v-if="oldPasswordError">{{
-              oldPasswordError
-            }}</span>
-          </div>
-          <input
-            type="password"
-            required
-            class="input input-bordered w-full input-md text-lg"
-            v-model="oldPassword"
-            autofocus
-          />
-        </label>
-        <label class="form-control w-full">
-          <div class="label">
-            <span class="label-text">New password:</span>
-            <span class="label-text text-error" v-if="newPasswordError">{{
-              newPasswordError
-            }}</span>
-          </div>
-          <input
-            type="password"
-            required
-            class="input input-bordered w-full input-md text-lg"
-            v-model="newPassword"
-            autofocus
-          />
-        </label>
-        <label class="form-control w-full">
-          <div class="label">
-            <span class="label-text">Repeat the new password:</span>
-            <span class="label-text text-error" v-if="newPasswordRepeatError">{{
-              newPasswordRepeatError
-            }}</span>
-          </div>
-          <input
-            type="password"
-            required
-            class="input input-bordered w-full input-md text-lg"
-            v-model="newPasswordRepeat"
-            autofocus
-          />
-        </label>
+        <password-input
+          label="Old password:"
+          v-model="oldPassword"
+          :autofocus="true"
+          :error="oldPasswordError"
+        />
+        <password-input
+          label="New password:"
+          v-model="newPassword"
+          :error="newPasswordError"
+        />
+        <password-input
+          label="New password repeat:"
+          v-model="newPasswordRepeat"
+          :error="newPasswordRepeatError"
+        />
       </form>
-      <div v-if="error" class="mt-4 whitespace-pre-line text-error">
+      <div v-if="error" class="mt-4 whitespace-pre-line text-sm text-error">
         {{ error }}
       </div>
       <div class="modal-action justify-between">
@@ -77,6 +48,7 @@
 import { ref, watch } from "vue";
 import { httpClient } from "@/services/http.js";
 import { useToast } from "vue-toastification";
+import PasswordInput from "@/components/inputs/PasswordInput.vue";
 
 const oldPassword = ref("");
 const oldPasswordError = ref(null);
@@ -129,12 +101,14 @@ const changePassword = async () => {
     clearFields();
     toast.success("Password changed successfully");
   } catch (e) {
-    if (e.detail?.length) {
+    if (e?.detail?.length) {
       if (e.detail[0]["loc"][1] === "new_password") {
         newPasswordError.value = e.detail[0]["msg"];
       } else if (e.detail[0]["loc"][1] === "old_password") {
         oldPasswordError.value = e.detail[0]["msg"];
       }
+    } else {
+      error.value = e?.detail || "An error occurred";
     }
 
     console.log(e);

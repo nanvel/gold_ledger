@@ -1,11 +1,6 @@
 <template>
   <div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
     <div class="sm:mx-auto sm:w-full sm:max-w-sm">
-      <img
-        class="mx-auto h-10 w-auto"
-        src="https://tailwindui.com/plus/img/logos/mark.svg?color=indigo&shade=600"
-        alt="Your Company"
-      />
       <h2 class="mt-10 text-center text-2xl/9 font-bold tracking-tight">
         Register a store
       </h2>
@@ -37,62 +32,56 @@
         v-on:submit.prevent="onRegister"
       >
         <div class="form-control w-full">
-          <div class="label"><span class="label-text">Store name</span></div>
+          <div class="label">
+            <span class="label-text">Store name</span
+            ><span class="label-text text-error" v-if="nameError">{{
+              nameError
+            }}</span>
+          </div>
           <input
             type="text"
             name="name"
             id="name"
             required
-            class="input input-bordered w-full max-w-sm input-sm"
+            autofocus
+            class="input input-bordered w-full max-w-sm input-md text-lg"
             v-model="name"
           />
         </div>
 
         <div class="form-control w-full">
-          <div class="label"><span class="label-text">Email address</span></div>
+          <div class="label">
+            <span class="label-text">Email address</span
+            ><span class="label-text text-error" v-if="emailError">{{
+              emailError
+            }}</span>
+          </div>
           <input
             type="email"
             name="email"
             id="email"
             autocomplete="email"
             required
-            class="input input-bordered w-full max-w-sm input-sm"
+            class="input input-bordered w-full max-w-sm input-md-text-lg"
             v-model="email"
           />
         </div>
 
-        <div class="form-control w-full">
-          <div class="label">
-            <span class="label-text">Password</span>
-          </div>
-          <input
-            type="password"
-            name="password"
-            id="password"
-            required
-            class="input input-bordered w-full max-w-sm input-sm"
-            v-model="password"
-          />
-        </div>
+        <password-input
+          v-model="password"
+          label="Password"
+          :error="passwordError"
+        />
+        <password-input v-model="passwordRepeat" label="Repeat password" />
 
-        <div class="form-control w-full">
-          <div class="label">
-            <span class="label-text">Repeat password</span>
-          </div>
-          <input
-            type="password"
-            name="passwordRepeat"
-            id="password-repeat"
-            required
-            class="input input-bordered w-full max-w-sm input-sm"
-            v-model="passwordRepeat"
-          />
+        <div v-if="error" class="mt-4 whitespace-pre-line text-error">
+          {{ error }}
         </div>
 
         <div>
           <button
             type="submit"
-            class="btn btn-primary btn-sm sm:mx-auto sm:w-full sm:max-w-sm mt-4"
+            class="btn btn-primary btn-md sm:mx-auto sm:w-full sm:max-w-sm mt-4"
             :disabled="loading"
           >
             Register
@@ -108,21 +97,31 @@
   </div>
 </template>
 <script setup lang="ts">
-import { ref } from "vue";
-import { httpClient } from "@/services/http.js";
+import { ref, watch } from "vue";
+import { httpClient, parseError } from "@/services/http.js";
 import { useAuthStore } from "@/stores/index.js";
-import { RouterLink, useRouter } from "vue-router";
+import { RouterLink } from "vue-router";
 import { useToast } from "vue-toastification";
+import PasswordInput from "@/components/inputs/PasswordInput.vue";
 
 const storeType = ref("retailer");
 const email = ref("");
+const emailError = ref(null);
 const password = ref("");
+const passwordError = ref(null);
 const passwordRepeat = ref("");
 const name = ref("");
+const nameError = ref(null);
 const loading = ref(false);
+const error = ref(null);
 
-const { login } = useAuthStore();
 const toast = useToast();
+
+watch([email, password, passwordRepeat, name], () => {
+  emailError.value = null;
+  passwordError.value = null;
+  nameError.value = null;
+});
 
 const onRegister = async () => {
   if (loading.value) {
@@ -130,26 +129,33 @@ const onRegister = async () => {
   }
 
   if (password.value !== passwordRepeat.value) {
-    toast.error("Passwords do not match.");
-
+    passwordError.value = "Passwords do not match";
     return;
   }
 
   loading.value = true;
   try {
-    const res = await httpClient.post("/api/register", {
-      type: storeType.value,
-      name: name.value,
-      email: email.value,
-      password: password.value,
-    });
+    const res = await httpClient.post(
+      "/api/register",
+      {
+        type: storeType.value,
+        name: name.value,
+        email: email.value,
+        password: password.value,
+      },
+      null,
+      { showToast: false },
+    );
 
-    if (res.success) {
-      toast.success("The store was created.");
-      await login(email.value, password.value);
-    } else {
-      toast.error("An error occurred.");
-    }
+    toast.success("The store was created");
+
+    const { login } = useAuthStore();
+    await login(email.value, password.value);
+  } catch (e) {
+    error.value = parseError(e);
+    nameError.value = parseError(e, "name");
+    emailError.value = parseError(e, "email");
+    passwordError.value = parseError(e, "password");
   } finally {
     loading.value = false;
   }

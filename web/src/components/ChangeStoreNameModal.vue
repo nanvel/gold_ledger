@@ -94,8 +94,6 @@ const addStaff = async () => {
     } else {
       error.value = e.detail || "An error occurred";
     }
-
-    console.log(e);
   } finally {
     loading.value = false;
   }
