@@ -17,3 +17,5 @@ class Product:
     supplier_id: int
     retailer_id: int
     creator_id: int
+    confirmed_by: int
+    rejected_by: int

@@ -1,3 +1,4 @@
+from dataclasses import replace
 from datetime import date
 from decimal import Decimal
 from typing import Optional, Tuple
@@ -98,3 +99,59 @@ def get_payments(
         )
 
     return PaymentsResponse(total=total, items=items)
+
+
+class UpdateResponse(BaseModel):
+    success: bool
+
+
+@router.post("/payments/{payment_id}/confirm")
+@inject
+def confirm_payment(
+    payment_id: int,
+    user: User = Depends(get_active_user),
+    uow: UnitOfFork = Depends(Provide[Container.uow]),
+) -> UpdateResponse:
+    with uow:
+        payment = uow.payments.by_id(payment_id)
+
+        if not payment or payment.supplier_id != user.supplier_id:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="The payment was not found.",
+            )
+
+        assert payment.rejected_by is None
+        assert payment.confirmed_by is None
+
+        payment = replace(payment, confirmed_by=user.id)
+
+        uow.payments.update(payment)
+
+    return UpdateResponse(success=True)
+
+
+@router.post("/payments/{payment_id}/reject")
+@inject
+def reject_payment(
+    payment_id: int,
+    user: User = Depends(get_active_user),
+    uow: UnitOfFork = Depends(Provide[Container.uow]),
+) -> UpdateResponse:
+    with uow:
+        payment = uow.payments.by_id(payment_id)
+
+        if not payment or payment.supplier_id != user.supplier_id:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="The payment was not found.",
+            )
+
+        assert payment.rejected_by is None
+        assert payment.confirmed_by is None
+
+        payment = replace(payment, rejected_by=user.id)
+
+        uow.payments.update(payment)
+
+    return UpdateResponse(success=True)

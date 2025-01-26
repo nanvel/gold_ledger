@@ -49,7 +49,7 @@ MVP v3:
     - [x] api
     - [x] table
 - [ ] statuses for product
-  - [ ] db confirmed by and rejected by
+  - [x] db confirmed by and rejected by
   - [ ] api
   - [ ] modals
   - [ ] show in tables

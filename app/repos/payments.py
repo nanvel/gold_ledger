@@ -48,6 +48,34 @@ class PaymentsRepo:
 
         return record.id
 
+    def update(self, payment: Payment) -> None:
+        record = self._session.query(PaymentTable).filter_by(id=payment.id).first()
+
+        if record:
+            record.confirmed_by = payment.confirmed_by
+            record.rejected_by = payment.rejected_by
+
+            self._session.commit()
+
+    def by_id(self, payment_id: int) -> Optional[Payment]:
+        record = self._session.query(PaymentTable).filter_by(id=payment_id).first()
+
+        if record:
+            return Payment(
+                id=record.id,
+                type=PaymentType(record.type),
+                date=record.date,
+                weight=record.weight,
+                quality=record.quality,
+                rate_per_gram=record.rate_per_gram,
+                total_amount=record.total_amount,
+                supplier_id=record.supplier_id,
+                retailer_id=record.retailer_id,
+                creator_id=record.creator_id,
+                confirmed_by=record.confirmed_by,
+                rejected_by=record.rejected_by,
+            )
+
     def filter(
         self,
         supplier_id: Optional[int],

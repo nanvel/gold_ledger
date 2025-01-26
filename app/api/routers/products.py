@@ -8,7 +8,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from pydantic import BaseModel, Field
 
 from app.container import Container
-from app.models import Product, Timestamp, User
+from app.models import Product, User
 from app.repos.products import ProductDetailsItem, ProductSearchItem
 from app.repos.uow import UnitOfFork
 from .auth import get_active_user
@@ -145,3 +145,59 @@ def get_product(
             )
 
         return product
+
+
+class UpdateResponse(BaseModel):
+    success: bool
+
+
+@router.post("/products/{product_id}/confirm")
+@inject
+def confirm_product(
+    product_id: int,
+    user: User = Depends(get_active_user),
+    uow: UnitOfFork = Depends(Provide[Container.uow]),
+) -> UpdateResponse:
+    with uow:
+        product = uow.products.by_id(product_id)
+
+        if not product or product.retailer_id != user.retailer_id:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="The product was not found.",
+            )
+
+        assert product.rejected_by is None
+        assert product.confirmed_by is None
+
+        product = replace(product, confirmed_by=user.id)
+
+        uow.products.update(product)
+
+    return UpdateResponse(success=True)
+
+
+@router.post("/products/{product_id}/reject")
+@inject
+def reject_product(
+    product_id: int,
+    user: User = Depends(get_active_user),
+    uow: UnitOfFork = Depends(Provide[Container.uow]),
+) -> UpdateResponse:
+    with uow:
+        product = uow.products.by_id(product_id)
+
+        if not product or product.retailer_id != user.retailer_id:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="The product was not found.",
+            )
+
+        assert product.rejected_by is None
+        assert product.confirmed_by is None
+
+        product = replace(product, rejected_by=user.id)
+
+        uow.products.update(product)
+
+    return UpdateResponse(success=True)

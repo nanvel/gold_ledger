@@ -72,6 +72,15 @@ class ProductsRepo:
 
         return record.id
 
+    def update(self, product: Product):
+        record = self._session.query(ProductTable).filter_by(id=product.id).first()
+
+        if record:
+            record.confirmed_by = product.confirmed_by
+            record.rejected_by = product.rejected_by
+
+            self._session.commit()
+
     def by_id(self, product_id: int) -> Optional[ProductDetailsItem]:
         record = self._session.query(ProductTable).filter_by(id=product_id).first()
 
