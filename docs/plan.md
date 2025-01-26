@@ -19,10 +19,12 @@ MVP v3:
   - [x] rid of retailers page
   - [x] product modal on products page
   - [x] use retailer picker
-  - [ ] quality: 0-100
-  - [ ] total > 0
-  - [ ] add due date to the form
+  - [x] add due date to the form
+  - [x] quality: 0-100
+  - [x] total > 0
   - [ ] show errors
+- [ ] plan update
+- [ ] hide create product for retailers
 - [ ] show empty list placeholder
 - [ ] supplier search component
 - [ ] image input

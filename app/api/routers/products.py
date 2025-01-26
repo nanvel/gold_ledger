@@ -17,7 +17,7 @@ router = APIRouter()
 
 
 class ProductForm(BaseModel):
-    name: str
+    name: str = Field(..., min_length=1, max_length=64)
     date: date
     weight: Decimal = Field(..., gt=0)
     quality: Decimal = Field(..., ge=0, le=100)

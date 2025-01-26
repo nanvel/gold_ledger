@@ -22,9 +22,12 @@
           >
         </div>
         <form v-on:submit.prevent="addProduct" class="space-y-2 mt-4">
-          <label class="form-control w-full">
+          <div class="form-control w-full">
             <div class="label">
               <span class="label-text">Name</span>
+              <span class="label-text text-error" v-if="nameError">{{
+                nameError
+              }}</span>
             </div>
             <input
               type="text"
@@ -32,10 +35,13 @@
               v-model="name"
               autofocus
             />
-          </label>
-          <label class="form-control w-full">
+          </div>
+          <div class="form-control w-full">
             <div class="label">
               <span class="label-text">Date</span>
+              <span class="label-text text-error" v-if="dateError">{{
+                dateError
+              }}</span>
             </div>
             <input
               type="date"
@@ -43,10 +49,13 @@
               :value="dateToStr(date)"
               @input="date = $event.target.valueAsDate"
             />
-          </label>
-          <label class="form-control w-full">
+          </div>
+          <div class="form-control w-full">
             <div class="label">
               <span class="label-text">Weight</span>
+              <span class="label-text text-error" v-if="weightError">{{
+                weightError
+              }}</span>
             </div>
             <input
               type="number"
@@ -55,10 +64,13 @@
               min="0"
               step="0.1"
             />
-          </label>
-          <label class="form-control w-full">
+          </div>
+          <div class="form-control w-full">
             <div class="label">
               <span class="label-text">Quality</span>
+              <span class="label-text text-error" v-if="qualityError">{{
+                qualityError
+              }}</span>
             </div>
             <input
               type="number"
@@ -67,10 +79,13 @@
               min="0"
               step="0.1"
             />
-          </label>
-          <label class="form-control w-full">
+          </div>
+          <div class="form-control w-full">
             <div class="label">
               <span class="label-text">Rate per gram</span>
+              <span class="label-text text-error" v-if="ratePerGramError">{{
+                ratePerGramError
+              }}</span>
             </div>
             <input
               type="number"
@@ -79,10 +94,13 @@
               min="0"
               step="0.1"
             />
-          </label>
-          <label class="form-control w-full">
+          </div>
+          <div class="form-control w-full">
             <div class="label">
               <span class="label-text">Total amount</span>
+              <span class="label-text text-error" v-if="totalAmountError">{{
+                totalAmountError
+              }}</span>
             </div>
             <input
               type="number"
@@ -91,10 +109,13 @@
               min="0"
               step="0.1"
             />
-          </label>
-          <label class="form-control w-full">
+          </div>
+          <div class="form-control w-full">
             <div class="label">
               <span class="label-text">Payment due date</span>
+              <span class="label-text text-error" v-if="paymentDueDateError">{{
+                paymentDueDateError
+              }}</span>
             </div>
             <input
               type="date"
@@ -102,8 +123,8 @@
               :value="dateToStr(paymentDueDate)"
               @input="paymentDueDate = $event.target.valueAsDate"
             />
-          </label>
-          <label class="form-control w-full">
+          </div>
+          <div class="form-control w-full">
             <div class="label">
               <span class="label-text">Image</span>
             </div>
@@ -112,7 +133,7 @@
               @change="onFileChanged($event)"
               accept="image/*"
               class="file-input file-input-bordered file-input-md w-full text-lg"
-              capture
+              capture="environment"
             />
             <div v-if="formImageThumb && !formImageLoading">
               <img
@@ -123,7 +144,7 @@
               />
             </div>
             <div v-if="formImageLoading">Uploading ...</div>
-          </label>
+          </div>
         </form>
         <div v-if="error" class="mt-4 whitespace-pre-line text-error">
           {{ error }}
@@ -150,18 +171,25 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
-import { httpClient } from "@/services/http.js";
+import { ref, watch } from "vue";
+import { httpClient, parseError } from "@/services/http.js";
 import RetailerPicker from "@/components/RetailerPicker.vue";
 
 const retailer = ref(null);
 const name = ref("");
+const nameError = ref(null);
 const date = ref(new Date());
+const dateError = ref(null);
 const weight = ref(0);
+const weightError = ref(null);
 const quality = ref(0);
+const qualityError = ref(null);
 const ratePerGram = ref(0);
+const ratePerGramError = ref(null);
 const totalAmount = ref(0);
+const totalAmountError = ref(null);
 const paymentDueDate = ref(new Date());
+const paymentDueDateError = ref(null);
 const loading = ref(false);
 const formImageId = ref(null);
 const formImageThumb = ref(null);
@@ -195,16 +223,6 @@ const clearFields = () => {
   error.value = "";
 };
 
-const parseError = (r) => {
-  if (r.detail) {
-    return r.detail.map((d) => `${d.loc.slice(-1)}: ${d.msg}.`).join("\n");
-  } else if (r.message) {
-    return r.message;
-  } else {
-    return "Internal server error.";
-  }
-};
-
 const onFileChanged = async (event) => {
   formImageLoading.value = true;
   try {
@@ -226,10 +244,23 @@ const closeModal = () => {
   add_product.close();
 };
 
+watch(
+  [name, date, weight, quality, ratePerGram, totalAmount, paymentDueDate],
+  () => {
+    nameError.value = null;
+    dateError.value = null;
+    weightError.value = null;
+    qualityError.value = null;
+    ratePerGramError.value = null;
+    totalAmountError.value = null;
+    paymentDueDateError.value = null;
+  },
+);
+
 const addProduct = async () => {
   loading.value = true;
   try {
-    const resp = await httpClient.post(
+    await httpClient.post(
       `/api/products`,
       {
         name: name.value,
@@ -250,7 +281,12 @@ const addProduct = async () => {
     emit("productAdded");
   } catch (e) {
     error.value = parseError(e);
-    console.log(e);
+    nameError.value = parseError(e, "name");
+    dateError.value = parseError(e, "date");
+    weightError.value = parseError(e, "weight");
+    qualityError.value = parseError(e, "quality");
+    ratePerGramError.value = parseError(e, "rate_per_gram");
+    totalAmountError.value = parseError(e, "total_amount");
   } finally {
     loading.value = false;
   }
