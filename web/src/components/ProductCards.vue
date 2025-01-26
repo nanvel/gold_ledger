@@ -46,6 +46,10 @@
                   <td>Total amount</td>
                   <td>{{ product.total_amount }}</td>
                 </tr>
+                <tr>
+                  <td>Status</td>
+                  <td>{{ parseStatus(product) }}</td>
+                </tr>
               </tbody>
             </table>
           </div>
@@ -61,4 +65,14 @@ import { RouterLink } from "vue-router";
 const props = defineProps({
   products: Array,
 });
+
+const parseStatus = (product) => {
+  if (product.rejected_by) {
+    return "Rejected";
+  } else if (product.confirmed_by) {
+    return "Confirmed";
+  } else {
+    return "Pending";
+  }
+};
 </script>

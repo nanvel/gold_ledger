@@ -23,6 +23,8 @@ class PaymentSearchItem:
     rate_per_gram: Decimal
     total_amount: Decimal
     created_at: int
+    confirmed_by: Optional[int]
+    rejected_by: Optional[int]
 
 
 class PaymentsRepo:
@@ -115,6 +117,8 @@ class PaymentsRepo:
                 rate_per_gram=record.rate_per_gram,
                 total_amount=record.total_amount,
                 created_at=int(Timestamp.from_datetime(record.created_at)),
+                confirmed_by=record.confirmed_by,
+                rejected_by=record.rejected_by,
             )
             for record in records
         )

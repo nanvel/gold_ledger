@@ -28,6 +28,8 @@ class ProductSearchItem:
     payment_due_date: str
     created_at: int
     images: Tuple[ProductImage, ...]
+    confirmed_by: Optional[int]
+    rejected_by: Optional[int]
 
 
 @dataclass(frozen=True)
@@ -45,6 +47,8 @@ class ProductDetailsItem:
     retailer_id: int
     creator_id: int
     images: Tuple[ProductImage, ...]
+    confirmed_by: Optional[int]
+    rejected_by: Optional[int]
 
 
 class ProductsRepo:
@@ -107,6 +111,8 @@ class ProductsRepo:
                     )
                     for image in record.images
                 ),
+                confirmed_by=record.confirmed_by,
+                rejected_by=record.rejected_by,
             )
 
     def filter(
@@ -158,6 +164,8 @@ class ProductsRepo:
                     )
                     for image in record.images
                 ),
+                confirmed_by=record.confirmed_by,
+                rejected_by=record.rejected_by,
             )
             for record in records
         )

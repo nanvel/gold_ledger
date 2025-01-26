@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from datetime import date
 from decimal import Decimal
+from typing import Optional
 
 
 @dataclass(frozen=True)
@@ -17,5 +18,5 @@ class Product:
     supplier_id: int
     retailer_id: int
     creator_id: int
-    confirmed_by: int
-    rejected_by: int
+    confirmed_by: Optional[int]
+    rejected_by: Optional[int]

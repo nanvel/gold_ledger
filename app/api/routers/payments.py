@@ -63,6 +63,8 @@ def create_payment(
             retailer_id=user.retailer_id,
             supplier_id=supplier.id,
             creator_id=user.id,
+            confirmed_by=None,
+            rejected_by=None,
         )
         payment.validate()
         uow.payments.create(payment)

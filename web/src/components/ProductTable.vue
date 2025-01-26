@@ -7,6 +7,7 @@
           <th>Date</th>
           <th>Total</th>
           <th>Created</th>
+          <th>Status</th>
         </tr>
       </thead>
       <tbody>
@@ -25,6 +26,7 @@
           <td>
             <timestamp :value="product.created_at" :show-duration="true" />
           </td>
+          <td>{{ parseStatus(product) }}</td>
         </tr>
       </tbody>
     </table>
@@ -37,4 +39,14 @@ import { RouterLink } from "vue-router";
 const props = defineProps({
   products: Array,
 });
+
+const parseStatus = (product) => {
+  if (product.rejected_by) {
+    return "Rejected";
+  } else if (product.confirmed_by) {
+    return "Confirmed";
+  } else {
+    return "Pending";
+  }
+};
 </script>

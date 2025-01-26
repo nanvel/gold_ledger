@@ -8,6 +8,7 @@
             <th>Date</th>
             <th>Total</th>
             <th>Created</th>
+            <th>Status</th>
           </tr>
         </thead>
         <tbody>
@@ -24,6 +25,7 @@
             <td>
               <timestamp :value="payment.created_at" :show-duration="true" />
             </td>
+            <td>{{ parseStatus(payment) }}</td>
           </tr>
         </tbody>
       </table>
@@ -67,6 +69,16 @@ const limit = ref(20);
 const loading = ref(false);
 
 const pages = computed(() => Math.ceil(total.value / limit.value));
+
+const parseStatus = (payment) => {
+  if (payment.rejected_by) {
+    return "Rejected";
+  } else if (payment.confirmed_by) {
+    return "Confirmed";
+  } else {
+    return "Pending";
+  }
+};
 
 const loadPage = async (p) => {
   page.value = p;

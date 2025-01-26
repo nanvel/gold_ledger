@@ -84,6 +84,8 @@ def create_product(
             supplier_id=user.supplier_id,
             retailer_id=retailer.id,
             creator_id=user.id,
+            confirmed_by=None,
+            rejected_by=None,
         )
         product_id = uow.products.create(product)
         product = replace(product, id=product_id)
