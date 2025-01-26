@@ -12,7 +12,7 @@
       <form v-on:submit.prevent="addProduct" class="space-y-2 mt-4">
         <label class="form-control w-full">
           <div class="label">
-            <span class="label-text">Name:</span>
+            <span class="label-text">Name</span>
           </div>
           <input
             type="text"
@@ -23,7 +23,7 @@
         </label>
         <label class="form-control w-full">
           <div class="label">
-            <span class="label-text">Date:</span>
+            <span class="label-text">Date</span>
           </div>
           <input
             type="date"
@@ -34,7 +34,7 @@
         </label>
         <label class="form-control w-full">
           <div class="label">
-            <span class="label-text">Weight:</span>
+            <span class="label-text">Weight</span>
           </div>
           <input
             type="number"
@@ -46,7 +46,7 @@
         </label>
         <label class="form-control w-full">
           <div class="label">
-            <span class="label-text">Quality:</span>
+            <span class="label-text">Quality</span>
           </div>
           <input
             type="number"
@@ -58,7 +58,7 @@
         </label>
         <label class="form-control w-full">
           <div class="label">
-            <span class="label-text">Rate per gram:</span>
+            <span class="label-text">Rate per gram</span>
           </div>
           <input
             type="number"
@@ -70,7 +70,7 @@
         </label>
         <label class="form-control w-full">
           <div class="label">
-            <span class="label-text">Total amount:</span>
+            <span class="label-text">Total amount</span>
           </div>
           <input
             type="number"
@@ -82,7 +82,7 @@
         </label>
         <label class="form-control w-full">
           <div class="label">
-            <span class="label-text">Image:</span>
+            <span class="label-text">Image</span>
           </div>
           <input
             type="file"

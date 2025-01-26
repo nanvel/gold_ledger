@@ -10,7 +10,7 @@
       <form v-on:submit.prevent="addStaff" class="space-y-2">
         <label class="form-control w-full">
           <div class="label">
-            <span class="label-text">Email:</span>
+            <span class="label-text">Email</span>
             <span class="label-text text-error" v-if="emailError">{{
               emailError
             }}</span>
@@ -25,7 +25,7 @@
         </label>
         <label class="form-control w-full">
           <div class="label">
-            <span class="label-text">Password:</span>
+            <span class="label-text">Password</span>
             <span class="label-text text-error" v-if="passwordError">{{
               passwordError
             }}</span>
@@ -40,7 +40,7 @@
         </label>
         <label class="form-control w-full">
           <div class="label">
-            <span class="label-text">Repeat password:</span>
+            <span class="label-text">Repeat password</span>
             <span class="label-text text-error" v-if="passwordRepeatError">{{
               passwordRepeatError
             }}</span>

@@ -12,9 +12,15 @@ MVP v3:
 - [x] make input component (password)
 - [x] error messages in login/register form
 - [ ] retailer search component
-  - [ ] search by id if only number provided
+  - [x] search by id if only number provided
   - [ ] vue component
+  - [ ] recent retailers
+- [ ] product form validation
+  - [ ] show errors 
+  - [ ] quality: 1-100
+  - [ ] total > 0
 - [ ] supplier search component
+- [ ] image input
 - [ ] Products, Payments, Settings
 - [ ] split product add in steps
 - [ ] retailer views
@@ -27,6 +33,7 @@ MVP v3:
     - [ ] Goods Payment: Enter Weight, Quality, Rate, and Total Amount
 - [ ] received product
 - [ ] paid / unpaid transactions
+- [ ] make sure store is visible after login
 - [ ] action log on dashboard
   - [ ] activity log
   - [ ] auto reload
@@ -44,6 +51,7 @@ MVP v3:
 - [ ] validate login/register input inside js
 - [ ] datetime -> date? (product and payment)
 - [ ] add more input components, label - div
+- [ ] autocalculate amount for goods payment?
 
 Other:
 

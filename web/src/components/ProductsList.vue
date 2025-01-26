@@ -63,13 +63,13 @@ const total = ref(0);
 const page = ref(1);
 const limit = ref(20);
 const loading = ref(false);
-const productsView = ref(localStorage.getItem("productsView") || "table");
+const productsView = ref(localStorage.getItem("products_view") || "table");
 
 const pages = computed(() => Math.ceil(total.value / limit.value));
 
 const setProductsView = (view) => {
   productsView.value = view;
-  localStorage.setItem("productsView", view);
+  localStorage.setItem("products_view", view);
 };
 
 const loadPage = async (p) => {

@@ -9,18 +9,18 @@
     <div class="modal-box">
       <form v-on:submit.prevent="changePassword" class="space-y-2">
         <password-input
-          label="Old password:"
+          label="Old password"
           v-model="oldPassword"
           :autofocus="true"
           :error="oldPasswordError"
         />
         <password-input
-          label="New password:"
+          label="New password"
           v-model="newPassword"
           :error="newPasswordError"
         />
         <password-input
-          label="New password repeat:"
+          label="New password repeat"
           v-model="newPasswordRepeat"
           :error="newPasswordRepeatError"
         />
