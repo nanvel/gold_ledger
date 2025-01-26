@@ -4,7 +4,7 @@ from typing import Optional
 
 from dependency_injector.wiring import Provide, inject
 from fastapi import APIRouter, Depends, HTTPException, status
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 
 from app.container import Container
 from app.models import PaymentType, Payment, User
@@ -17,9 +17,9 @@ router = APIRouter()
 class PaymentForm(BaseModel):
     type: PaymentType
     date: date
-    weight: Optional[Decimal] = Field(..., gt=0)
-    quality: Optional[Decimal] = Field(..., ge=0, le=100)
-    rate_per_gram: Optional[Decimal] = Field(..., gt=0)
+    weight: Optional[Decimal] = Field(None, gt=0)
+    quality: Optional[Decimal] = Field(None, ge=0, le=100)
+    rate_per_gram: Optional[Decimal] = Field(None, gt=0)
     total_amount: Decimal = Field(..., gt=0)
     supplier_id: int
 

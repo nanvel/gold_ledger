@@ -37,11 +37,13 @@ MVP v3:
   - [ ] new payment
     - [x] db table
     - [x] repo
-    - [ ] api
+    - [x] api
+    - [ ] supplier picker
     - [ ] modal
     - [ ] Cash Payment / Bank Transfer: Enter amount and date
     - [ ] Goods Payment: Enter Weight, Quality, Rate, and Total Amount
-    - [ ] validate payment type in model 
+    - [ ] validate payment type in model
+    - [ ] set rate, quality to null when not goods payment
   - [ ] hide create product for retailers
   - [ ] show payments
 - [ ] statuses for product

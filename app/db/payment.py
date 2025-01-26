@@ -14,9 +14,9 @@ class PaymentTable(Base):
     id: Mapped[int]
     date: Mapped[date]
     type: Mapped[int]
-    weight: Mapped[Decimal] = mapped_column(type_=sa.DECIMAL)
-    quality: Mapped[Decimal] = mapped_column(type_=sa.DECIMAL)
-    rate_per_gram: Mapped[Decimal] = mapped_column(type_=sa.DECIMAL)
+    weight: Mapped[Decimal] = mapped_column(type_=sa.DECIMAL, nullable=True)
+    quality: Mapped[Decimal] = mapped_column(type_=sa.DECIMAL, nullable=True)
+    rate_per_gram: Mapped[Decimal] = mapped_column(type_=sa.DECIMAL, nullable=True)
     total_amount: Mapped[Decimal] = mapped_column(type_=sa.DECIMAL)
     supplier_id: Mapped[int] = mapped_column(sa.ForeignKey("suppliers.id"))
     retailer_id: Mapped[int] = mapped_column(sa.ForeignKey("retailers.id"), index=True)
