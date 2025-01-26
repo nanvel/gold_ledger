@@ -19,9 +19,9 @@ class Container(containers.DeclarativeContainer):
             "app.api.routers.password",
             "app.api.routers.products",
             "app.api.routers.register",
-            "app.api.routers.retailer",
             "app.api.routers.retailers",
             "app.api.routers.staff",
+            "app.api.routers.suppliers",
         ]
     )
 

@@ -65,7 +65,7 @@
 </template>
 <script setup>
 import { ref, watch } from "vue";
-import { useAuthStore } from "@/stores/index.js";
+import { useAuthStore, useMeStore } from "@/stores/index.js";
 import { RouterLink } from "vue-router";
 import PasswordInput from "@/components/inputs/PasswordInput.vue";
 import { parseError } from "@/services/http.js";
@@ -76,7 +76,9 @@ const usernameError = ref(null);
 const password = ref("");
 const passwordError = ref(null);
 const error = ref(null);
-const { login } = useAuthStore();
+
+const authStore = useAuthStore();
+const meStore = useMeStore();
 
 watch([username, password], () => {
   usernameError.value = null;
@@ -87,9 +89,10 @@ const onLogin = async () => {
   if (loading.value) {
     return;
   }
+  meStore.reset();
   loading.value = true;
   try {
-    await login(username.value, password.value);
+    await authStore.login(username.value, password.value);
   } catch (e) {
     error.value = parseError(e);
     usernameError.value = parseError(e, "username");

@@ -99,7 +99,7 @@
 <script setup lang="ts">
 import { ref, watch } from "vue";
 import { httpClient, parseError } from "@/services/http.js";
-import { useAuthStore } from "@/stores/index.js";
+import { useAuthStore, useMeStore } from "@/stores/index.js";
 import { RouterLink } from "vue-router";
 import { useToast } from "vue-toastification";
 import PasswordInput from "@/components/inputs/PasswordInput.vue";
@@ -116,6 +116,7 @@ const loading = ref(false);
 const error = ref(null);
 
 const toast = useToast();
+const meStore = useMeStore();
 
 watch([email, password, passwordRepeat, name], () => {
   emailError.value = null;
@@ -127,6 +128,8 @@ const onRegister = async () => {
   if (loading.value) {
     return;
   }
+
+  meStore.reset();
 
   if (password.value !== passwordRepeat.value) {
     passwordError.value = "Passwords do not match";
@@ -149,8 +152,8 @@ const onRegister = async () => {
 
     toast.success("The store was created");
 
-    const { login } = useAuthStore();
-    await login(email.value, password.value);
+    const authStore = useAuthStore();
+    await authStore.login(email.value, password.value);
   } catch (e) {
     error.value = parseError(e);
     nameError.value = parseError(e, "name");

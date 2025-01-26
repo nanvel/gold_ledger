@@ -78,5 +78,6 @@ const logout = async () => {
   const authStore = useAuthStore();
 
   await authStore.logout();
+  meStore.reset();
 };
 </script>

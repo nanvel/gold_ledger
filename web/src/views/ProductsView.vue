@@ -1,11 +1,15 @@
 <template>
   <Navbar>
     <div class="py-4">
-      <add-product-modal v-on:product-added="productsListVersion += 1" />
+      <add-product-modal
+        v-on:product-added="productsListVersion += 1"
+        v-if="supplierId"
+      />
 
       <ProductsList
         :supplier-id="supplierId"
-        v-if="supplierId"
+        :retailer-id="retailerId"
+        v-if="supplierId || retailerId"
         :key="productsListVersion"
       />
     </div>
@@ -22,7 +26,7 @@ import AddProductModal from "@/components/AddProductModal.vue";
 
 const meStore = useMeStore();
 
-const { supplierId } = storeToRefs(meStore);
+const { supplierId, retailerId } = storeToRefs(meStore);
 
 const productsListVersion = ref(0);
 </script>

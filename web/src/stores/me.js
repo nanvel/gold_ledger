@@ -33,6 +33,16 @@ export const useMeStore = defineStore("me", () => {
     storeName.value = name;
   };
 
+  const reset = () => {
+    myId.value = null;
+    myEmail.value = null;
+    myName.value = null;
+    storeName.value = null;
+    storeOwnerId.value = null;
+    supplierId.value = null;
+    retailerId.value = null;
+  };
+
   const load = async () => {
     if (myEmail.value) {
       return;
@@ -62,6 +72,7 @@ export const useMeStore = defineStore("me", () => {
     supplierId,
     retailerId,
     load,
+    reset,
     setTheme,
     setName,
     setStoreName,

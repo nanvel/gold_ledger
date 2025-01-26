@@ -34,7 +34,7 @@
           <ul class="menu menu-horizontal">
             <!-- Navbar menu content here -->
             <li><RouterLink to="/products">Products</RouterLink></li>
-            <li><a>Payments</a></li>
+            <li><RouterLink to="/payments">Payments</RouterLink></li>
             <li><RouterLink to="/settings">Settings</RouterLink></li>
           </ul>
         </div>
@@ -52,7 +52,7 @@
       <ul class="menu bg-base-200 min-h-full w-80 p-4">
         <!-- Sidebar content here -->
         <li><RouterLink to="/products">Products</RouterLink></li>
-        <li><a>Payments</a></li>
+        <li><RouterLink to="/payments">Payments</RouterLink></li>
         <li><RouterLink to="/settings">Settings</RouterLink></li>
       </ul>
     </div>
@@ -66,7 +66,7 @@ import { storeToRefs } from "pinia";
 import { RouterLink } from "vue-router";
 
 const store = useMeStore();
-const { isSupplier, storeName, supplierId, retailerId } = storeToRefs(store);
+const { storeName, supplierId, retailerId } = storeToRefs(store);
 
 onMounted(async () => {
   await store.load();

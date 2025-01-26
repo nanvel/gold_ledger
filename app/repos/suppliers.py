@@ -1,9 +1,20 @@
-from typing import Optional
+import re
+from dataclasses import dataclass
+from typing import Optional, Tuple
 
 from sqlalchemy.orm import Session
 
 from app.db import SupplierTable
-from app.models import Supplier
+from app.models import Supplier, SupplierOrderBy, Timestamp
+
+STORE_ID_RE = re.compile(r"^\d+$")
+
+
+@dataclass(frozen=True)
+class SupplierSearchItem:
+    id: int
+    name: str
+    created_at: int
 
 
 class SuppliersRepo:
@@ -36,3 +47,43 @@ class SuppliersRepo:
         if record:
             record.name = supplier.name
             self._session.commit()
+
+    def filter(
+        self,
+        q: Optional[str] = None,
+        order_by: SupplierOrderBy = SupplierOrderBy.CREATED,
+        reverse: bool = True,
+        offset: int = 0,
+        limit: int = 20,
+    ) -> Tuple[int, Tuple[SupplierSearchItem, ...]]:
+        query = self._session.query(SupplierTable)
+
+        if q:
+            q = q.strip()
+            if STORE_ID_RE.match(q):
+                query = query.filter(SupplierTable.id == int(q))
+            else:
+                query = query.filter(SupplierTable.name.ilike(f"%{q}%"))
+
+        total = query.count()
+
+        if order_by == SupplierOrderBy.CREATED:
+            order_field = SupplierTable.created_at
+        elif order_by == SupplierOrderBy.NANE:
+            order_field = SupplierTable.name
+        else:
+            raise ValueError(f"Unknown order_by value: {order_by}")
+
+        if reverse:
+            order_field = order_field.desc()
+
+        records = query.order_by(order_field).offset(offset).limit(limit)
+
+        return total, tuple(
+            SupplierSearchItem(
+                id=record.id,
+                name=record.name,
+                created_at=int(Timestamp.from_datetime(record.created_at)),
+            )
+            for record in records
+        )

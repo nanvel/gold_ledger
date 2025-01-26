@@ -2,6 +2,7 @@ import { useAuthStore } from "@/stores/auth";
 import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "@/views/HomeView.vue";
 import LoginView from "@/views/LoginView.vue";
+import PaymentsView from "@/views/PaymentsView.vue";
 import ProductsView from "@/views/ProductsView.vue";
 import ProductView from "@/views/ProductView.vue";
 import RegisterView from "@/views/RegisterView.vue";
@@ -39,6 +40,11 @@ const router = createRouter({
       path: "/products/:id",
       name: "product",
       component: ProductView,
+    },
+    {
+      path: "/payments",
+      name: "payments",
+      component: PaymentsView,
     },
   ],
 });

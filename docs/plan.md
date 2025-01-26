@@ -28,10 +28,12 @@ MVP v3:
   - [x] validate and print errors for login/registration forms
 - [x] plan update
 - [ ] retailer payments
-  - [ ] datetime -> date? (product and payment)
-  - [ ] Products, Payments, Settings
-  - [ ] suppliers picker
-  - [ ] payments page
+  - [x] datetime -> date? (product and payment)
+  - [x] Products, Payments, Settings
+  - [x] payments page
+  - [x] suppliers picker
+    - [x] repo
+    - [x] api
   - [ ] new payment
     - [x] db table
     - [ ] api
@@ -46,6 +48,7 @@ MVP v3:
 - [ ] UI improvements
   - [ ] show empty list placeholder
   - [ ] image input
+  - [ ] make navbar sticky
 - [ ] received product
 - [ ] paid / unpaid transactions
 - [ ] make sure store is visible after login
