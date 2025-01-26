@@ -4,119 +4,136 @@
   </button>
   <dialog id="add_product" class="modal">
     <div class="modal-box">
-      <form method="dialog">
+      <form method="dialog" v-on:submit.prevent="closeModal">
         <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
           ✕
         </button>
       </form>
-      <form v-on:submit.prevent="addProduct" class="space-y-2 mt-4">
-        <label class="form-control w-full">
-          <div class="label">
-            <span class="label-text">Name</span>
-          </div>
-          <input
-            type="text"
-            class="input input-bordered w-full input-md text-lg"
-            v-model="name"
-            autofocus
-          />
-        </label>
-        <label class="form-control w-full">
-          <div class="label">
-            <span class="label-text">Date</span>
-          </div>
-          <input
-            type="date"
-            class="input input-bordered w-full input-md text-lg"
-            :value="dateToStr(date)"
-            @input="date = $event.target.valueAsDate"
-          />
-        </label>
-        <label class="form-control w-full">
-          <div class="label">
-            <span class="label-text">Weight</span>
-          </div>
-          <input
-            type="number"
-            class="input input-bordered w-full input-md text-lg"
-            v-model="weight"
-            min="0"
-            step="0.1"
-          />
-        </label>
-        <label class="form-control w-full">
-          <div class="label">
-            <span class="label-text">Quality</span>
-          </div>
-          <input
-            type="number"
-            class="input input-bordered w-full input-md text-lg"
-            v-model="quality"
-            min="0"
-            step="0.1"
-          />
-        </label>
-        <label class="form-control w-full">
-          <div class="label">
-            <span class="label-text">Rate per gram</span>
-          </div>
-          <input
-            type="number"
-            class="input input-bordered w-full input-md text-lg"
-            v-model="ratePerGram"
-            min="0"
-            step="0.1"
-          />
-        </label>
-        <label class="form-control w-full">
-          <div class="label">
-            <span class="label-text">Total amount</span>
-          </div>
-          <input
-            type="number"
-            class="input input-bordered w-full input-md text-lg"
-            v-model="totalAmount"
-            min="0"
-            step="0.1"
-          />
-        </label>
-        <label class="form-control w-full">
-          <div class="label">
-            <span class="label-text">Image</span>
-          </div>
-          <input
-            type="file"
-            @change="onFileChanged($event)"
-            accept="image/*"
-            class="file-input file-input-bordered file-input-md w-full text-lg"
-            capture
-          />
-          <div v-if="formImageThumb && !formImageLoading">
-            <img
-              v-if="formImageThumb"
-              :src="formImageThumb"
-              alt="Product image"
-              class="mt-2 rounded-lg max-h-60"
+      <template v-if="!retailer">
+        <retailer-picker v-on:selected="setRetailer" />
+      </template>
+      <template v-if="retailer">
+        <div class="text-md">
+          Retailer
+          <a
+            class="underline text-primary cursor-pointer"
+            v-on:click="retailer = null"
+            >{{ retailer.id }} : {{ retailer.name }}</a
+          >
+        </div>
+        <form v-on:submit.prevent="addProduct" class="space-y-2 mt-4">
+          <label class="form-control w-full">
+            <div class="label">
+              <span class="label-text">Name</span>
+            </div>
+            <input
+              type="text"
+              class="input input-bordered w-full input-md text-lg"
+              v-model="name"
+              autofocus
             />
-          </div>
-          <div v-if="formImageLoading">Uploading ...</div>
-        </label>
-      </form>
-      <div v-if="error" class="mt-4 whitespace-pre-line text-error">
-        {{ error }}
-      </div>
-      <div class="modal-action justify-between">
-        <form method="dialog" v-on:submit="clearFields">
-          <button class="btn btn-secondary" :disabled="loading">Cancel</button>
+          </label>
+          <label class="form-control w-full">
+            <div class="label">
+              <span class="label-text">Date</span>
+            </div>
+            <input
+              type="date"
+              class="input input-bordered w-full input-md text-lg"
+              :value="dateToStr(date)"
+              @input="date = $event.target.valueAsDate"
+            />
+          </label>
+          <label class="form-control w-full">
+            <div class="label">
+              <span class="label-text">Weight</span>
+            </div>
+            <input
+              type="number"
+              class="input input-bordered w-full input-md text-lg"
+              v-model="weight"
+              min="0"
+              step="0.1"
+            />
+          </label>
+          <label class="form-control w-full">
+            <div class="label">
+              <span class="label-text">Quality</span>
+            </div>
+            <input
+              type="number"
+              class="input input-bordered w-full input-md text-lg"
+              v-model="quality"
+              min="0"
+              step="0.1"
+            />
+          </label>
+          <label class="form-control w-full">
+            <div class="label">
+              <span class="label-text">Rate per gram</span>
+            </div>
+            <input
+              type="number"
+              class="input input-bordered w-full input-md text-lg"
+              v-model="ratePerGram"
+              min="0"
+              step="0.1"
+            />
+          </label>
+          <label class="form-control w-full">
+            <div class="label">
+              <span class="label-text">Total amount</span>
+            </div>
+            <input
+              type="number"
+              class="input input-bordered w-full input-md text-lg"
+              v-model="totalAmount"
+              min="0"
+              step="0.1"
+            />
+          </label>
+          <label class="form-control w-full">
+            <div class="label">
+              <span class="label-text">Image</span>
+            </div>
+            <input
+              type="file"
+              @change="onFileChanged($event)"
+              accept="image/*"
+              class="file-input file-input-bordered file-input-md w-full text-lg"
+              capture
+            />
+            <div v-if="formImageThumb && !formImageLoading">
+              <img
+                v-if="formImageThumb"
+                :src="formImageThumb"
+                alt="Product image"
+                class="mt-2 rounded-lg max-h-60"
+              />
+            </div>
+            <div v-if="formImageLoading">Uploading ...</div>
+          </label>
         </form>
-        <button
-          class="btn btn-primary"
-          :disabled="loading"
-          v-on:click="addProduct"
-        >
-          Save
-        </button>
-      </div>
+        <div v-if="error" class="mt-4 whitespace-pre-line text-error">
+          {{ error }}
+        </div>
+        <div class="modal-action justify-between">
+          <button
+            class="btn btn-secondary"
+            :disabled="loading"
+            v-on:click="closeModal"
+          >
+            Cancel
+          </button>
+          <button
+            class="btn btn-primary"
+            :disabled="loading"
+            v-on:click="addProduct"
+          >
+            Save
+          </button>
+        </div>
+      </template>
     </div>
   </dialog>
 </template>
@@ -124,11 +141,9 @@
 <script setup>
 import { ref } from "vue";
 import { httpClient } from "@/services/http.js";
+import RetailerPicker from "@/components/RetailerPicker.vue";
 
-const props = defineProps({
-  retailer_id: Number,
-});
-
+const retailer = ref(null);
 const name = ref("");
 const date = ref(new Date());
 const weight = ref(0);
@@ -154,6 +169,7 @@ const dateToStr = (d) => {
 };
 
 const clearFields = () => {
+  retailer.value = null;
   name.value = "";
   date.value = new Date();
   weight.value = 0;
@@ -189,6 +205,14 @@ const onFileChanged = async (event) => {
   }
 };
 
+const setRetailer = (r) => {
+  retailer.value = r;
+};
+
+const closeModal = () => {
+  add_product.close();
+};
+
 const addProduct = async () => {
   loading.value = true;
   try {
@@ -201,7 +225,7 @@ const addProduct = async () => {
         quality: quality.value,
         rate_per_gram: ratePerGram.value,
         total_amount: totalAmount.value,
-        retailer_id: props.retailer_id,
+        retailer_id: retailer.value.id,
         image_id: formImageId.value,
       },
       null,
