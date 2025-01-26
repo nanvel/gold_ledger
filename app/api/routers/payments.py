@@ -62,6 +62,7 @@ def create_payment(
             supplier_id=supplier.id,
             creator_id=user.id,
         )
+        payment.validate()
         uow.payments.create(payment)
 
     return PaymentResponse(success=True)
