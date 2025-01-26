@@ -26,7 +26,9 @@
           </label>
         </div>
         <div class="mx-2 flex-1 px-2">
-          <RouterLink to="/">{{ storeName }}</RouterLink>
+          <RouterLink to="/"
+            >{{ supplierId || retailerId }} : {{ storeName }}</RouterLink
+          >
         </div>
         <div class="hidden flex-none lg:block">
           <ul class="menu menu-horizontal">
@@ -68,7 +70,7 @@ import { storeToRefs } from "pinia";
 import { RouterLink } from "vue-router";
 
 const store = useMeStore();
-const { storeName, isSupplier } = storeToRefs(store);
+const { isSupplier, storeName, supplierId, retailerId } = storeToRefs(store);
 
 onMounted(async () => {
   await store.load();

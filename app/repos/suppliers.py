@@ -30,3 +30,9 @@ class SuppliersRepo:
         self._session.refresh(record)
 
         return record.id
+
+    def update(self, supplier: Supplier):
+        record = self._session.query(SupplierTable).filter_by(id=supplier.id).first()
+        if record:
+            record.name = supplier.name
+            self._session.commit()

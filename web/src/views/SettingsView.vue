@@ -12,7 +12,7 @@
           Log out
         </button>
         <change-password-modal />
-        <change-name-modal :name="myName" v-on:name-changed="meStore.setName" />
+        <ChangeNameModal :name="myName" v-on:name-changed="meStore.setName" />
       </div>
 
       <h3 class="text-2xl font-semibold">Theme</h3>
@@ -27,6 +27,14 @@
           v-for="theme in themes"
           :disabled="theme[0] === selectedTheme"
           v-on:click.prevent="setTheme(theme[0])"
+        />
+      </div>
+
+      <h3 class="text-2xl font-semibold" v-if="isOwner">Store</h3>
+      <div class="flex flex-row space-x-4" v-if="isOwner">
+        <ChangeStoreNameModal
+          :name="storeName"
+          v-on:name-changed="meStore.setStoreName"
         />
       </div>
 
@@ -48,10 +56,12 @@ import { storeToRefs } from "pinia";
 import changePasswordModal from "@/components/ChangePasswordModal.vue";
 import StaffList from "@/components/StaffList.vue";
 import AddStaffModal from "@/components/AddStaffModal.vue";
-import changeNameModal from "@/components/ChangeNameModal.vue";
+import ChangeNameModal from "@/components/ChangeNameModal.vue";
+import ChangeStoreNameModal from "@/components/ChangeStoreNameModal.vue";
 
 const meStore = useMeStore();
-const { selectedTheme, myEmail, myName, isOwner } = storeToRefs(meStore);
+const { selectedTheme, myEmail, myName, isOwner, storeName } =
+  storeToRefs(meStore);
 const staffListVersion = ref(0);
 
 const themes = [

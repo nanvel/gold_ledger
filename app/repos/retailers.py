@@ -39,6 +39,12 @@ class RetailersRepo:
 
         return record.id
 
+    def update(self, retailer: Retailer):
+        record = self._session.query(RetailerTable).filter_by(id=retailer.id).first()
+        if record:
+            record.name = retailer.name
+            self._session.commit()
+
     def filter(
         self,
         q: Optional[str] = None,

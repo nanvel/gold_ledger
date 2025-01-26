@@ -4,11 +4,16 @@ MVP v3:
 - [x] deploy
 - [x] session -> account
 - [x] show shop id
-- [ ] convert to date
-- [ ] due date
+- [x] convert to date
+- [x] due date
+- [ ] change store name
+  - [ ] api
+  - [ ] modal
+- [ ] make input component
 - [ ] search by id if only number provided
 - [ ] error messages in login/register form
 - [ ] Products, Payments, Settings
+- [ ] split product add in steps
 - [ ] retailer views
   - [ ] supplier page
   - [ ] products page
