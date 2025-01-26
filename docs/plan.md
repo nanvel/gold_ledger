@@ -34,7 +34,7 @@ MVP v3:
   - [x] suppliers picker
     - [x] repo
     - [x] api
-  - [ ] new payment
+  - [x] new payment
     - [x] db table
     - [x] repo
     - [x] api
@@ -43,11 +43,14 @@ MVP v3:
     - [x] Cash Payment / Bank Transfer: Enter amount and date
     - [x] Goods Payment: Enter Weight, Quality, Rate, and Total Amount
     - [x] validate payment type in model
-    - [ ] additional validation in model
-  - [ ] hide create product for retailers
+    - [x] additional validation in model
+  - [x] hide create product for retailers
   - [ ] show payments
+    - [x] api
+    - [ ] table
 - [ ] statuses for product
 - [ ] statuses for payment
+- [ ] show retailer and supplier in payments and products
 - [ ] improve cards and tables display
 - [ ] UI improvements
   - [ ] show empty list placeholder (don't show table/cards placeholder)

@@ -1,5 +1,6 @@
 from .image import Image
 from .payment import Payment
+from .payment_order_by import PaymentOrderBy
 from .payment_type import PaymentType
 from .product import Product
 from .product_order_by import ProductOrderBy
@@ -15,6 +16,7 @@ from .user import User
 __all__ = (
     "Image",
     "Payment",
+    "PaymentOrderBy",
     "PaymentType",
     "Product",
     "ProductOrderBy",

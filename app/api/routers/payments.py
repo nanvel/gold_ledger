@@ -1,13 +1,14 @@
 from datetime import date
 from decimal import Decimal
-from typing import Optional
+from typing import Optional, Tuple
 
 from dependency_injector.wiring import Provide, inject
 from fastapi import APIRouter, Depends, HTTPException, status
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, Field
 
 from app.container import Container
 from app.models import PaymentType, Payment, User
+from app.repos.payments import PaymentSearchItem
 from app.repos.uow import UnitOfFork
 from .auth import get_active_user
 
@@ -66,3 +67,34 @@ def create_payment(
         uow.payments.create(payment)
 
     return PaymentResponse(success=True)
+
+
+class PaymentsResponse(BaseModel):
+    total: int
+    items: Tuple[PaymentSearchItem, ...]
+
+
+@router.get("/payments")
+@inject
+def get_payments(
+    retailer_id: Optional[int] = None,
+    supplier_id: Optional[int] = None,
+    user: User = Depends(get_active_user),
+    uow: UnitOfFork = Depends(Provide[Container.uow]),
+    limit: int = 20,
+    offset: int = 0,
+) -> PaymentsResponse:
+    if user.is_supplier:
+        supplier_id = user.supplier_id
+    else:
+        retailer_id = user.retailer_id
+
+    with uow:
+        total, items = uow.payments.filter(
+            supplier_id=supplier_id,
+            retailer_id=retailer_id,
+            limit=limit,
+            offset=offset,
+        )
+
+    return PaymentsResponse(total=total, items=items)
