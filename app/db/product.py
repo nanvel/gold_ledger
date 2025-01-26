@@ -34,6 +34,8 @@ class ProductTable(Base):
     supplier_id: Mapped[int] = mapped_column(sa.ForeignKey("suppliers.id"))
     retailer_id: Mapped[int] = mapped_column(sa.ForeignKey("retailers.id"), index=True)
     creator_id: Mapped[int] = mapped_column(sa.ForeignKey("users.id"))
+    confirmed_by = mapped_column(sa.ForeignKey("users.id"), nullable=True)
+    rejected_by = mapped_column(sa.ForeignKey("users.id"), nullable=True)
 
     images: Mapped[List[ImageTable]] = relationship(secondary=product_image_association)
 

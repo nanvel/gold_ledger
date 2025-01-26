@@ -45,10 +45,14 @@ MVP v3:
     - [x] validate payment type in model
     - [x] additional validation in model
   - [x] hide create product for retailers
-  - [ ] show payments
+  - [x] show payments
     - [x] api
-    - [ ] table
+    - [x] table
 - [ ] statuses for product
+  - [ ] db confirmed by and rejected by
+  - [ ] api
+  - [ ] modals
+  - [ ] show in tables
 - [ ] statuses for payment
 - [ ] show retailer and supplier in payments and products
 - [ ] improve cards and tables display

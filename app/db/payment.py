@@ -21,6 +21,8 @@ class PaymentTable(Base):
     supplier_id: Mapped[int] = mapped_column(sa.ForeignKey("suppliers.id"))
     retailer_id: Mapped[int] = mapped_column(sa.ForeignKey("retailers.id"), index=True)
     creator_id: Mapped[int] = mapped_column(sa.ForeignKey("users.id"))
+    confirmed_by = mapped_column(sa.ForeignKey("users.id"), nullable=True)
+    rejected_by = mapped_column(sa.ForeignKey("users.id"), nullable=True)
 
     created_at: Mapped[datetime] = mapped_column(server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(
