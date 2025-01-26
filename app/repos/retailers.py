@@ -1,3 +1,4 @@
+import re
 from dataclasses import dataclass
 from typing import Optional, Tuple
 
@@ -5,6 +6,8 @@ from sqlalchemy.orm import Session
 
 from app.db import RetailerTable
 from app.models import Retailer, RetailerOrderBy, Timestamp
+
+STORE_ID_RE = re.compile(r"^\d+$")
 
 
 @dataclass(frozen=True)
@@ -56,7 +59,11 @@ class RetailersRepo:
         query = self._session.query(RetailerTable)
 
         if q:
-            query = query.filter(RetailerTable.name.ilike(f"%{q}%"))
+            q = q.strip()
+            if STORE_ID_RE.match(q):
+                query = query.filter(RetailerTable.id == int(q))
+            else:
+                query = query.filter(RetailerTable.name.ilike(f"%{q}%"))
 
         total = query.count()
 

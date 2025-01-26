@@ -9,9 +9,12 @@ MVP v3:
 - [x] change store name
   - [x] api
   - [x] modal
-- [ ] make input component
-- [ ] search by id if only number provided
-- [ ] error messages in login/register form
+- [x] make input component (password)
+- [x] error messages in login/register form
+- [ ] retailer search component
+  - [ ] search by id if only number provided
+  - [ ] vue component
+- [ ] supplier search component
 - [ ] Products, Payments, Settings
 - [ ] split product add in steps
 - [ ] retailer views
@@ -40,6 +43,7 @@ MVP v3:
 - [ ] use details for errors response, not message
 - [ ] validate login/register input inside js
 - [ ] datetime -> date? (product and payment)
+- [ ] add more input components, label - div
 
 Other:
 
