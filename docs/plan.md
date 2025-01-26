@@ -17,11 +17,12 @@ MVP v3:
   - [x] recent retailers
 - [ ] product form improvements
   - [x] rid of retailers page
-  - [ ] product modal on products page
-  - [ ] show errors 
-  - [ ] quality: 1-100
+  - [x] product modal on products page
+  - [x] use retailer picker
+  - [ ] quality: 0-100
   - [ ] total > 0
-  - [ ] use retailer picker
+  - [ ] add due date to the form
+  - [ ] show errors
 - [ ] show empty list placeholder
 - [ ] supplier search component
 - [ ] image input

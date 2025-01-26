@@ -1,10 +1,11 @@
 from dataclasses import replace
+from datetime import date
 from decimal import Decimal
 from typing import Optional, Tuple
 
 from dependency_injector.wiring import Provide, inject
 from fastapi import APIRouter, Depends, HTTPException, status
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from app.container import Container
 from app.models import Product, Timestamp, User
@@ -17,11 +18,12 @@ router = APIRouter()
 
 class ProductForm(BaseModel):
     name: str
-    date: str
-    weight: Decimal
-    quality: Decimal
-    rate_per_gram: Decimal
-    total_amount: Decimal
+    date: date
+    weight: Decimal = Field(..., gt=0)
+    quality: Decimal = Field(..., ge=0, le=100)
+    rate_per_gram: Decimal = Field(..., gt=0)
+    total_amount: Decimal = Field(..., gt=0)
+    payment_due_date: date
     retailer_id: int
     image_id: Optional[int]
 
@@ -72,11 +74,12 @@ def create_product(
         product = Product(
             id=0,
             name=item.name,
-            date=Timestamp.from_string(item.date),
+            date=item.date,
             weight=item.weight,
             quality=item.quality,
             rate_per_gram=item.rate_per_gram,
             total_amount=item.total_amount,
+            payment_due_date=item.payment_due_date,
             custom_fields={},
             supplier_id=user.supplier_id,
             retailer_id=retailer.id,

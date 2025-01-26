@@ -94,6 +94,17 @@
           </label>
           <label class="form-control w-full">
             <div class="label">
+              <span class="label-text">Payment due date</span>
+            </div>
+            <input
+              type="date"
+              class="input input-bordered w-full input-md text-lg"
+              :value="dateToStr(paymentDueDate)"
+              @input="paymentDueDate = $event.target.valueAsDate"
+            />
+          </label>
+          <label class="form-control w-full">
+            <div class="label">
               <span class="label-text">Image</span>
             </div>
             <input
@@ -150,6 +161,7 @@ const weight = ref(0);
 const quality = ref(0);
 const ratePerGram = ref(0);
 const totalAmount = ref(0);
+const paymentDueDate = ref(new Date());
 const loading = ref(false);
 const formImageId = ref(null);
 const formImageThumb = ref(null);
@@ -176,6 +188,7 @@ const clearFields = () => {
   quality.value = 0;
   ratePerGram.value = 0;
   totalAmount.value = 0;
+  paymentDueDate.value = new Date();
   formImageId.value = null;
   formImageThumb.value = null;
   formImageLoading.value = false;
@@ -225,6 +238,7 @@ const addProduct = async () => {
         quality: quality.value,
         rate_per_gram: ratePerGram.value,
         total_amount: totalAmount.value,
+        payment_due_date: dateToStr(paymentDueDate.value),
         retailer_id: retailer.value.id,
         image_id: formImageId.value,
       },
