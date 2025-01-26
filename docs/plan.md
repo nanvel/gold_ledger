@@ -15,29 +15,37 @@ MVP v3:
   - [x] search by id if only number provided
   - [x] vue component
   - [x] recent retailers
-- [ ] product form improvements
+- [x] product form improvements
   - [x] rid of retailers page
   - [x] product modal on products page
+  - [x] split product add in steps
   - [x] use retailer picker
   - [x] add due date to the form
   - [x] quality: 0-100
   - [x] total > 0
-  - [ ] show errors
-- [ ] plan update
-- [ ] hide create product for retailers
-- [ ] show empty list placeholder
-- [ ] supplier search component
-- [ ] image input
-- [ ] Products, Payments, Settings
-- [ ] split product add in steps
-- [ ] retailer views
-  - [ ] supplier page
-  - [ ] products page
-  - [ ] product page adjustment
-  - [ ] submit payment
+  - [x] show errors
+  - [x] use details for errors response, not message
+  - [x] validate and print errors for login/registration forms
+- [x] plan update
+- [ ] retailer payments
+  - [ ] datetime -> date? (product and payment)
+  - [ ] Products, Payments, Settings
+  - [ ] suppliers picker
+  - [ ] payments page
+  - [ ] new payment
     - [x] db table
+    - [ ] api
+    - [ ] modal
     - [ ] Cash Payment: Enter amount and date
     - [ ] Goods Payment: Enter Weight, Quality, Rate, and Total Amount
+  - [ ] hide create product for retailers
+  - [ ] show payments
+- [ ] statuses for product
+- [ ] statuses for payment
+- [ ] improve cards and tables display
+- [ ] UI improvements
+  - [ ] show empty list placeholder
+  - [ ] image input
 - [ ] received product
 - [ ] paid / unpaid transactions
 - [ ] make sure store is visible after login
@@ -52,16 +60,11 @@ MVP v3:
 - [ ] limit number of users and products per hr
 - [ ] remove product before received?
 - [ ] highlight selected menu?
-- [ ] use slider for quality?
-- [ ] validate and print errors for login/registration forms
-- [ ] use details for errors response, not message
 - [ ] validate login/register input inside js
-- [ ] datetime -> date? (product and payment)
 - [ ] add more input components, label - div
 - [ ] autocalculate amount for goods payment?
 
 Other:
-
 - [ ] Security
   - [ ] DB backups
   - [ ] sentry

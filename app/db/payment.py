@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import date, datetime
 from decimal import Decimal
 
 import sqlalchemy as sa
@@ -12,7 +12,7 @@ class PaymentTable(Base):
     __tablename__ = "payments"
 
     id: Mapped[int]
-    date: Mapped[datetime]
+    date: Mapped[date]
     type: Mapped[int]
     weight: Mapped[Decimal] = mapped_column(type_=sa.DECIMAL)
     quality: Mapped[Decimal] = mapped_column(type_=sa.DECIMAL)
