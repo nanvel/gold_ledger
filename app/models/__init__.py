@@ -1,3 +1,5 @@
+from .activity import Activity
+from .activity_type import ActivityType
 from .image import Image
 from .payment import Payment
 from .payment_order_by import PaymentOrderBy
@@ -14,6 +16,8 @@ from .user import User
 
 
 __all__ = (
+    "Activity",
+    "ActivityType",
     "Image",
     "Payment",
     "PaymentOrderBy",

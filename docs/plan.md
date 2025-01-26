@@ -1,59 +1,24 @@
 # Plan
 
-MVP v3:
-- [x] deploy
-- [x] session -> account
-- [x] show shop id
-- [x] convert to date
-- [x] due date
-- [x] change store name
-  - [x] api
-  - [x] modal
-- [x] make input component (password)
-- [x] error messages in login/register form
-- [x] retailer search component
-  - [x] search by id if only number provided
-  - [x] vue component
-  - [x] recent retailers
-- [x] product form improvements
-  - [x] rid of retailers page
-  - [x] product modal on products page
-  - [x] split product add in steps
-  - [x] use retailer picker
-  - [x] add due date to the form
-  - [x] quality: 0-100
-  - [x] total > 0
-  - [x] show errors
-  - [x] use details for errors response, not message
-  - [x] validate and print errors for login/registration forms
-- [x] plan update
-- [ ] retailer payments
-  - [x] datetime -> date? (product and payment)
-  - [x] Products, Payments, Settings
-  - [x] payments page
-  - [x] suppliers picker
-    - [x] repo
-    - [x] api
-  - [x] new payment
-    - [x] db table
-    - [x] repo
-    - [x] api
-    - [x] supplier picker
-    - [x] modal
-    - [x] Cash Payment / Bank Transfer: Enter amount and date
-    - [x] Goods Payment: Enter Weight, Quality, Rate, and Total Amount
-    - [x] validate payment type in model
-    - [x] additional validation in model
-  - [x] hide create product for retailers
-  - [x] show payments
-    - [x] api
-    - [x] table
-- [ ] statuses for product
+MVP v4:
+- [x] statuses for product
   - [x] db confirmed by and rejected by
   - [x] api
-  - [ ] modals
-  - [ ] show in tables
+  - [x] show in tables
+- [ ] payment page
+  - [ ] payment details api
+  - [ ] ui
+- [ ] make sure showing all data
+- [ ] activity log
+  - [ ] db (user, supplier, retailer, product, payment, action, message, created)
+  - [ ] repo
+  - [ ] api
+  - [ ] activity log
+  - [ ] auto reload
+  - [ ] sound on updates
+  - [ ] outstanding payments per retailer
 - [ ] statuses for payment
+  - [ ] color circles for status 
 - [ ] show retailer and supplier in payments and products
 - [ ] improve cards and tables display
 - [ ] UI improvements
@@ -63,11 +28,6 @@ MVP v3:
 - [ ] received product
 - [ ] paid / unpaid transactions
 - [ ] make sure store is visible after login
-- [ ] action log on dashboard
-  - [ ] activity log
-  - [ ] auto reload
-  - [ ] sound on updates
-  - [ ] outstanding payments per retailer
 - [ ] pg full text search
 - [ ] make sure only either supplier or retailer is specified
 - [ ] custom fields
