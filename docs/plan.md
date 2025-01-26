@@ -36,17 +36,19 @@ MVP v3:
     - [x] api
   - [ ] new payment
     - [x] db table
+    - [x] repo
     - [ ] api
     - [ ] modal
-    - [ ] Cash Payment: Enter amount and date
+    - [ ] Cash Payment / Bank Transfer: Enter amount and date
     - [ ] Goods Payment: Enter Weight, Quality, Rate, and Total Amount
+    - [ ] validate payment type in model 
   - [ ] hide create product for retailers
   - [ ] show payments
 - [ ] statuses for product
 - [ ] statuses for payment
 - [ ] improve cards and tables display
 - [ ] UI improvements
-  - [ ] show empty list placeholder
+  - [ ] show empty list placeholder (don't show table/cards placeholder)
   - [ ] image input
   - [ ] make navbar sticky
 - [ ] received product

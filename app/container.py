@@ -16,6 +16,7 @@ class Container(containers.DeclarativeContainer):
             "app.api.routers.auth",
             "app.api.routers.images",
             "app.api.routers.me",
+            "app.api.routers.payments",
             "app.api.routers.password",
             "app.api.routers.products",
             "app.api.routers.register",

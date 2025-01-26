@@ -10,7 +10,8 @@ class PaymentTypeValue:
 
 class PaymentType(int, Enum):
     CASH = PaymentTypeValue(value=1, label="Cash")
-    GOODS = PaymentTypeValue(value=2, label="Goods")
+    BANK_TRANSFER = PaymentTypeValue(value=2, label="Bank Transfer")
+    GOODS = PaymentTypeValue(value=3, label="Goods")
 
     def __new__(cls, arg):
         obj = int.__new__(cls, arg.value)
