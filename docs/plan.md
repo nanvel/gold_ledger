@@ -11,11 +11,13 @@ MVP v3:
   - [x] modal
 - [x] make input component (password)
 - [x] error messages in login/register form
-- [ ] retailer search component
+- [x] retailer search component
   - [x] search by id if only number provided
-  - [ ] vue component
-  - [ ] recent retailers
-- [ ] product form validation
+  - [x] vue component
+  - [x] recent retailers
+- [ ] product form improvements
+  - [x] rid of retailers page
+  - [ ] use retailer picker 
   - [ ] show errors 
   - [ ] quality: 1-100
   - [ ] total > 0

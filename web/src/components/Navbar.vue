@@ -33,10 +33,8 @@
         <div class="hidden flex-none lg:block">
           <ul class="menu menu-horizontal">
             <!-- Navbar menu content here -->
-            <li v-if="isSupplier">
-              <RouterLink to="/retailers">Retailers</RouterLink>
-            </li>
             <li><RouterLink to="/products">Products</RouterLink></li>
+            <li><a>Payments</a></li>
             <li><RouterLink to="/settings">Settings</RouterLink></li>
           </ul>
         </div>
@@ -53,10 +51,8 @@
       ></label>
       <ul class="menu bg-base-200 min-h-full w-80 p-4">
         <!-- Sidebar content here -->
-        <li v-if="isSupplier">
-          <RouterLink to="/retailers">Retailers</RouterLink>
-        </li>
         <li><RouterLink to="/products">Products</RouterLink></li>
+        <li><a>Payments</a></li>
         <li><RouterLink to="/settings">Settings</RouterLink></li>
       </ul>
     </div>

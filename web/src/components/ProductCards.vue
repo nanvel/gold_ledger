@@ -6,8 +6,12 @@
       :key="product.id"
     >
       <div class="card-body">
-        <h2 class="card-title"><RouterLink :to="`/products/${product.id}`">{{ product.name }}</RouterLink></h2>
-        <p>
+        <h2 class="card-title">
+          <RouterLink :to="`/products/${product.id}`">{{
+            product.name
+          }}</RouterLink>
+        </h2>
+        <div>
           <img
             v-if="product.images?.length"
             :src="product.images[0].thumb_url"
@@ -26,33 +30,32 @@
                   <td>Date</td>
                   <td>{{ product.date }}</td>
                 </tr>
-              <tr>
+                <tr>
                   <td>Weight</td>
                   <td>{{ product.weight }}</td>
                 </tr>
-              <tr>
+                <tr>
                   <td>Quality</td>
                   <td>{{ product.quality }}</td>
                 </tr>
-              <tr>
+                <tr>
                   <td>Rate per gram</td>
                   <td>{{ product.rate_per_gram }}</td>
                 </tr>
-              <tr>
+                <tr>
                   <td>Total amount</td>
                   <td>{{ product.total_amount }}</td>
                 </tr>
               </tbody>
             </table>
           </div>
-        </p>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { defineProps } from "vue";
 import { RouterLink } from "vue-router";
 
 const props = defineProps({

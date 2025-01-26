@@ -32,8 +32,6 @@
 </template>
 
 <script setup>
-import { defineProps } from "vue";
-import Timestamp from "@/components/Timestamp.vue";
 import { RouterLink } from "vue-router";
 
 const props = defineProps({

@@ -48,7 +48,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref, defineProps, computed } from "vue";
+import { onMounted, ref, computed } from "vue";
 import { httpClient } from "@/services/http.js";
 import ProductTable from "@/components/ProductTable.vue";
 import ProductCards from "@/components/ProductCards.vue";

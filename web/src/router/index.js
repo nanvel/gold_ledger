@@ -5,8 +5,6 @@ import LoginView from "@/views/LoginView.vue";
 import ProductsView from "@/views/ProductsView.vue";
 import ProductView from "@/views/ProductView.vue";
 import RegisterView from "@/views/RegisterView.vue";
-import RetailerView from "@/views/RetailerView.vue";
-import RetailersView from "@/views/RetailersView.vue";
 import SettingsView from "@/views/SettingsView.vue";
 
 const router = createRouter({
@@ -31,16 +29,6 @@ const router = createRouter({
       path: "/settings",
       name: "settings",
       component: SettingsView,
-    },
-    {
-      path: "/retailers",
-      name: "retailers",
-      component: RetailersView,
-    },
-    {
-      path: "/retailers/:id",
-      name: "retailer",
-      component: RetailerView,
     },
     {
       path: "/products",
