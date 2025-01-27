@@ -7,7 +7,7 @@ from .suppliers import SuppliersRepo
 from .users import UsersRepo
 
 
-class UnitOfFork:
+class UnitOfWork:
     activities: ActivitiesRepo
     images: ImagesRepo
     payments: PaymentsRepo

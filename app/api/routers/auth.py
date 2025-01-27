@@ -9,7 +9,7 @@ from pydantic import BaseModel
 
 from app.container import Container
 from app.models import User
-from app.repos.uow import UnitOfFork
+from app.repos.uow import UnitOfWork
 
 router = APIRouter(
     prefix="/auth",
@@ -28,7 +28,7 @@ class TokenResponse(BaseModel):
 @inject
 def create_access_token(
     form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
-    uow: UnitOfFork = Depends(Provide[Container.uow]),
+    uow: UnitOfWork = Depends(Provide[Container.uow]),
     crypt_context: CryptContext = Depends(Provide[Container.crypt_context]),
     secret_key: str = Depends(Provide[Container.config.secret_key]),
     jwt_algorithm: str = Depends(Provide[Container.jwt_algorithm]),
@@ -59,7 +59,7 @@ def create_access_token(
 @inject
 def get_current_user(
     token: Annotated[str, Depends(oauth2_scheme)],
-    uow: UnitOfFork = Depends(Provide[Container.uow]),
+    uow: UnitOfWork = Depends(Provide[Container.uow]),
     secret_key: str = Depends(Provide[Container.config.secret_key]),
     jwt_algorithm: str = Depends(Provide[Container.jwt_algorithm]),
 ):

@@ -10,7 +10,7 @@ from pydantic import BaseModel, Field
 from app.container import Container
 from app.models import Product, User
 from app.repos.products import ProductDetailsItem, ProductSearchItem
-from app.repos.uow import UnitOfFork
+from app.repos.uow import UnitOfWork
 from .auth import get_active_user
 
 router = APIRouter()
@@ -37,7 +37,7 @@ class ProductResponse(BaseModel):
 def create_product(
     item: ProductForm,
     user: User = Depends(get_active_user),
-    uow: UnitOfFork = Depends(Provide[Container.uow]),
+    uow: UnitOfWork = Depends(Provide[Container.uow]),
 ) -> ProductResponse:
     if not user.is_supplier:
         raise HTTPException(
@@ -107,7 +107,7 @@ def get_products(
     retailer_id: Optional[int] = None,
     supplier_id: Optional[int] = None,
     user: User = Depends(get_active_user),
-    uow: UnitOfFork = Depends(Provide[Container.uow]),
+    uow: UnitOfWork = Depends(Provide[Container.uow]),
     limit: int = 20,
     offset: int = 0,
 ) -> ProductsResponse:
@@ -132,7 +132,7 @@ def get_products(
 def get_product(
     product_id: int,
     user: User = Depends(get_active_user),
-    uow: UnitOfFork = Depends(Provide[Container.uow]),
+    uow: UnitOfWork = Depends(Provide[Container.uow]),
 ) -> ProductDetailsItem:
     with uow:
         product = uow.products.by_id(product_id)
@@ -158,7 +158,7 @@ class UpdateResponse(BaseModel):
 def confirm_product(
     product_id: int,
     user: User = Depends(get_active_user),
-    uow: UnitOfFork = Depends(Provide[Container.uow]),
+    uow: UnitOfWork = Depends(Provide[Container.uow]),
 ) -> UpdateResponse:
     with uow:
         product = uow.products.by_id(product_id)
@@ -184,7 +184,7 @@ def confirm_product(
 def reject_product(
     product_id: int,
     user: User = Depends(get_active_user),
-    uow: UnitOfFork = Depends(Provide[Container.uow]),
+    uow: UnitOfWork = Depends(Provide[Container.uow]),
 ) -> UpdateResponse:
     with uow:
         product = uow.products.by_id(product_id)

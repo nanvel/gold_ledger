@@ -1,4 +1,4 @@
-from app.models import User, UserRole
+from app.models import User
 from app.repos.users import UsersRepo
 
 
@@ -8,9 +8,10 @@ def test_users(session):
         User(
             username="test",
             password_hash="password",
-            role=UserRole.EMPLOYEE,
             token_version=0,
             id=0,
+            supplier_id=None,
+            retailer_id=None,
         )
     )
 
@@ -19,5 +20,4 @@ def test_users(session):
     assert user.id == user_id
     assert user.username == "test"
     assert user.password_hash == "password"
-    assert user.role == UserRole.EMPLOYEE
     assert user.token_version == 0
