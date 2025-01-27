@@ -19,3 +19,7 @@ class User:
     @property
     def is_retailer(self):
         return self.retailer_id is not None
+
+    @property
+    def display_name(self):
+        return self.name or self.username

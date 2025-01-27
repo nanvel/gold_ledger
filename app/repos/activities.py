@@ -8,7 +8,7 @@ class ActivitiesRepo:
     def __init__(self, session: Session):
         self._session = session
 
-    def create(self, activity: Activity):
+    def create(self, activity: Activity) -> int:
         record = ActivityTable(
             type=activity.type.value,
             user_id=activity.user_id,
@@ -21,3 +21,6 @@ class ActivitiesRepo:
 
         self._session.add(record)
         self._session.commit()
+        self._session.refresh(record)
+
+        return record.id
