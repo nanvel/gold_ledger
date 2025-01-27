@@ -8,11 +8,13 @@ MVP v4:
 - [ ] payment page
   - [ ] payment details api
   - [ ] ui
+- [ ] move business logic into models
 - [ ] make sure showing all data
 - [ ] activity log
-  - [ ] db (user, supplier, retailer, product, payment, action, message, created)
-  - [ ] repo
-  - [ ] api
+  - [x] db (user, supplier, retailer, product, payment, action, message, created)
+  - [x] repo
+  - [ ] messages generation (factory?)
+  - [ ] api (filter and get messages)
   - [ ] activity log
   - [ ] auto reload
   - [ ] sound on updates
