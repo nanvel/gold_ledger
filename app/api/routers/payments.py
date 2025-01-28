@@ -8,9 +8,9 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from pydantic import BaseModel, Field
 
 from app.container import Container
-from app.models import PaymentType, Payment, User
+from app.models import Activity, ActivityType, PaymentType, Payment, User
 from app.repos.payments import PaymentSearchItem
-from app.repos.uow import UnitOfFork
+from app.repos.uow import UnitOfWork
 from .auth import get_active_user
 
 router = APIRouter()
@@ -35,7 +35,8 @@ class PaymentResponse(BaseModel):
 def create_payment(
     item: PaymentForm,
     user: User = Depends(get_active_user),
-    uow: UnitOfFork = Depends(Provide[Container.uow]),
+    uow: UnitOfWork = Depends(Provide[Container.uow]),
+    activity_message_factory=Depends(Provide[Container.activity_message_factory]),
 ) -> PaymentResponse:
     if not user.is_retailer:
         raise HTTPException(
@@ -69,6 +70,22 @@ def create_payment(
         payment.validate()
         uow.payments.create(payment)
 
+        activity = Activity(
+            id=0,
+            type=ActivityType.PAYMENT_ADDED,
+            user_id=user.id,
+            supplier_id=supplier.id,
+            retailer_id=user.retailer_id,
+            product_id=None,
+            payment_id=payment.id,
+            message="",
+        )
+        activity = replace(
+            activity,
+            message=activity_message_factory.from_activity(activity, uow),
+        )
+        uow.activities.create(activity)
+
     return PaymentResponse(success=True)
 
 
@@ -83,7 +100,7 @@ def get_payments(
     retailer_id: Optional[int] = None,
     supplier_id: Optional[int] = None,
     user: User = Depends(get_active_user),
-    uow: UnitOfFork = Depends(Provide[Container.uow]),
+    uow: UnitOfWork = Depends(Provide[Container.uow]),
     limit: int = 20,
     offset: int = 0,
 ) -> PaymentsResponse:
@@ -112,7 +129,8 @@ class UpdateResponse(BaseModel):
 def confirm_payment(
     payment_id: int,
     user: User = Depends(get_active_user),
-    uow: UnitOfFork = Depends(Provide[Container.uow]),
+    uow: UnitOfWork = Depends(Provide[Container.uow]),
+    activity_message_factory=Depends(Provide[Container.activity_message_factory]),
 ) -> UpdateResponse:
     with uow:
         payment = uow.payments.by_id(payment_id)
@@ -130,6 +148,22 @@ def confirm_payment(
 
         uow.payments.update(payment)
 
+        activity = Activity(
+            id=0,
+            type=ActivityType.PAYMENT_CONFIRMED,
+            user_id=user.id,
+            supplier_id=user.supplier_id,
+            retailer_id=payment.retailer_id,
+            product_id=None,
+            payment_id=payment.id,
+            message="",
+        )
+        activity = replace(
+            activity,
+            message=activity_message_factory.from_activity(activity, uow),
+        )
+        uow.activities.create(activity)
+
     return UpdateResponse(success=True)
 
 
@@ -138,7 +172,8 @@ def confirm_payment(
 def reject_payment(
     payment_id: int,
     user: User = Depends(get_active_user),
-    uow: UnitOfFork = Depends(Provide[Container.uow]),
+    uow: UnitOfWork = Depends(Provide[Container.uow]),
+    activity_message_factory=Depends(Provide[Container.activity_message_factory]),
 ) -> UpdateResponse:
     with uow:
         payment = uow.payments.by_id(payment_id)
@@ -155,5 +190,21 @@ def reject_payment(
         payment = replace(payment, rejected_by=user.id)
 
         uow.payments.update(payment)
+
+        activity = Activity(
+            id=0,
+            type=ActivityType.PAYMENT_REJECTED,
+            user_id=user.id,
+            supplier_id=user.supplier_id,
+            retailer_id=payment.retailer_id,
+            product_id=None,
+            payment_id=payment.id,
+            message="",
+        )
+        activity = replace(
+            activity,
+            message=activity_message_factory.from_activity(activity, uow),
+        )
+        uow.activities.create(activity)
 
     return UpdateResponse(success=True)

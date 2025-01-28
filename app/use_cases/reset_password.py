@@ -2,11 +2,11 @@ from dataclasses import replace
 
 from passlib.context import CryptContext
 
-from app.repos.uow import UnitOfFork
+from app.repos.uow import UnitOfWork
 
 
 class ResetPassword:
-    def __init__(self, uow: UnitOfFork, crypt_context: CryptContext):
+    def __init__(self, uow: UnitOfWork, crypt_context: CryptContext):
         self._uow = uow
         self._crypt_context = crypt_context
 

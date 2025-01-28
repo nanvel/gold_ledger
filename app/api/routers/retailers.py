@@ -6,7 +6,7 @@ from pydantic import BaseModel
 
 from app.container import Container
 from app.models import RetailerOrderBy
-from app.repos.uow import UnitOfFork
+from app.repos.uow import UnitOfWork
 from app.repos.retailers import RetailerSearchItem
 from .auth import get_active_user
 
@@ -21,7 +21,7 @@ class ResponseItem(BaseModel):
 @router.get("/retailers", dependencies=[Depends(get_active_user)])
 @inject
 def filter_retailers(
-    uow: UnitOfFork = Depends(Provide[Container.uow]),
+    uow: UnitOfWork = Depends(Provide[Container.uow]),
     q: Optional[str] = None,
     offset: int = 0,
     limit: int = 20,

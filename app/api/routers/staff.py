@@ -8,7 +8,7 @@ from pydantic import BaseModel, Field
 
 from app.container import Container
 from app.models import User
-from app.repos.uow import UnitOfFork
+from app.repos.uow import UnitOfWork
 from app.repos.users import UsersSearchItems
 from .auth import get_active_user
 
@@ -29,7 +29,7 @@ class StoreResponse(BaseModel):
 def add_staff(
     item: AddStaffForm,
     user: User = Depends(get_active_user),
-    uow: UnitOfFork = Depends(Provide[Container.uow]),
+    uow: UnitOfWork = Depends(Provide[Container.uow]),
     crypt_context: CryptContext = Depends(Provide[Container.crypt_context]),
 ) -> StoreResponse:
     with uow:
@@ -83,7 +83,7 @@ class ListStaffResponse(BaseModel):
 @inject
 def list_staff(
     user: User = Depends(get_active_user),
-    uow: UnitOfFork = Depends(Provide[Container.uow]),
+    uow: UnitOfWork = Depends(Provide[Container.uow]),
     limit: int = 20,
     offset: int = 0,
 ) -> ListStaffResponse:

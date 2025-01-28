@@ -6,7 +6,7 @@ from pydantic import BaseModel, Field
 
 from app.container import Container
 from app.models import User
-from app.repos.uow import UnitOfFork
+from app.repos.uow import UnitOfWork
 from .auth import get_active_user
 
 
@@ -27,7 +27,7 @@ class Response(BaseModel):
 def change_password(
     item: ChangePasswordForm,
     user: User = Depends(get_active_user),
-    uow: UnitOfFork = Depends(Provide[Container.uow]),
+    uow: UnitOfWork = Depends(Provide[Container.uow]),
     crypt_context: CryptContext = Depends(Provide[Container.crypt_context]),
 ) -> Response:
     if not crypt_context.verify(item.old_password, user.password_hash):

@@ -9,6 +9,7 @@ from fastapi.staticfiles import StaticFiles
 
 from app.container import Container
 
+from .routers import activities
 from .routers import auth
 from .routers import images
 from .routers import me
@@ -33,6 +34,7 @@ def create_app(container: Container):
 
     app.mount("/static", StaticFiles(directory="static"), name="static")
 
+    app.include_router(activities.router, prefix="/api")
     app.include_router(auth.router, prefix="/api")
     app.include_router(images.router, prefix="/api")
     app.include_router(me.router, prefix="/api")

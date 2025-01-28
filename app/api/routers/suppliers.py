@@ -7,7 +7,7 @@ from pydantic import BaseModel
 from app.container import Container
 from app.models import SupplierOrderBy
 from app.repos.suppliers import SupplierSearchItem
-from app.repos.uow import UnitOfFork
+from app.repos.uow import UnitOfWork
 from .auth import get_active_user
 
 router = APIRouter()
@@ -21,7 +21,7 @@ class ResponseItem(BaseModel):
 @router.get("/suppliers", dependencies=[Depends(get_active_user)])
 @inject
 def filter_suppliers(
-    uow: UnitOfFork = Depends(Provide[Container.uow]),
+    uow: UnitOfWork = Depends(Provide[Container.uow]),
     q: Optional[str] = None,
     offset: int = 0,
     limit: int = 20,

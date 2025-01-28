@@ -7,7 +7,7 @@ from pydantic import BaseModel, Field
 
 from app.container import Container
 from app.models import Retailer, StoreType, Supplier, User
-from app.repos.uow import UnitOfFork
+from app.repos.uow import UnitOfWork
 
 router = APIRouter()
 
@@ -27,7 +27,7 @@ class StoreResponse(BaseModel):
 @inject
 def register_store(
     item: RegisterStoreForm,
-    uow: UnitOfFork = Depends(Provide[Container.uow]),
+    uow: UnitOfWork = Depends(Provide[Container.uow]),
     crypt_context: CryptContext = Depends(Provide[Container.crypt_context]),
 ) -> StoreResponse:
     with uow:

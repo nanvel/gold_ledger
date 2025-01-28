@@ -8,7 +8,7 @@ from pydantic import BaseModel, Field
 
 from app.container import Container
 from app.models import User
-from app.repos.uow import UnitOfFork
+from app.repos.uow import UnitOfWork
 from .auth import get_active_user
 
 router = APIRouter()
@@ -28,7 +28,7 @@ class ResponseItem(BaseModel):
 @inject
 def get_me(
     user: User = Depends(get_active_user),
-    uow: UnitOfFork = Depends(Provide[Container.uow]),
+    uow: UnitOfWork = Depends(Provide[Container.uow]),
 ) -> ResponseItem:
     if user.supplier_id is not None:
         with uow:
@@ -63,7 +63,7 @@ class ChangeNameResponse(BaseModel):
 def set_name(
     item: ChangeNameForm,
     user: User = Depends(get_active_user),
-    uow: UnitOfFork = Depends(Provide[Container.uow]),
+    uow: UnitOfWork = Depends(Provide[Container.uow]),
 ) -> ChangeNameResponse:
     with uow:
         user = replace(user, name=item.name)
@@ -81,7 +81,7 @@ class ChangeStoreNameForm(BaseModel):
 def set_store_name(
     item: ChangeStoreNameForm,
     user: User = Depends(get_active_user),
-    uow: UnitOfFork = Depends(Provide[Container.uow]),
+    uow: UnitOfWork = Depends(Provide[Container.uow]),
 ) -> ChangeNameResponse:
     with uow:
         if user.supplier_id is not None:
