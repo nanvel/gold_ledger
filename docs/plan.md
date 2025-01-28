@@ -5,20 +5,22 @@ MVP v4:
   - [x] db confirmed by and rejected by
   - [x] api
   - [x] show in tables
-- [ ] activity log
+- [x] activity log
   - [x] db (user, supplier, retailer, product, payment, action, message, created)
   - [x] repo
   - [x] fix tests
   - [x] tests for message factory
   - [x] record activities
   - [x] messages generation (factory?)
-  - [ ] api (filter and get messages)
-  - [ ] activity log
-- [ ] reset -> set password
-- [ ] use message bus for activities
+  - [x] api (filter and get messages)
+  - [x] activity log
 - [ ] payment page
   - [ ] payment details api
   - [ ] ui
+- [ ] retailer page
+- [ ] supplier page
+- [ ] reset -> set password
+- [ ] use message bus for activities
 - [ ] move business logic into models
 - [ ] make sure showing all data
 - [ ] statuses for payment
