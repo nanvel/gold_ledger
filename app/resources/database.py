@@ -5,7 +5,7 @@ from sqlalchemy.orm import sessionmaker
 def init_db(db_uri):
     engine = create_engine(db_uri)
     try:
-        with engine.connect() as conn:
+        with engine.connect().execution_options(isolation_level="AUTOCOMMIT") as conn:
             yield sessionmaker(conn)
             conn.commit()
     finally:
