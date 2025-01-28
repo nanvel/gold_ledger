@@ -5,7 +5,7 @@
         <thead>
           <tr>
             <th>Created</th>
-            <th>Message</th>
+            <th>Activity</th>
             <th>Links</th>
           </tr>
         </thead>

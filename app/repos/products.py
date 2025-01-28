@@ -85,7 +85,28 @@ class ProductsRepo:
 
             self._session.commit()
 
-    def by_id(self, product_id: int) -> Optional[ProductDetailsItem]:
+    def by_id(self, product_id: int) -> Optional[Product]:
+        record = self._session.query(ProductTable).filter_by(id=product_id).first()
+
+        if record:
+            return Product(
+                id=record.id,
+                name=record.name,
+                date=record.date,
+                weight=record.weight,
+                quality=record.quality,
+                rate_per_gram=record.rate_per_gram,
+                total_amount=record.total_amount,
+                payment_due_date=record.payment_due_date,
+                supplier_id=record.supplier_id,
+                retailer_id=record.retailer_id,
+                creator_id=record.creator_id,
+                confirmed_by=record.confirmed_by,
+                rejected_by=record.rejected_by,
+                custom_fields=record.custom_fields,
+            )
+
+    def details(self, product_id: int) -> Optional[ProductDetailsItem]:
         record = self._session.query(ProductTable).filter_by(id=product_id).first()
 
         if record:

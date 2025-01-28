@@ -152,18 +152,18 @@ def get_product(
     uow: UnitOfWork = Depends(Provide[Container.uow]),
 ) -> ProductDetailsItem:
     with uow:
-        product = uow.products.by_id(product_id)
+        product_details = uow.products.details(product_id)
 
-        if not product or (
-            product.supplier_id != user.supplier_id
-            and product.retailer_id != user.retailer_id
+        if not product_details or (
+            product_details.supplier_id != user.supplier_id
+            and product_details.retailer_id != user.retailer_id
         ):
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
                 detail="The product was not found.",
             )
 
-        return product
+        return product_details
 
 
 class UpdateResponse(BaseModel):
