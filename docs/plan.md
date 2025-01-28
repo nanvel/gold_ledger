@@ -10,8 +10,8 @@ MVP v4:
   - [x] repo
   - [x] fix tests
   - [x] tests for message factory
-  - [ ] record activities
-  - [ ] messages generation (factory?)
+  - [x] record activities
+  - [x] messages generation (factory?)
   - [ ] api (filter and get messages)
   - [ ] activity log
 - [ ] reset -> set password
