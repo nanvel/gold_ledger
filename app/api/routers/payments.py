@@ -9,7 +9,7 @@ from pydantic import BaseModel, Field
 
 from app.container import Container
 from app.models import Activity, ActivityType, PaymentType, Payment, User
-from app.repos.payments import PaymentSearchItem
+from app.repos.payments import PaymentDetailsItem, PaymentSearchItem
 from app.repos.uow import UnitOfWork
 from .auth import get_active_user
 
@@ -68,7 +68,7 @@ def create_payment(
             rejected_by=None,
         )
         payment.validate()
-        uow.payments.create(payment)
+        payment_id = uow.payments.create(payment)
 
         activity = Activity(
             id=0,
@@ -77,7 +77,7 @@ def create_payment(
             supplier_id=supplier.id,
             retailer_id=user.retailer_id,
             product_id=None,
-            payment_id=payment.id,
+            payment_id=payment_id,
             message="",
         )
         activity = replace(
@@ -118,6 +118,28 @@ def get_payments(
         )
 
     return PaymentsResponse(total=total, items=items)
+
+
+@router.get("/payments/{payment_id}")
+@inject
+def get_payment(
+    payment_id: int,
+    user: User = Depends(get_active_user),
+    uow: UnitOfWork = Depends(Provide[Container.uow]),
+) -> PaymentDetailsItem:
+    with uow:
+        payment_details = uow.payments.details(payment_id)
+
+        if not payment_details or (
+            payment_details.supplier_id != user.supplier_id
+            and payment_details.retailer_id != user.retailer_id
+        ):
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="The payment was not found.",
+            )
+
+        return payment_details
 
 
 class UpdateResponse(BaseModel):

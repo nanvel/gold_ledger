@@ -3,6 +3,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "@/views/HomeView.vue";
 import LoginView from "@/views/LoginView.vue";
 import PaymentsView from "@/views/PaymentsView.vue";
+import PaymentView from "@/views/PaymentView.vue";
 import ProductsView from "@/views/ProductsView.vue";
 import ProductView from "@/views/ProductView.vue";
 import RegisterView from "@/views/RegisterView.vue";
@@ -45,6 +46,11 @@ const router = createRouter({
       path: "/payments",
       name: "payments",
       component: PaymentsView,
+    },
+    {
+      path: "/payments/:id",
+      name: "payment",
+      component: PaymentView,
     },
   ],
 });

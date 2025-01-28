@@ -27,6 +27,23 @@ class PaymentSearchItem:
     rejected_by: Optional[int]
 
 
+@dataclass(frozen=True)
+class PaymentDetailsItem:
+    id: int
+    type: str
+    date: str
+    weight: Optional[Decimal]
+    quality: Optional[Decimal]
+    rate_per_gram: Optional[Decimal]
+    total_amount: Decimal
+    supplier_id: int
+    retailer_id: int
+    creator_id: int
+    confirmed_by: Optional[int]
+    rejected_by: Optional[int]
+    created_at: int
+
+
 class PaymentsRepo:
     def __init__(self, session: Session):
         self._session = session
@@ -76,6 +93,26 @@ class PaymentsRepo:
                 creator_id=record.creator_id,
                 confirmed_by=record.confirmed_by,
                 rejected_by=record.rejected_by,
+            )
+
+    def details(self, payment_id: int) -> Optional[PaymentDetailsItem]:
+        record = self._session.query(PaymentTable).filter_by(id=payment_id).first()
+
+        if record:
+            return PaymentDetailsItem(
+                id=record.id,
+                type=PaymentType(record.type).label,
+                date=record.date.isoformat(),
+                weight=record.weight,
+                quality=record.quality,
+                rate_per_gram=record.rate_per_gram,
+                total_amount=record.total_amount,
+                supplier_id=record.supplier_id,
+                retailer_id=record.retailer_id,
+                creator_id=record.creator_id,
+                confirmed_by=record.confirmed_by,
+                rejected_by=record.rejected_by,
+                created_at=int(Timestamp.from_datetime(record.created_at)),
             )
 
     def filter(
