@@ -8,13 +8,14 @@ MVP v4:
 - [ ] activity log
   - [x] db (user, supplier, retailer, product, payment, action, message, created)
   - [x] repo
-  - [ ] fix tests
-  - [ ] tests for message factory
+  - [x] fix tests
+  - [x] tests for message factory
   - [ ] record activities
   - [ ] messages generation (factory?)
   - [ ] api (filter and get messages)
   - [ ] activity log
 - [ ] reset -> set password
+- [ ] use message bus for activities
 - [ ] payment page
   - [ ] payment details api
   - [ ] ui

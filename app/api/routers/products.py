@@ -8,7 +8,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from pydantic import BaseModel, Field
 
 from app.container import Container
-from app.models import Product, User
+from app.models import Activity, ActivityType, Product, User
 from app.repos.products import ProductDetailsItem, ProductSearchItem
 from app.repos.uow import UnitOfWork
 from .auth import get_active_user
@@ -38,6 +38,7 @@ def create_product(
     item: ProductForm,
     user: User = Depends(get_active_user),
     uow: UnitOfWork = Depends(Provide[Container.uow]),
+    activity_message_factory=Depends(Provide[Container.activity_message_factory]),
 ) -> ProductResponse:
     if not user.is_supplier:
         raise HTTPException(
@@ -92,6 +93,22 @@ def create_product(
 
         if image:
             uow.products.add_image(product, image)
+
+        activity = Activity(
+            id=0,
+            type=ActivityType.PRODUCT_GIVEN,
+            user_id=user.id,
+            supplier_id=user.supplier_id,
+            retailer_id=retailer.id,
+            product_id=product_id,
+            payment_id=None,
+            message="",
+        )
+        activity = replace(
+            activity,
+            message=activity_message_factory.from_activity(activity, uow=uow),
+        )
+        uow.activities.create(activity)
 
     return ProductResponse(success=True)
 
@@ -159,6 +176,7 @@ def confirm_product(
     product_id: int,
     user: User = Depends(get_active_user),
     uow: UnitOfWork = Depends(Provide[Container.uow]),
+    activity_message_factory=Depends(Provide[Container.activity_message_factory]),
 ) -> UpdateResponse:
     with uow:
         product = uow.products.by_id(product_id)
@@ -176,6 +194,22 @@ def confirm_product(
 
         uow.products.update(product)
 
+        activity = Activity(
+            id=0,
+            type=ActivityType.PRODUCT_CONFIRMED,
+            user_id=user.id,
+            supplier_id=user.supplier_id,
+            retailer_id=user.retailer_id,
+            product_id=product_id,
+            payment_id=None,
+            message="",
+        )
+        activity = replace(
+            activity,
+            message=activity_message_factory.from_activity(activity, uow=uow),
+        )
+        uow.activities.create(activity)
+
     return UpdateResponse(success=True)
 
 
@@ -185,6 +219,7 @@ def reject_product(
     product_id: int,
     user: User = Depends(get_active_user),
     uow: UnitOfWork = Depends(Provide[Container.uow]),
+    activity_message_factory=Depends(Provide[Container.activity_message_factory]),
 ) -> UpdateResponse:
     with uow:
         product = uow.products.by_id(product_id)
@@ -201,5 +236,21 @@ def reject_product(
         product = replace(product, rejected_by=user.id)
 
         uow.products.update(product)
+
+        activity = Activity(
+            id=0,
+            type=ActivityType.PRODUCT_REJECTED,
+            user_id=user.id,
+            supplier_id=user.supplier_id,
+            retailer_id=user.retailer_id,
+            product_id=product_id,
+            payment_id=None,
+            message="",
+        )
+        activity = replace(
+            activity,
+            message=activity_message_factory.from_activity(activity, uow=uow),
+        )
+        uow.activities.create(activity)
 
     return UpdateResponse(success=True)

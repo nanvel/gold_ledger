@@ -88,7 +88,8 @@ def test_activity_message_factory(container):
                 ),
                 uow=uow,
             )
-            == "User Name (Supplier Name) has given Product Name to Retailer Name"
+            == f"User Name ({supplier_id}:Supplier Name) has given "
+            f"Product Name to {retailer_id}:Retailer Name"
         )
 
         assert (
@@ -105,7 +106,7 @@ def test_activity_message_factory(container):
                 ),
                 uow=uow,
             )
-            == "User Name (Retailer Name) has received Product Name"
+            == f"User Name ({retailer_id}:Retailer Name) has received Product Name"
         )
 
         assert (
@@ -122,7 +123,7 @@ def test_activity_message_factory(container):
                 ),
                 uow=uow,
             )
-            == "User Name (Retailer Name) has rejected Product Name"
+            == f"User Name ({retailer_id}:Retailer Name) has rejected Product Name"
         )
 
         assert (
@@ -139,7 +140,7 @@ def test_activity_message_factory(container):
                 ),
                 uow=uow,
             )
-            == "User Name (Retailer Name) has added a payment of ₹100 (Cash)"
+            == f"User Name ({retailer_id}:Retailer Name) has added a payment of ₹100 (Cash)"
         )
 
         assert (
@@ -156,7 +157,7 @@ def test_activity_message_factory(container):
                 ),
                 uow=uow,
             )
-            == "User Name (Supplier Name) has confirmed a payment of ₹100 (Cash)"
+            == f"User Name ({supplier_id}:Supplier Name) has confirmed a payment of ₹100 (Cash)"
         )
 
         assert (
@@ -173,5 +174,5 @@ def test_activity_message_factory(container):
                 ),
                 uow=uow,
             )
-            == "User Name (Supplier Name) has rejected a payment of ₹100 (Cash)"
+            == f"User Name ({supplier_id}:Supplier Name) has rejected a payment of ₹100 (Cash)"
         )
