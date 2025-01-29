@@ -92,6 +92,7 @@ def create_payment(
 class PaymentsResponse(BaseModel):
     total: int
     items: Tuple[PaymentSearchItem, ...]
+    amount_sum: Decimal
 
 
 @router.get("/payments")
@@ -110,14 +111,14 @@ def get_payments(
         retailer_id = user.retailer_id
 
     with uow:
-        total, items = uow.payments.filter(
+        total, items, amount_sum = uow.payments.filter(
             supplier_id=supplier_id,
             retailer_id=retailer_id,
             limit=limit,
             offset=offset,
         )
 
-    return PaymentsResponse(total=total, items=items)
+    return PaymentsResponse(total=total, items=items, amount_sum=amount_sum)
 
 
 @router.get("/payments/{payment_id}")

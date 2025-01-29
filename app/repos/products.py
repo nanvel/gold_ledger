@@ -3,6 +3,7 @@ from decimal import Decimal
 from typing import Optional, Tuple
 
 from sqlalchemy.orm import Session
+from sqlalchemy.sql import func
 
 from app.db import ImageTable, ProductTable
 from app.models import Image, Product, ProductOrderBy, Timestamp
@@ -144,7 +145,7 @@ class ProductsRepo:
         offset: int,
         order_by: ProductOrderBy = ProductOrderBy.CREATED,
         reverse: bool = True,
-    ) -> Tuple[int, Tuple[ProductSearchItem, ...]]:
+    ) -> Tuple[int, Tuple[ProductSearchItem, ...], Decimal]:
         query = self._session.query(ProductTable)
 
         if supplier_id:
@@ -153,6 +154,7 @@ class ProductsRepo:
             query = query.filter(ProductTable.retailer_id == retailer_id)
 
         total = query.count()
+        amount_sum = query.with_entities(func.sum(ProductTable.total_amount)).scalar()
 
         order_by_field = (
             ProductTable.created_at
@@ -165,30 +167,34 @@ class ProductsRepo:
 
         records = query.order_by(order_by_field).offset(offset).limit(limit)
 
-        return total, tuple(
-            ProductSearchItem(
-                id=record.id,
-                name=record.name,
-                date=record.date.isoformat(),
-                weight=record.weight,
-                quality=record.quality,
-                rate_per_gram=record.rate_per_gram,
-                total_amount=record.total_amount,
-                payment_due_date=record.payment_due_date.isoformat(),
-                created_at=int(Timestamp.from_datetime(record.created_at)),
-                images=tuple(
-                    ProductImage(
-                        id=image.id,
-                        url=image.url,
-                        thumb_url=image.thumb_url,
-                        created_at=int(Timestamp.from_datetime(image.created_at)),
-                    )
-                    for image in record.images
-                ),
-                confirmed_by=record.confirmed_by,
-                rejected_by=record.rejected_by,
-            )
-            for record in records
+        return (
+            total,
+            tuple(
+                ProductSearchItem(
+                    id=record.id,
+                    name=record.name,
+                    date=record.date.isoformat(),
+                    weight=record.weight,
+                    quality=record.quality,
+                    rate_per_gram=record.rate_per_gram,
+                    total_amount=record.total_amount,
+                    payment_due_date=record.payment_due_date.isoformat(),
+                    created_at=int(Timestamp.from_datetime(record.created_at)),
+                    images=tuple(
+                        ProductImage(
+                            id=image.id,
+                            url=image.url,
+                            thumb_url=image.thumb_url,
+                            created_at=int(Timestamp.from_datetime(image.created_at)),
+                        )
+                        for image in record.images
+                    ),
+                    confirmed_by=record.confirmed_by,
+                    rejected_by=record.rejected_by,
+                )
+                for record in records
+            ),
+            amount_sum,
         )
 
     def add_image(self, product: Product, image: Image):
