@@ -3,6 +3,7 @@ from decimal import Decimal
 from typing import Optional, Tuple
 
 from sqlalchemy.orm import Session
+from sqlalchemy.sql import func
 
 from app.db import PaymentTable
 from app.models import (
@@ -123,7 +124,7 @@ class PaymentsRepo:
         offset: int,
         order_by: PaymentOrderBy = PaymentOrderBy.CREATED,
         reverse: bool = True,
-    ) -> Tuple[int, Tuple[PaymentSearchItem, ...]]:
+    ) -> Tuple[int, Tuple[PaymentSearchItem, ...], Decimal]:
         query = self._session.query(PaymentTable)
 
         if supplier_id:
@@ -132,6 +133,7 @@ class PaymentsRepo:
             query = query.filter(PaymentTable.retailer_id == retailer_id)
 
         total = query.count()
+        amount_sum = query.with_entities(func.sum(PaymentTable.total_amount)).scalar()
 
         order_by_field = (
             PaymentTable.created_at
@@ -144,18 +146,22 @@ class PaymentsRepo:
 
         records = query.order_by(order_by_field).offset(offset).limit(limit)
 
-        return total, tuple(
-            PaymentSearchItem(
-                id=record.id,
-                type=PaymentType(record.type).slug,
-                date=record.date.isoformat(),
-                weight=record.weight,
-                quality=record.quality,
-                rate_per_gram=record.rate_per_gram,
-                total_amount=record.total_amount,
-                created_at=int(Timestamp.from_datetime(record.created_at)),
-                confirmed_by=record.confirmed_by,
-                rejected_by=record.rejected_by,
-            )
-            for record in records
+        return (
+            total,
+            tuple(
+                PaymentSearchItem(
+                    id=record.id,
+                    type=PaymentType(record.type).slug,
+                    date=record.date.isoformat(),
+                    weight=record.weight,
+                    quality=record.quality,
+                    rate_per_gram=record.rate_per_gram,
+                    total_amount=record.total_amount,
+                    created_at=int(Timestamp.from_datetime(record.created_at)),
+                    confirmed_by=record.confirmed_by,
+                    rejected_by=record.rejected_by,
+                )
+                for record in records
+            ),
+            amount_sum,
         )

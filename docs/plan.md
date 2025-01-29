@@ -14,17 +14,33 @@ MVP v4:
   - [x] messages generation (factory?)
   - [x] api (filter and get messages)
   - [x] activity log
-- [ ] payment page
-  - [ ] payment details api
-  - [ ] ui
-- [ ] retailer page
-- [ ] supplier page
-- [ ] reset -> set password
-- [ ] use message bus for activities
+- [x] payment page
+  - [x] payment details api
+  - [x] ui
+- [ ] totals
+  - [ ] return total with products list
+  - [ ] return total with payments list
+  - [ ] pending payments (sum)
+  - [ ] total paid
+  - [ ] total received
 - [ ] move business logic into models
+  - [ ] validate user has either supplier or retailer id
+  - [ ] set confirmed / rejected
+- [ ] empty list placeholders
+- [ ] reset -> set password
+- [ ] retailer page
+  - [ ] make sure we show ids 
+  - [ ] only show for suppliers
+- [ ] products filtering
+- [ ] payments filtering
+- [ ] supplier page
+  - [ ] only show for retailers
 - [ ] make sure showing all data
+  - [ ] show activities for product
+  - [ ] show activities for payment
 - [ ] statuses for payment
-  - [ ] color circles for status 
+  - [ ] color circles for status
+  - [ ] compute status in model
 - [ ] show retailer and supplier in payments and products
 - [ ] improve cards and tables display
 - [ ] UI improvements
@@ -38,11 +54,13 @@ MVP v4:
 - [ ] make sure only either supplier or retailer is specified
 - [ ] custom fields
 - [ ] limit number of users and products per hr
-- [ ] remove product before received?
 - [ ] highlight selected menu?
 - [ ] validate login/register input inside js
 - [ ] add more input components, label - div
 - [ ] autocalculate amount for goods payment?
+- [ ] use message bus for activities
+- [ ] cancel transaction
+- [ ] try adding image from phone
 
 Other:
 - [ ] Security

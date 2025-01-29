@@ -1,4 +1,5 @@
 <template>
+  <div class="mt-4">Total: {{ amountSum }}</div>
   <div class="flex flex-col space-y-2">
     <div class="overflow-x-auto">
       <table class="table table-zebra">
@@ -67,6 +68,7 @@ const total = ref(0);
 const page = ref(1);
 const limit = ref(20);
 const loading = ref(false);
+const amountSum = ref(null);
 
 const pages = computed(() => Math.ceil(total.value / limit.value));
 
@@ -94,6 +96,7 @@ const loadPage = async (p) => {
     const resp = await httpClient.get(`/api/payments${q}`, null, null);
     payments.value = resp["items"];
     total.value = resp["total"];
+    amountSum.value = resp["amount_sum"];
   } finally {
     loading.value = false;
   }
