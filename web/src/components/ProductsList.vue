@@ -1,5 +1,4 @@
 <template>
-  <div class="mt-4">Total: {{ amountSum }}</div>
   <div class="flex flex-col space-y-2">
     <div class="join mt-8">
       <button
@@ -63,7 +62,6 @@ const products = ref([]);
 const total = ref(0);
 const page = ref(1);
 const limit = ref(20);
-const amountSum = ref(null);
 const loading = ref(false);
 const productsView = ref(localStorage.getItem("products_view") || "table");
 
@@ -88,7 +86,6 @@ const loadPage = async (p) => {
     const resp = await httpClient.get(`/api/products${q}`, null, null);
     products.value = resp["items"];
     total.value = resp["total"];
-    amountSum.value = resp["amount_sum"];
   } finally {
     loading.value = false;
   }

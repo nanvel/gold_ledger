@@ -1,5 +1,9 @@
 <template>
-  <div class="mt-4">Total: {{ amountSum }}</div>
+  <div class="flex flex-col space-y-1 py-2">
+    <div>Products received: {{ totalProducts }}</div>
+    <div>Payments confirmed: {{ totalPayments }}</div>
+    <div>Pending payments: {{ totalPending }} ({{ totalOverdue }} overdue)</div>
+  </div>
   <div class="flex flex-col space-y-2">
     <div class="overflow-x-auto">
       <table class="table table-zebra">
@@ -68,7 +72,10 @@ const total = ref(0);
 const page = ref(1);
 const limit = ref(20);
 const loading = ref(false);
-const amountSum = ref(null);
+const totalProducts = ref(0);
+const totalPayments = ref(0);
+const totalPending = ref(0);
+const totalOverdue = ref(0);
 
 const pages = computed(() => Math.ceil(total.value / limit.value));
 
@@ -79,6 +86,27 @@ const parseStatus = (payment) => {
     return "Confirmed";
   } else {
     return "Pending";
+  }
+};
+
+const loadSummary = async () => {
+  loading.value = true;
+  try {
+    let q = "";
+    if (props.retailerId && props.supplierId) {
+      q = `?retailer_id=${props.retailerId}&supplier_id=${props.supplierId}`;
+    } else if (props.retailerId) {
+      q = `?retailer_id=${props.retailerId}`;
+    } else if (props.supplierId) {
+      q = `?supplier_id=${props.supplierId}`;
+    }
+    const resp = await httpClient.get(`/api/payments-summary${q}`, null, null);
+    totalProducts.value = resp["total_products"];
+    totalPayments.value = resp["total_payments"];
+    totalPending.value = resp["total_pending"];
+    totalOverdue.value = resp["total_overdue"];
+  } finally {
+    loading.value = false;
   }
 };
 
@@ -96,7 +124,6 @@ const loadPage = async (p) => {
     const resp = await httpClient.get(`/api/payments${q}`, null, null);
     payments.value = resp["items"];
     total.value = resp["total"];
-    amountSum.value = resp["amount_sum"];
   } finally {
     loading.value = false;
   }
@@ -104,5 +131,6 @@ const loadPage = async (p) => {
 
 onMounted(async () => {
   await loadPage(1);
+  await loadSummary();
 });
 </script>

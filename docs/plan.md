@@ -18,11 +18,15 @@ MVP v4:
   - [x] payment details api
   - [x] ui
 - [ ] totals
-  - [ ] return total with products list
-  - [ ] return total with payments list
-  - [ ] pending payments (sum)
-  - [ ] total paid
-  - [ ] total received
+  - [x] return total with products list
+  - [x] return total with payments list
+  - [x] total paid
+  - [x] total received
+  - [ ] pending payments api
+  - [ ] show pending payment
+- [ ] filter by supplier/retailer
+  - [ ] improve widget
+  - [ ] selector modal
 - [ ] move business logic into models
   - [ ] validate user has either supplier or retailer id
   - [ ] set confirmed / rejected
