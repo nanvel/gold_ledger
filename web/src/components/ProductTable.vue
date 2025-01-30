@@ -35,6 +35,7 @@
 
 <script setup>
 import { RouterLink } from "vue-router";
+import Timestamp from "@/components/Timestamp.vue";
 
 const props = defineProps({
   products: Array,

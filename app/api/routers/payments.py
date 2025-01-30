@@ -92,7 +92,6 @@ def create_payment(
 class PaymentsResponse(BaseModel):
     total: int
     items: Tuple[PaymentSearchItem, ...]
-    amount_sum: Decimal
 
 
 @router.get("/payments")
@@ -111,14 +110,14 @@ def get_payments(
         retailer_id = user.retailer_id
 
     with uow:
-        total, items, amount_sum = uow.payments.filter(
+        total, items = uow.payments.filter(
             supplier_id=supplier_id,
             retailer_id=retailer_id,
             limit=limit,
             offset=offset,
         )
 
-    return PaymentsResponse(total=total, items=items, amount_sum=amount_sum)
+    return PaymentsResponse(total=total, items=items)
 
 
 @router.get("/payments/{payment_id}")
@@ -231,3 +230,45 @@ def reject_payment(
         uow.activities.create(activity)
 
     return UpdateResponse(success=True)
+
+
+class SummaryResponse(BaseModel):
+    total_payments: Decimal
+    total_products: Decimal
+    total_pending: Decimal
+    total_overdue: Decimal
+
+
+@router.get("/payments-summary")
+@inject
+def payments_summary(
+    supplier_id: Optional[int] = None,
+    retailer_id: Optional[int] = None,
+    user: User = Depends(get_active_user),
+    uow: UnitOfWork = Depends(Provide[Container.uow]),
+) -> SummaryResponse:
+    if user.supplier_id:
+        supplier_id = user.supplier_id
+    elif user.retailer_id:
+        retailer_id = user.retailer_id
+
+    with uow:
+        product_stats = uow.products.stats(
+            supplier_id=supplier_id, retailer_id=retailer_id
+        )
+        payment_stats = uow.payments.stats(
+            supplier_id=supplier_id, retailer_id=retailer_id
+        )
+
+        total_pending = product_stats.total_received - payment_stats.total_paid
+        overdue = Decimal(0)
+        if total_pending > 0 and total_pending > product_stats.total_ontime:
+            if total_pending > product_stats.total_ontime:
+                overdue = total_pending - product_stats.total_ontime
+
+        return SummaryResponse(
+            total_payments=payment_stats.total_paid,
+            total_products=product_stats.total_received,
+            total_pending=total_pending,
+            total_overdue=overdue,
+        )

@@ -116,7 +116,6 @@ def create_product(
 class ProductsResponse(BaseModel):
     total: int
     items: Tuple[ProductSearchItem, ...]
-    amount_sum: Decimal
 
 
 @router.get("/products")
@@ -135,14 +134,14 @@ def get_products(
         retailer_id = user.retailer_id
 
     with uow:
-        total, items, amount_sum = uow.products.filter(
+        total, items = uow.products.filter(
             supplier_id=supplier_id,
             retailer_id=retailer_id,
             limit=limit,
             offset=offset,
         )
 
-    return ProductsResponse(total=total, items=items, amount_sum=amount_sum)
+    return ProductsResponse(total=total, items=items)
 
 
 @router.get("/products/{product_id}")

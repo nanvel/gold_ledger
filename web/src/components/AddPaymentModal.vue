@@ -13,11 +13,9 @@
         <supplier-picker v-on:selected="setSupplier" />
       </template>
       <template v-if="supplier">
-        <div class="text-md">
+        <div class="btn btn-neutral" v-on:click="supplier = null">
           Supplier
-          <a
-            class="underline text-primary cursor-pointer"
-            v-on:click="supplier = null"
+          <a class="underline text-primary cursor-pointer"
             >{{ supplier.id }} : {{ supplier.name }}</a
           >
         </div>

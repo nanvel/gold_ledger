@@ -52,6 +52,13 @@ class ProductDetailsItem:
     rejected_by: Optional[int]
 
 
+@dataclass(frozen=True)
+class ProductStats:
+    total_received: Decimal
+    number_received: int
+    total_ontime: Decimal
+
+
 class ProductsRepo:
     def __init__(self, session: Session):
         self._session = session
@@ -145,7 +152,7 @@ class ProductsRepo:
         offset: int,
         order_by: ProductOrderBy = ProductOrderBy.CREATED,
         reverse: bool = True,
-    ) -> Tuple[int, Tuple[ProductSearchItem, ...], Decimal]:
+    ) -> Tuple[int, Tuple[ProductSearchItem, ...]]:
         query = self._session.query(ProductTable)
 
         if supplier_id:
@@ -194,7 +201,6 @@ class ProductsRepo:
                 )
                 for record in records
             ),
-            amount_sum,
         )
 
     def add_image(self, product: Product, image: Image):
@@ -209,3 +215,33 @@ class ProductsRepo:
             product.images.append(image)
 
         self._session.commit()
+
+    def stats(
+        self,
+        supplier_id: Optional[int],
+        retailer_id: Optional[int],
+    ) -> ProductStats:
+        query = self._session.query(
+            func.sum(ProductTable.total_amount).label("total"),
+            func.count(ProductTable.id).label("count"),
+        )
+
+        if supplier_id:
+            query = query.filter(ProductTable.supplier_id == supplier_id)
+        if retailer_id:
+            query = query.filter(ProductTable.retailer_id == retailer_id)
+
+        total_received, number_received = query.filter(
+            ProductTable.confirmed_by.isnot(None)
+        ).first() or (Decimal(0), 0)
+
+        total_ontime = query.filter(
+            ProductTable.confirmed_by.isnot(None),
+            ProductTable.payment_due_date <= func.now(),
+        ).scalar() or Decimal(0)
+
+        return ProductStats(
+            total_received=total_received or Decimal(0),
+            number_received=number_received or 0,
+            total_ontime=total_ontime or Decimal(0),
+        )

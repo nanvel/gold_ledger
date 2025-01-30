@@ -13,11 +13,9 @@
         <retailer-picker v-on:selected="setRetailer" />
       </template>
       <template v-if="retailer">
-        <div class="text-md">
+        <div class="btn btn-neutral" v-on:click="retailer = null">
           Retailer
-          <a
-            class="underline text-primary cursor-pointer"
-            v-on:click="retailer = null"
+          <a class="underline text-primary cursor-pointer"
             >{{ retailer.id }} : {{ retailer.name }}</a
           >
         </div>
