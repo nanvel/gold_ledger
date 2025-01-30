@@ -45,7 +45,7 @@
         v-for="r in recent.slice().reverse()"
         :key="r.id"
         v-on:click="selectRetailer(r)"
-        class="rounded-md bg-base-200 px-2"
+        class="rounded-md bg-base-200 px-2 cursor-pointer"
         >{{ r.id }} : {{ r.name }}</span
       >
     </div>

@@ -116,7 +116,6 @@ def create_product(
 class ProductsResponse(BaseModel):
     total: int
     items: Tuple[ProductSearchItem, ...]
-    amount_sum: Decimal
 
 
 @router.get("/products")

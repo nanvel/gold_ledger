@@ -17,13 +17,13 @@ MVP v4:
 - [x] payment page
   - [x] payment details api
   - [x] ui
-- [ ] totals
+- [x] totals
   - [x] return total with products list
   - [x] return total with payments list
   - [x] total paid
   - [x] total received
-  - [ ] pending payments api
-  - [ ] show pending payment
+  - [x] pending payments api
+  - [x] show pending payment
 - [ ] filter by supplier/retailer
   - [ ] improve widget
   - [ ] selector modal

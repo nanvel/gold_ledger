@@ -1,20 +1,27 @@
 <template>
   <div class="flex flex-col space-y-2">
-    <div class="join mt-8">
-      <button
-        class="btn btn-sm join-item"
-        :disabled="productsView === 'table'"
-        v-on:click="setProductsView('table')"
-      >
-        Table
-      </button>
-      <button
-        class="btn btn-sm join-item"
-        :disabled="productsView === 'cards'"
-        v-on:click="setProductsView('cards')"
-      >
-        Cards
-      </button>
+    <div class="flex flex-row space-x-2 mt-8 justify-between">
+      <div class="join">
+        <button
+          class="btn btn-sm join-item"
+          :disabled="productsView === 'table'"
+          v-on:click="setProductsView('table')"
+        >
+          Table
+        </button>
+        <button
+          class="btn btn-sm join-item"
+          :disabled="productsView === 'cards'"
+          v-on:click="setProductsView('cards')"
+        >
+          Cards
+        </button>
+      </div>
+
+      <div>
+        <retailer-picker-modal v-if="isSupplier" v-on:selected="setRetailer" />
+        <supplier-picker-modal v-else v-on:selected="setSupplier" />
+      </div>
     </div>
 
     <ProductTable
@@ -52,6 +59,8 @@ import { onMounted, ref, computed } from "vue";
 import { httpClient } from "@/services/http.js";
 import ProductTable from "@/components/ProductTable.vue";
 import ProductCards from "@/components/ProductCards.vue";
+import SupplierPickerModal from "@/components/SupplierPickerModal.vue";
+import RetailerPickerModal from "@/components/RetailerPickerModal.vue";
 
 const props = defineProps({
   retailerId: Number,
@@ -63,7 +72,11 @@ const total = ref(0);
 const page = ref(1);
 const limit = ref(20);
 const loading = ref(false);
+const retailerId = ref(props.retailerId);
+const supplierId = ref(props.supplierId);
 const productsView = ref(localStorage.getItem("products_view") || "table");
+
+const isSupplier = computed(() => props.supplierId);
 
 const pages = computed(() => Math.ceil(total.value / limit.value));
 
@@ -75,11 +88,11 @@ const setProductsView = (view) => {
 const loadPage = async (p) => {
   page.value = p;
   let q = `?offset=${(page.value - 1) * limit.value}&limit=${limit.value}`;
-  if (props.retailerId) {
-    q += `&retailer_id=${props.retailerId}`;
+  if (retailerId.value) {
+    q += `&retailer_id=${retailerId.value}`;
   }
-  if (props.supplierId) {
-    q += `&supplier_id=${props.supplierId}`;
+  if (supplierId.value) {
+    q += `&supplier_id=${supplierId.value}`;
   }
   loading.value = true;
   try {
@@ -89,6 +102,16 @@ const loadPage = async (p) => {
   } finally {
     loading.value = false;
   }
+};
+
+const setRetailer = (retailer) => {
+  retailerId.value = retailer.id;
+  loadPage(1);
+};
+
+const setSupplier = (supplier) => {
+  supplierId.value = supplier.id;
+  loadPage(1);
 };
 
 onMounted(async () => {
