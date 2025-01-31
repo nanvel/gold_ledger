@@ -17,28 +17,33 @@
           Supplier {{ supplier.id }} : {{ supplier.name }}
         </div>
         <form v-on:submit.prevent="addPayment" class="space-y-2 mt-4">
-          <div
-            role="tablist"
-            class="tabs tabs-boxed mt-10 sm:mx-auto sm:w-full sm:max-w-sm"
-          >
-            <a
-              role="tab"
-              :class="{ tab: true, 'tab-active': type === 1 }"
-              v-on:click="type = 1"
-              >Cash</a
-            >
-            <a
-              role="tab"
-              :class="{ tab: true, 'tab-active': type === 2 }"
-              v-on:click="type = 2"
-              >RTGS</a
-            >
-            <a
-              role="tab"
-              :class="{ tab: true, 'tab-active': type === 3 }"
-              v-on:click="type = 3"
-              >Fine</a
-            >
+          <div class="form-control w-full">
+            <div class="label">
+              <span class="label-text">Payment type</span>
+              <span class="label-text text-error" v-if="typeError">{{
+                typeError
+              }}</span>
+            </div>
+            <div role="tablist" class="tabs tabs-boxed border border-neutral">
+              <a
+                role="tab"
+                :class="{ tab: true, 'tab-active': type === 1 }"
+                v-on:click="type = 1"
+                >Cash</a
+              >
+              <a
+                role="tab"
+                :class="{ tab: true, 'tab-active': type === 2 }"
+                v-on:click="type = 2"
+                >RTGS</a
+              >
+              <a
+                role="tab"
+                :class="{ tab: true, 'tab-active': type === 3 }"
+                v-on:click="type = 3"
+                >Fine</a
+              >
+            </div>
           </div>
 
           <div class="form-control w-full">

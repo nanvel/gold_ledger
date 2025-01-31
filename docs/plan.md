@@ -32,10 +32,10 @@ MVP v4:
 - [ ] form changes
   - [x] bank transfer -> RTGS
   - [x] Goods -> Fine
-  - [ ] payment_mode for products (Cash, RTGS, Fine)
+  - [x] payment_mode for products (Cash, RTGS, Fine)
     - [x] db
     - [x] api
-    - [ ] ui
+    - [x] ui
 - [ ] empty list placeholders
 - [ ] due payments page
 - [ ] move business logic into models
