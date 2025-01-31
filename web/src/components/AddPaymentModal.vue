@@ -14,10 +14,7 @@
       </template>
       <template v-if="supplier">
         <div class="btn btn-neutral" v-on:click="supplier = null">
-          Supplier
-          <a class="underline text-primary cursor-pointer"
-            >{{ supplier.id }} : {{ supplier.name }}</a
-          >
+          Supplier {{ supplier.id }} : {{ supplier.name }}
         </div>
         <form v-on:submit.prevent="addPayment" class="space-y-2 mt-4">
           <div
@@ -34,13 +31,13 @@
               role="tab"
               :class="{ tab: true, 'tab-active': type === 2 }"
               v-on:click="type = 2"
-              >Bank transfer</a
+              >RTGS</a
             >
             <a
               role="tab"
               :class="{ tab: true, 'tab-active': type === 3 }"
               v-on:click="type = 3"
-              >Goods</a
+              >Fine</a
             >
           </div>
 

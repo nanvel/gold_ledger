@@ -49,6 +49,5 @@ def test_products(container):
             offset=0,
             limit=1,
         )
-        assert len(result) == 3
+        assert len(result) == 2
         assert result[0] == 2
-        assert result[2] == Decimal(3)

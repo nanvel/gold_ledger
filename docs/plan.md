@@ -28,7 +28,7 @@ MVP v4:
   - [x] improve widget
   - [x] selector modal
   - [x] unselect
-- [ ] icon
+- [x] icon
 - [ ] form changes
   - [ ] bank transfer -> RTGS
   - [ ] Goods -> Fine

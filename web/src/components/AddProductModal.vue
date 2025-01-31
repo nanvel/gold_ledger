@@ -14,10 +14,7 @@
       </template>
       <template v-if="retailer">
         <div class="btn btn-neutral" v-on:click="retailer = null">
-          Retailer
-          <a class="underline text-primary cursor-pointer"
-            >{{ retailer.id }} : {{ retailer.name }}</a
-          >
+          Retailer {{ retailer.id }} : {{ retailer.name }}
         </div>
         <form v-on:submit.prevent="addProduct" class="space-y-2 mt-4">
           <div class="form-control w-full">
