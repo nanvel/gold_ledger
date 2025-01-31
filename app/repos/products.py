@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy.sql import func
 
 from app.db import ImageTable, ProductTable
-from app.models import Image, Product, ProductOrderBy, Timestamp
+from app.models import Image, PaymentType, Product, ProductOrderBy, Timestamp
 
 
 @dataclass(frozen=True)
@@ -26,6 +26,7 @@ class ProductSearchItem:
     quality: Decimal
     rate_per_gram: Decimal
     total_amount: Decimal
+    payment_type: str
     payment_due_date: str
     created_at: int
     images: Tuple[ProductImage, ...]
@@ -42,6 +43,7 @@ class ProductDetailsItem:
     quality: Decimal
     rate_per_gram: Decimal
     total_amount: Decimal
+    payment_type: str
     payment_due_date: str
     created_at: int
     supplier_id: int
@@ -71,6 +73,7 @@ class ProductsRepo:
             quality=product.quality,
             rate_per_gram=product.rate_per_gram,
             total_amount=product.total_amount,
+            payment_type=product.payment_type.value,
             payment_due_date=product.payment_due_date,
             custom_fields=product.custom_fields,
             supplier_id=product.supplier_id,
@@ -105,6 +108,7 @@ class ProductsRepo:
                 quality=record.quality,
                 rate_per_gram=record.rate_per_gram,
                 total_amount=record.total_amount,
+                payment_type=PaymentType(record.payment_type),
                 payment_due_date=record.payment_due_date,
                 supplier_id=record.supplier_id,
                 retailer_id=record.retailer_id,
@@ -126,6 +130,7 @@ class ProductsRepo:
                 quality=record.quality,
                 rate_per_gram=record.rate_per_gram,
                 total_amount=record.total_amount,
+                payment_type=PaymentType(record.payment_type).label,
                 payment_due_date=record.payment_due_date.isoformat(),
                 created_at=int(Timestamp.from_datetime(record.created_at)),
                 supplier_id=record.supplier_id,
@@ -185,6 +190,7 @@ class ProductsRepo:
                     quality=record.quality,
                     rate_per_gram=record.rate_per_gram,
                     total_amount=record.total_amount,
+                    payment_type=PaymentType(record.payment_type).label,
                     payment_due_date=record.payment_due_date.isoformat(),
                     created_at=int(Timestamp.from_datetime(record.created_at)),
                     images=tuple(

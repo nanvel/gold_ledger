@@ -29,6 +29,7 @@ class ProductTable(Base):
     quality: Mapped[Decimal] = mapped_column(type_=sa.DECIMAL)
     rate_per_gram: Mapped[Decimal] = mapped_column(type_=sa.DECIMAL)
     total_amount: Mapped[Decimal] = mapped_column(type_=sa.DECIMAL)
+    payment_type: Mapped[int] = mapped_column(server_default="1")
     payment_due_date: Mapped[date] = mapped_column(server_default="2025-12-31")
     custom_fields: Mapped[dict] = mapped_column(type_=sa.JSON)
     supplier_id: Mapped[int] = mapped_column(sa.ForeignKey("suppliers.id"))
