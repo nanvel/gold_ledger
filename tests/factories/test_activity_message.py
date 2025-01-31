@@ -46,6 +46,7 @@ def test_activity_message_factory(container):
             quality=Decimal(100),
             rate_per_gram=Decimal(100),
             total_amount=Decimal(100),
+            payment_type=PaymentType.CASH,
             payment_due_date=date(2021, 1, 10),
             creator_id=user_id,
             confirmed_by=None,
@@ -67,7 +68,6 @@ def test_activity_message_factory(container):
             rejected_by=None,
             weight=None,
             quality=None,
-            rate_per_gram=None,
         )
         payment_id = uow.payments.create(payment)
         payment = replace(payment, id=payment_id)

@@ -3,6 +3,8 @@ from datetime import date
 from decimal import Decimal
 from typing import Optional
 
+from .payment_type import PaymentType
+
 
 @dataclass(frozen=True)
 class Product:
@@ -14,6 +16,7 @@ class Product:
     rate_per_gram: Decimal
     total_amount: Decimal
     payment_due_date: date
+    payment_type: PaymentType
     custom_fields: dict
     supplier_id: int
     retailer_id: int

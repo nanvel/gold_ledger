@@ -4,9 +4,9 @@
       <table class="table table-zebra">
         <thead>
           <tr>
-            <th>Created</th>
+            <th>Time</th>
             <th>Activity</th>
-            <th>Links</th>
+            <th></th>
           </tr>
         </thead>
         <tbody>

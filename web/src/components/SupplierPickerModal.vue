@@ -12,7 +12,7 @@
           ✕
         </button>
       </form>
-      <supplier-picker v-on:selected="setSupplier" />
+      <supplier-picker v-on:selected="setSupplier" allow-none />
     </div>
   </dialog>
 </template>

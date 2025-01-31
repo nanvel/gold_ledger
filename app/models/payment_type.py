@@ -11,10 +11,8 @@ class PaymentTypeValue:
 
 class PaymentType(int, Enum):
     CASH = PaymentTypeValue(value=1, label="Cash", slug="cash")
-    BANK_TRANSFER = PaymentTypeValue(
-        value=2, label="Bank Transfer", slug="bank_transfer"
-    )
-    GOODS = PaymentTypeValue(value=3, label="Goods", slug="goods")
+    RTGS = PaymentTypeValue(value=2, label="RTGS", slug="rtgs")
+    FINE = PaymentTypeValue(value=3, label="Fine", slug="fine")
 
     def __new__(cls, arg):
         obj = int.__new__(cls, arg.value)

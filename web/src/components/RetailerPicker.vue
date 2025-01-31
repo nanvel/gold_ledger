@@ -48,6 +48,12 @@
         class="rounded-md bg-base-200 px-2 cursor-pointer"
         >{{ r.id }} : {{ r.name }}</span
       >
+      <span
+        class="rounded-md px-2 cursor-pointer bg-base-200"
+        v-if="props.allowNone"
+        v-on:click="selectRetailer(null)"
+        >None</span
+      >
     </div>
   </div>
 </template>
@@ -63,6 +69,13 @@ const recent = ref([]);
 
 let searchTimer = null;
 let searchQuery = ref("");
+
+const props = defineProps({
+  allowNone: {
+    type: Boolean,
+    default: false,
+  },
+});
 
 const emit = defineEmits(["selected"]);
 
@@ -97,6 +110,9 @@ watch(searchQuery, async (query) => {
 });
 
 const addRecent = (retailer) => {
+  if (!retailer) {
+    return;
+  }
   const r = [...recent.value.filter((r) => r.id !== retailer.id)];
   r.push(retailer);
   recent.value = r.slice(-4);

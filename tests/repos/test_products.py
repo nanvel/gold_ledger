@@ -2,7 +2,7 @@ from dataclasses import replace
 from datetime import date
 from decimal import Decimal
 
-from app.models import Product, Retailer, Supplier, User
+from app.models import PaymentType, Product, Retailer, Supplier, User
 
 
 def test_products(container):
@@ -31,6 +31,7 @@ def test_products(container):
             quality=Decimal(1),
             rate_per_gram=Decimal(1),
             total_amount=Decimal(1),
+            payment_type=PaymentType.CASH,
             payment_due_date=date(2021, 1, 1),
             supplier_id=supplier_id,
             retailer_id=retailer_id,
@@ -49,6 +50,5 @@ def test_products(container):
             offset=0,
             limit=1,
         )
-        assert len(result) == 3
+        assert len(result) == 2
         assert result[0] == 2
-        assert result[2] == Decimal(3)

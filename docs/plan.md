@@ -24,13 +24,27 @@ MVP v4:
   - [x] total received
   - [x] pending payments api
   - [x] show pending payment
-- [ ] filter by supplier/retailer
-  - [ ] improve widget
-  - [ ] selector modal
+- [x] filter by supplier/retailer
+  - [x] improve widget
+  - [x] selector modal
+  - [x] unselect
+- [x] icon
+- [x] form changes
+  - [x] bank transfer -> RTGS
+  - [x] Goods -> Fine
+  - [x] payment_mode for products (Cash, RTGS, Fine)
+    - [x] db
+    - [x] api
+    - [x] ui
+  - [ ] remove rate per gr and total amount from payments
+    - [ ] db
+    - [ ] models
+    - [ ] api
+- [ ] empty list placeholders
+- [ ] due payments page
 - [ ] move business logic into models
   - [ ] validate user has either supplier or retailer id
   - [ ] set confirmed / rejected
-- [ ] empty list placeholders
 - [ ] reset -> set password
 - [ ] retailer page
   - [ ] make sure we show ids 
@@ -65,6 +79,10 @@ MVP v4:
 - [ ] use message bus for activities
 - [ ] cancel transaction
 - [ ] try adding image from phone
+- [ ] send email on each trasaction
+  - [ ] message bus
+- [ ] incremental log on dynamodb
+- [ ] tablist component
 
 Other:
 - [ ] Security

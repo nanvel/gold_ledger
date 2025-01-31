@@ -146,13 +146,13 @@ const loadPage = async (p) => {
 };
 
 const setSupplier = (supplier) => {
-  supplierId.value = supplier.id;
+  supplierId.value = supplier?.id;
   loadPage(1);
   loadSummary();
 };
 
 const setRetailer = (retailer) => {
-  retailerId.value = retailer.id;
+  retailerId.value = retailer?.id;
   loadPage(1);
   loadSummary();
 };

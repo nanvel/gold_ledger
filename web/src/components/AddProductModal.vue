@@ -14,10 +14,7 @@
       </template>
       <template v-if="retailer">
         <div class="btn btn-neutral" v-on:click="retailer = null">
-          Retailer
-          <a class="underline text-primary cursor-pointer"
-            >{{ retailer.id }} : {{ retailer.name }}</a
-          >
+          Retailer {{ retailer.id }} : {{ retailer.name }}
         </div>
         <form v-on:submit.prevent="addProduct" class="space-y-2 mt-4">
           <div class="form-control w-full">
@@ -75,6 +72,7 @@
               class="input input-bordered w-full input-md text-lg"
               v-model="quality"
               min="0"
+              max="100"
               step="0.1"
             />
           </div>
@@ -92,6 +90,34 @@
               min="0"
               step="0.1"
             />
+          </div>
+          <div class="form-control w-full">
+            <div class="label">
+              <span class="label-text">Payment type</span>
+              <span class="label-text text-error" v-if="paymentTypeError">{{
+                paymentTypeError
+              }}</span>
+            </div>
+            <div role="tablist" class="tabs tabs-boxed border-neutral border">
+              <a
+                role="tab"
+                :class="{ tab: true, 'tab-active': paymentType === 1 }"
+                v-on:click="paymentType = 1"
+                >Cash</a
+              >
+              <a
+                role="tab"
+                :class="{ tab: true, 'tab-active': paymentType === 2 }"
+                v-on:click="paymentType = 2"
+                >RTGS</a
+              >
+              <a
+                role="tab"
+                :class="{ tab: true, 'tab-active': paymentType === 3 }"
+                v-on:click="paymentType = 3"
+                >Fine</a
+              >
+            </div>
           </div>
           <div class="form-control w-full">
             <div class="label">
@@ -186,6 +212,8 @@ const ratePerGram = ref(0);
 const ratePerGramError = ref(null);
 const totalAmount = ref(0);
 const totalAmountError = ref(null);
+const paymentType = ref(1);
+const paymentTypeError = ref(null);
 const paymentDueDate = ref(new Date());
 const paymentDueDateError = ref(null);
 const loading = ref(false);
@@ -214,6 +242,7 @@ const clearFields = () => {
   quality.value = 0;
   ratePerGram.value = 0;
   totalAmount.value = 0;
+  paymentType.value = 1;
   paymentDueDate.value = new Date();
   formImageId.value = null;
   formImageThumb.value = null;
@@ -243,7 +272,16 @@ const closeModal = () => {
 };
 
 watch(
-  [name, date, weight, quality, ratePerGram, totalAmount, paymentDueDate],
+  [
+    name,
+    date,
+    weight,
+    quality,
+    ratePerGram,
+    totalAmount,
+    paymentType,
+    paymentDueDate,
+  ],
   () => {
     nameError.value = null;
     dateError.value = null;
@@ -252,6 +290,7 @@ watch(
     ratePerGramError.value = null;
     totalAmountError.value = null;
     paymentDueDateError.value = null;
+    paymentTypeError.value = null;
   },
 );
 
@@ -267,6 +306,7 @@ const addProduct = async () => {
         quality: quality.value,
         rate_per_gram: ratePerGram.value,
         total_amount: totalAmount.value,
+        payment_type: paymentType.value,
         payment_due_date: dateToStr(paymentDueDate.value),
         retailer_id: retailer.value.id,
         image_id: formImageId.value,
@@ -285,6 +325,7 @@ const addProduct = async () => {
     qualityError.value = parseError(e, "quality");
     ratePerGramError.value = parseError(e, "rate_per_gram");
     totalAmountError.value = parseError(e, "total_amount");
+    paymentTypeError.value = parseError(e, "payment_type");
   } finally {
     loading.value = false;
   }

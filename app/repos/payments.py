@@ -21,7 +21,6 @@ class PaymentSearchItem:
     date: str
     weight: Decimal
     quality: Decimal
-    rate_per_gram: Decimal
     total_amount: Decimal
     created_at: int
     confirmed_by: Optional[int]
@@ -35,7 +34,6 @@ class PaymentDetailsItem:
     date: str
     weight: Optional[Decimal]
     quality: Optional[Decimal]
-    rate_per_gram: Optional[Decimal]
     total_amount: Decimal
     supplier_id: int
     retailer_id: int
@@ -63,7 +61,6 @@ class PaymentsRepo:
             type=payment.type.value,
             weight=payment.weight,
             quality=payment.quality,
-            rate_per_gram=payment.rate_per_gram,
             total_amount=payment.total_amount,
             supplier_id=payment.supplier_id,
             retailer_id=payment.retailer_id,
@@ -95,7 +92,6 @@ class PaymentsRepo:
                 date=record.date,
                 weight=record.weight,
                 quality=record.quality,
-                rate_per_gram=record.rate_per_gram,
                 total_amount=record.total_amount,
                 supplier_id=record.supplier_id,
                 retailer_id=record.retailer_id,
@@ -114,7 +110,6 @@ class PaymentsRepo:
                 date=record.date.isoformat(),
                 weight=record.weight,
                 quality=record.quality,
-                rate_per_gram=record.rate_per_gram,
                 total_amount=record.total_amount,
                 supplier_id=record.supplier_id,
                 retailer_id=record.retailer_id,
@@ -162,7 +157,6 @@ class PaymentsRepo:
                     date=record.date.isoformat(),
                     weight=record.weight,
                     quality=record.quality,
-                    rate_per_gram=record.rate_per_gram,
                     total_amount=record.total_amount,
                     created_at=int(Timestamp.from_datetime(record.created_at)),
                     confirmed_by=record.confirmed_by,
