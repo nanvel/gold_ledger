@@ -1,12 +1,12 @@
 <template>
-  <div class="drawer">
-    <input id="my-drawer-3" type="checkbox" class="drawer-toggle" />
-    <div class="drawer-content flex flex-col">
+  <div class="drawer h-dvh">
+    <input id="nav-drawer" type="checkbox" class="drawer-toggle" />
+    <div class="drawer-content flex flex-col h-full overflow-scroll">
       <!-- Navbar -->
       <div class="navbar bg-base-300 w-full">
         <div class="flex-none lg:hidden">
           <label
-            for="my-drawer-3"
+            for="nav-drawer"
             aria-label="open sidebar"
             class="btn btn-square btn-ghost"
           >
@@ -45,7 +45,7 @@
     </div>
     <div class="drawer-side">
       <label
-        for="my-drawer-3"
+        for="nav-drawer"
         aria-label="close sidebar"
         class="drawer-overlay"
       ></label>

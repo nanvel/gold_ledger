@@ -1,47 +1,22 @@
 # Plan
 
-MVP v4:
-- [x] statuses for product
-  - [x] db confirmed by and rejected by
-  - [x] api
-  - [x] show in tables
-- [x] activity log
-  - [x] db (user, supplier, retailer, product, payment, action, message, created)
-  - [x] repo
-  - [x] fix tests
-  - [x] tests for message factory
-  - [x] record activities
-  - [x] messages generation (factory?)
-  - [x] api (filter and get messages)
-  - [x] activity log
-- [x] payment page
-  - [x] payment details api
-  - [x] ui
-- [x] totals
-  - [x] return total with products list
-  - [x] return total with payments list
-  - [x] total paid
-  - [x] total received
-  - [x] pending payments api
-  - [x] show pending payment
-- [x] filter by supplier/retailer
-  - [x] improve widget
-  - [x] selector modal
-  - [x] unselect
-- [x] icon
-- [x] form changes
-  - [x] bank transfer -> RTGS
-  - [x] Goods -> Fine
-  - [x] payment_mode for products (Cash, RTGS, Fine)
-    - [x] db
-    - [x] api
-    - [x] ui
-  - [ ] remove rate per gr and total amount from payments
-    - [ ] db
-    - [ ] models
-    - [ ] api
-- [ ] empty list placeholders
+Improvements:
+- [ ] UI improvements
+  - [ ] empty list placeholders
+  - [ ] confirmation modal for accept/reject
+  - [ ] border for payment section in product
+  - [ ] refine cards ui
+  - [ ] refine tables ui
+  - [ ] refine products page
+  - [ ] refine payments page
+  - [ ] refine product page
+  - [ ] refine payment page
+  - [ ] color circles for status
+  - [ ] show retailer and supplier in payments and products
+  - [ ] sticky header
 - [ ] due payments page
+- [ ] message bus
+  - [ ] record IPs for activities
 - [ ] move business logic into models
   - [ ] validate user has either supplier or retailer id
   - [ ] set confirmed / rejected
@@ -59,12 +34,12 @@ MVP v4:
 - [ ] statuses for payment
   - [ ] color circles for status
   - [ ] compute status in model
-- [ ] show retailer and supplier in payments and products
 - [ ] improve cards and tables display
 - [ ] UI improvements
   - [ ] show empty list placeholder (don't show table/cards placeholder)
   - [ ] image input
   - [ ] make navbar sticky
+  - [ ] add ruppy, gramm
 - [ ] received product
 - [ ] paid / unpaid transactions
 - [ ] make sure store is visible after login
@@ -83,6 +58,10 @@ MVP v4:
   - [ ] message bus
 - [ ] incremental log on dynamodb
 - [ ] tablist component
+- [ ] email updates
+
+Deploy:
+- [ ] Mumbai region
 
 Other:
 - [ ] Security
@@ -106,6 +85,18 @@ Other:
 - [ ] auto reload activities
   - [ ] sound on updates
 - [ ] outstanding payments per retailer
+- [ ] docs pages: What is Gold Ledger, Terms of use, prices
+- [ ] move activities to DDB
+- [ ] pg replication
+- [ ] card view for payments
+
+Security:
+- limit number of registrations
+- limit images upload
+- block IPs
+- confirm email
+- sending reports via email
+- download records
 
 Questions:
 - validation of product fields?
