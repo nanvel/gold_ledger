@@ -29,13 +29,17 @@ MVP v4:
   - [x] selector modal
   - [x] unselect
 - [x] icon
-- [ ] form changes
+- [x] form changes
   - [x] bank transfer -> RTGS
   - [x] Goods -> Fine
   - [x] payment_mode for products (Cash, RTGS, Fine)
     - [x] db
     - [x] api
     - [x] ui
+  - [ ] remove rate per gr and total amount from payments
+    - [ ] db
+    - [ ] models
+    - [ ] api
 - [ ] empty list placeholders
 - [ ] due payments page
 - [ ] move business logic into models

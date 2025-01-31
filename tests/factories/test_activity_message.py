@@ -68,7 +68,6 @@ def test_activity_message_factory(container):
             rejected_by=None,
             weight=None,
             quality=None,
-            rate_per_gram=None,
         )
         payment_id = uow.payments.create(payment)
         payment = replace(payment, id=payment_id)

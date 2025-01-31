@@ -21,7 +21,6 @@ class PaymentForm(BaseModel):
     date: date
     weight: Optional[Decimal] = Field(None, gt=0)
     quality: Optional[Decimal] = Field(None, ge=0, le=100)
-    rate_per_gram: Optional[Decimal] = Field(None, gt=0)
     total_amount: Decimal = Field(..., gt=0)
     supplier_id: int
 
@@ -59,7 +58,6 @@ def create_payment(
             date=item.date,
             weight=item.weight,
             quality=item.quality,
-            rate_per_gram=item.rate_per_gram,
             total_amount=item.total_amount,
             retailer_id=user.retailer_id,
             supplier_id=supplier.id,

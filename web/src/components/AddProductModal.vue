@@ -72,6 +72,7 @@
               class="input input-bordered w-full input-md text-lg"
               v-model="quality"
               min="0"
+              max="100"
               step="0.1"
             />
           </div>

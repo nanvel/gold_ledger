@@ -88,25 +88,11 @@
               class="input input-bordered w-full input-md text-lg"
               v-model="quality"
               min="0"
+              max="100"
               step="0.1"
             />
           </div>
-          <div class="form-control w-full" v-if="type === 3">
-            <div class="label">
-              <span class="label-text">Rate per gram</span>
-              <span class="label-text text-error" v-if="ratePerGramError">{{
-                ratePerGramError
-              }}</span>
-            </div>
-            <input
-              type="number"
-              class="input input-bordered w-full input-md text-lg"
-              v-model="ratePerGram"
-              min="0"
-              step="0.1"
-            />
-          </div>
-          <div class="form-control w-full">
+          <div class="form-control w-full" v-if="type !== 3">
             <div class="label">
               <span class="label-text">Total amount</span>
               <span class="label-text text-error" v-if="totalAmountError">{{
@@ -160,8 +146,6 @@ const weight = ref(0);
 const weightError = ref(null);
 const quality = ref(0);
 const qualityError = ref(null);
-const ratePerGram = ref(0);
-const ratePerGramError = ref(null);
 const totalAmount = ref(0);
 const totalAmountError = ref(null);
 const loading = ref(false);
@@ -185,14 +169,12 @@ const clearFields = () => {
   date.value = new Date();
   weight.value = 0;
   quality.value = 0;
-  ratePerGram.value = 0;
   totalAmount.value = 0;
   error.value = null;
   typeError.value = null;
   dateError.value = null;
   weightError.value = null;
   qualityError.value = null;
-  ratePerGramError.value = null;
   totalAmountError.value = null;
 };
 
@@ -204,12 +186,11 @@ const closeModal = () => {
   add_payment.close();
 };
 
-watch([type, date, weight, quality, ratePerGram, totalAmount], () => {
+watch([type, date, weight, quality, totalAmount], () => {
   typeError.value = null;
   dateError.value = null;
   weightError.value = null;
   qualityError.value = null;
-  ratePerGramError.value = null;
   totalAmountError.value = null;
 });
 
@@ -223,7 +204,7 @@ const addPayment = async () => {
   if (type.value === 3) {
     data["weight"] = weight.value;
     data["quality"] = quality.value;
-    data["rate_per_gram"] = ratePerGram.value;
+    data["total_amount"] = (weight.value * quality.value) / 100;
   }
 
   loading.value = true;
@@ -238,7 +219,6 @@ const addPayment = async () => {
     dateError.value = parseError(e, "date");
     weightError.value = parseError(e, "weight");
     qualityError.value = parseError(e, "quality");
-    ratePerGramError.value = parseError(e, "rate_per_gram");
     totalAmountError.value = parseError(e, "total_amount");
   } finally {
     loading.value = false;
