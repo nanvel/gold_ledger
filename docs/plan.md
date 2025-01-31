@@ -34,7 +34,7 @@ MVP v4:
   - [x] Goods -> Fine
   - [ ] payment_mode for products (Cash, RTGS, Fine)
     - [x] db
-    - [ ] api
+    - [x] api
     - [ ] ui
 - [ ] empty list placeholders
 - [ ] due payments page
@@ -78,6 +78,7 @@ MVP v4:
 - [ ] send email on each trasaction
   - [ ] message bus
 - [ ] incremental log on dynamodb
+- [ ] tablist component
 
 Other:
 - [ ] Security

@@ -8,7 +8,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from pydantic import BaseModel, Field
 
 from app.container import Container
-from app.models import Activity, ActivityType, Product, User
+from app.models import Activity, ActivityType, PaymentType, Product, User
 from app.repos.products import ProductDetailsItem, ProductSearchItem
 from app.repos.uow import UnitOfWork
 from .auth import get_active_user
@@ -23,6 +23,7 @@ class ProductForm(BaseModel):
     quality: Decimal = Field(..., ge=0, le=100)
     rate_per_gram: Decimal = Field(..., gt=0)
     total_amount: Decimal = Field(..., gt=0)
+    payment_type: PaymentType
     payment_due_date: date
     retailer_id: int
     image_id: Optional[int]
@@ -81,6 +82,7 @@ def create_product(
             rate_per_gram=item.rate_per_gram,
             total_amount=item.total_amount,
             payment_due_date=item.payment_due_date,
+            payment_type=item.payment_type,
             custom_fields={},
             supplier_id=user.supplier_id,
             retailer_id=retailer.id,
