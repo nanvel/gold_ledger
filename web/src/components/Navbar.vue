@@ -3,7 +3,7 @@
     <input id="nav-drawer" type="checkbox" class="drawer-toggle" />
     <div class="drawer-content flex flex-col h-full overflow-scroll">
       <!-- Navbar -->
-      <div class="navbar bg-base-300 w-full">
+      <div class="navbar bg-base-300 w-full shadow-md">
         <div class="flex-none lg:hidden">
           <label
             for="nav-drawer"

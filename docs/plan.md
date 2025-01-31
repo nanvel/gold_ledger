@@ -2,6 +2,7 @@
 
 Improvements:
 - [ ] UI improvements
+  - [x] sticky header
   - [ ] empty list placeholders
   - [ ] confirmation modal for accept/reject
   - [ ] border for payment section in product
@@ -13,7 +14,6 @@ Improvements:
   - [ ] refine payment page
   - [ ] color circles for status
   - [ ] show retailer and supplier in payments and products
-  - [ ] sticky header
 - [ ] due payments page
 - [ ] message bus
   - [ ] record IPs for activities
