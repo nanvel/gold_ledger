@@ -24,10 +24,11 @@ MVP v4:
   - [x] total received
   - [x] pending payments api
   - [x] show pending payment
-- [ ] filter by supplier/retailer
+- [x] filter by supplier/retailer
   - [x] improve widget
   - [x] selector modal
-  - [ ] unselect
+  - [x] unselect
+- [ ] icon
 - [ ] form changes
   - [ ] bank transfer -> RTGS
   - [ ] Goods -> Fine
