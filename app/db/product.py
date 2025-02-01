@@ -27,7 +27,7 @@ class ProductTable(Base):
     date: Mapped[date]
     weight: Mapped[Decimal] = mapped_column(type_=sa.DECIMAL)
     quality: Mapped[Decimal] = mapped_column(type_=sa.DECIMAL)
-    rate_per_gram: Mapped[Decimal] = mapped_column(type_=sa.DECIMAL)
+    rate: Mapped[Decimal] = mapped_column(type_=sa.DECIMAL)
 
     payment_type: Mapped[int] = mapped_column(server_default="1")
     payment_amount: Mapped[Decimal] = mapped_column(type_=sa.DECIMAL, nullable=True)

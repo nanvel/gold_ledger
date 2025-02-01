@@ -44,7 +44,7 @@ def test_activity_message_factory(container):
             retailer_id=retailer_id,
             weight=Decimal(1),
             quality=Decimal(100),
-            rate_per_gram=Decimal(100),
+            rate=Decimal(100),
             payment_type=PaymentType.CASH,
             payment_amount=Decimal(100),
             payment_weight=None,

@@ -14,7 +14,7 @@ class Product:
     date: date
     weight: Decimal
     quality: Decimal
-    rate_per_gram: Decimal
+    rate: Decimal
     payment_type: PaymentType
     payment_amount: Optional[Decimal]
     payment_weight: Optional[Decimal]

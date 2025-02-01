@@ -17,13 +17,14 @@ Improvements:
   - [x] border for payment section in product
 - [x] remove retailer and supplier pages
   - [x] make entire activity a link to product or payment
-- [ ] cancel payment/activity
+- [x] cancel payment/activity
   - [x] db
   - [x] move bl to models
   - [x] api
   - [x] activities
-  - [ ] ui
+  - [x] ui
 - [ ] complete product page
+  - [ ] rate per gram -> rate 
   - [ ] product details
   - [ ] time / timeline
   - [ ] payment

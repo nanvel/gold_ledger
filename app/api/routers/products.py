@@ -21,7 +21,7 @@ class ProductForm(BaseModel):
     date: date
     weight: Decimal = Field(..., gt=0)
     quality: Decimal = Field(..., gt=0, le=100)
-    rate_per_gram: Decimal = Field(..., gt=0)
+    rate: Decimal = Field(..., gt=0)
     payment_type: PaymentType
     payment_amount: Optional[Decimal] = Field(None, gt=0)
     payment_quality: Optional[Decimal] = Field(None, gt=0, le=100)
@@ -123,7 +123,7 @@ def create_product(
             date=item.date,
             weight=item.weight,
             quality=item.quality,
-            rate_per_gram=item.rate_per_gram,
+            rate=item.rate,
             payment_type=item.payment_type,
             payment_amount=item.payment_amount,
             payment_weight=item.payment_weight,

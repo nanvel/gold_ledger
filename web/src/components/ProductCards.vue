@@ -32,19 +32,19 @@
                 </tr>
                 <tr>
                   <td>Weight</td>
-                  <td>{{ product.weight }}</td>
+                  <td>{{ product.weight }} g</td>
                 </tr>
                 <tr>
                   <td>Quality</td>
-                  <td>{{ product.quality }}</td>
+                  <td>{{ product.quality }} %</td>
                 </tr>
                 <tr>
-                  <td>Rate per gram</td>
-                  <td>{{ product.rate_per_gram }}</td>
+                  <td>Rate</td>
+                  <td>{{ product.rate }} ₹/g</td>
                 </tr>
                 <tr>
                   <td>Amount</td>
-                  <td>{{ product.amount }}</td>
+                  <td>{{ product.amount }} ₹</td>
                 </tr>
                 <tr>
                   <td>Status</td>

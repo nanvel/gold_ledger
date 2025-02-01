@@ -24,7 +24,7 @@ class ProductSearchItem:
     date: str
     weight: Decimal
     quality: Decimal
-    rate_per_gram: Decimal
+    rate: Decimal
     payment_type: str
     payment_amount: Optional[Decimal]
     payment_weight: Optional[Decimal]
@@ -44,7 +44,7 @@ class ProductDetailsItem:
     date: str
     weight: Decimal
     quality: Decimal
-    rate_per_gram: Decimal
+    rate: Decimal
     payment_type: str
     payment_amount: Optional[Decimal]
     payment_weight: Optional[Decimal]
@@ -77,7 +77,7 @@ class ProductsRepo:
             date=product.date,
             weight=product.weight,
             quality=product.quality,
-            rate_per_gram=product.rate_per_gram,
+            rate=product.rate,
             payment_type=product.payment_type.value,
             payment_amount=product.payment_amount,
             payment_weight=product.payment_weight,
@@ -114,7 +114,7 @@ class ProductsRepo:
                 date=record.date,
                 weight=record.weight,
                 quality=record.quality,
-                rate_per_gram=record.rate_per_gram,
+                rate=record.rate,
                 payment_type=PaymentType(record.payment_type),
                 payment_amount=record.payment_amount,
                 payment_weight=record.payment_weight,
@@ -138,7 +138,7 @@ class ProductsRepo:
                 date=record.date.isoformat(),
                 weight=record.weight,
                 quality=record.quality,
-                rate_per_gram=record.rate_per_gram,
+                rate=record.rate,
                 payment_type=PaymentType(record.payment_type).label,
                 payment_amount=record.payment_amount,
                 payment_weight=record.payment_weight,
@@ -200,7 +200,7 @@ class ProductsRepo:
                     date=record.date.isoformat(),
                     weight=record.weight,
                     quality=record.quality,
-                    rate_per_gram=record.rate_per_gram,
+                    rate=record.rate,
                     payment_type=PaymentType(record.payment_type).label,
                     payment_amount=record.payment_amount,
                     payment_weight=record.payment_weight,

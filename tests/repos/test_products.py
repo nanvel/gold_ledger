@@ -29,7 +29,7 @@ def test_products(container):
             date=date(2021, 1, 1),
             weight=Decimal(1),
             quality=Decimal(1),
-            rate_per_gram=Decimal(1),
+            rate=Decimal(1),
             payment_type=PaymentType.CASH,
             payment_amount=Decimal(1),
             payment_weight=None,
