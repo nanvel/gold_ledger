@@ -17,7 +17,24 @@ Improvements:
   - [x] border for payment section in product
 - [x] remove retailer and supplier pages
   - [x] make entire activity a link to product or payment
+- [ ] cancel payment/activity
+  - [ ] db
+  - [ ] move bl to models
+  - [ ] api
+  - [ ] activities
+  - [ ] ui
 - [ ] complete product page
+  - [ ] product details
+  - [ ] time / timeline
+  - [ ] payment
+  - [ ] store names
+  - [ ] people
+    - [ ] creator
+    - [ ] confirmed/rejected
+  - [ ] photo
+  - [ ] activity
+  - [ ] actions
+  - [ ] overdue payment?
 - [ ] complete payment page
 - [ ] compute due payments / products
 - [ ] confirmation modal for accept/reject

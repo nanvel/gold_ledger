@@ -40,6 +40,7 @@ class ProductTable(Base):
     creator_id: Mapped[int] = mapped_column(sa.ForeignKey("users.id"))
     confirmed_by = mapped_column(sa.ForeignKey("users.id"), nullable=True)
     rejected_by = mapped_column(sa.ForeignKey("users.id"), nullable=True)
+    cancelled_by = mapped_column(sa.ForeignKey("users.id"), nullable=True)
 
     images: Mapped[List[ImageTable]] = relationship(secondary=product_image_association)
 
