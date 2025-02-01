@@ -39,8 +39,8 @@
               <td>{{ details.rate_per_gram }}</td>
             </tr>
             <tr>
-              <td>Total amount</td>
-              <td>{{ details.total_amount }}</td>
+              <td>Amount</td>
+              <td>{{ details.amount }}</td>
             </tr>
           </tbody>
         </table>

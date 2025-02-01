@@ -19,9 +19,9 @@ class PaymentSearchItem:
     id: int
     type: str
     date: str
-    weight: Decimal
-    quality: Decimal
-    total_amount: Decimal
+    weight: Optional[Decimal]
+    quality: Optional[Decimal]
+    amount: Optional[Decimal]
     created_at: int
     confirmed_by: Optional[int]
     rejected_by: Optional[int]
@@ -34,7 +34,7 @@ class PaymentDetailsItem:
     date: str
     weight: Optional[Decimal]
     quality: Optional[Decimal]
-    total_amount: Decimal
+    amount: Optional[Decimal]
     supplier_id: int
     retailer_id: int
     creator_id: int
@@ -61,7 +61,7 @@ class PaymentsRepo:
             type=payment.type.value,
             weight=payment.weight,
             quality=payment.quality,
-            total_amount=payment.total_amount,
+            amount=payment.amount,
             supplier_id=payment.supplier_id,
             retailer_id=payment.retailer_id,
             creator_id=payment.creator_id,
@@ -92,7 +92,7 @@ class PaymentsRepo:
                 date=record.date,
                 weight=record.weight,
                 quality=record.quality,
-                total_amount=record.total_amount,
+                amount=record.amount,
                 supplier_id=record.supplier_id,
                 retailer_id=record.retailer_id,
                 creator_id=record.creator_id,
@@ -110,7 +110,7 @@ class PaymentsRepo:
                 date=record.date.isoformat(),
                 weight=record.weight,
                 quality=record.quality,
-                total_amount=record.total_amount,
+                amount=record.amount,
                 supplier_id=record.supplier_id,
                 retailer_id=record.retailer_id,
                 creator_id=record.creator_id,
@@ -157,7 +157,7 @@ class PaymentsRepo:
                     date=record.date.isoformat(),
                     weight=record.weight,
                     quality=record.quality,
-                    total_amount=record.total_amount,
+                    amount=record.amount,
                     created_at=int(Timestamp.from_datetime(record.created_at)),
                     confirmed_by=record.confirmed_by,
                     rejected_by=record.rejected_by,
@@ -172,7 +172,7 @@ class PaymentsRepo:
         retailer_id: Optional[int],
     ) -> PaymentsStats:
         query = self._session.query(
-            func.sum(PaymentTable.total_amount).label("total"),
+            func.sum(PaymentTable.amount).label("total"),
             func.count(PaymentTable.id).label("count"),
         )
 

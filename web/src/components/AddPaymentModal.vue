@@ -96,20 +96,18 @@
           </div>
           <div class="form-control w-full" v-if="type !== 3">
             <div class="label">
-              <span class="label-text">Total amount</span>
+              <span class="label-text">Amount</span>
               <span class="label-text">₹</span>
             </div>
             <input
               type="number"
               class="input input-bordered w-full input-md text-lg"
-              v-model="totalAmount"
+              v-model="amount"
               min="0"
               step="0.1"
             />
-            <div class="label" v-if="totalAmountError">
-              <span class="label-text-alt text-error">{{
-                totalAmountError
-              }}</span>
+            <div class="label" v-if="amountError">
+              <span class="label-text-alt text-error">{{ amountError }}</span>
             </div>
           </div>
         </form>
@@ -151,8 +149,8 @@ const weight = ref(0);
 const weightError = ref(null);
 const quality = ref(0);
 const qualityError = ref(null);
-const totalAmount = ref(0);
-const totalAmountError = ref(null);
+const amount = ref(0);
+const amountError = ref(null);
 const loading = ref(false);
 const error = ref(null);
 
@@ -174,13 +172,13 @@ const clearFields = () => {
   date.value = new Date();
   weight.value = 0;
   quality.value = 0;
-  totalAmount.value = 0;
+  amount.value = 0;
   error.value = null;
   typeError.value = null;
   dateError.value = null;
   weightError.value = null;
   qualityError.value = null;
-  totalAmountError.value = null;
+  amountError.value = null;
 };
 
 const setSupplier = (r) => {
@@ -191,25 +189,25 @@ const closeModal = () => {
   add_payment.close();
 };
 
-watch([type, date, weight, quality, totalAmount], () => {
+watch([type, date, weight, quality, amount], () => {
   typeError.value = null;
   dateError.value = null;
   weightError.value = null;
   qualityError.value = null;
-  totalAmountError.value = null;
+  amountError.value = null;
 });
 
 const addPayment = async () => {
   const data = {
     type: type.value,
     date: dateToStr(date.value),
-    total_amount: totalAmount.value,
+    amount: amount.value,
     supplier_id: supplier.value.id,
   };
   if (type.value === 3) {
     data["weight"] = weight.value;
     data["quality"] = quality.value;
-    data["total_amount"] = (weight.value * quality.value) / 100;
+    data["amount"] = (weight.value * quality.value) / 100;
   }
 
   loading.value = true;
@@ -224,7 +222,7 @@ const addPayment = async () => {
     dateError.value = parseError(e, "date");
     weightError.value = parseError(e, "weight");
     qualityError.value = parseError(e, "quality");
-    totalAmountError.value = parseError(e, "total_amount");
+    amountError.value = parseError(e, "amount");
   } finally {
     loading.value = false;
   }

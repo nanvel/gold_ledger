@@ -25,8 +25,10 @@ class ProductSearchItem:
     weight: Decimal
     quality: Decimal
     rate_per_gram: Decimal
-    total_amount: Decimal
     payment_type: str
+    payment_amount: Optional[Decimal]
+    payment_weight: Optional[Decimal]
+    payment_quality: Optional[Decimal]
     payment_due_date: str
     created_at: int
     images: Tuple[ProductImage, ...]
@@ -42,8 +44,10 @@ class ProductDetailsItem:
     weight: Decimal
     quality: Decimal
     rate_per_gram: Decimal
-    total_amount: Decimal
     payment_type: str
+    payment_amount: Optional[Decimal]
+    payment_weight: Optional[Decimal]
+    payment_quality: Optional[Decimal]
     payment_due_date: str
     created_at: int
     supplier_id: int
@@ -72,10 +76,11 @@ class ProductsRepo:
             weight=product.weight,
             quality=product.quality,
             rate_per_gram=product.rate_per_gram,
-            total_amount=product.total_amount,
             payment_type=product.payment_type.value,
+            payment_amount=product.payment_amount,
+            payment_weight=product.payment_weight,
+            payment_quality=product.payment_quality,
             payment_due_date=product.payment_due_date,
-            custom_fields=product.custom_fields,
             supplier_id=product.supplier_id,
             retailer_id=product.retailer_id,
             creator_id=product.creator_id,
@@ -107,15 +112,16 @@ class ProductsRepo:
                 weight=record.weight,
                 quality=record.quality,
                 rate_per_gram=record.rate_per_gram,
-                total_amount=record.total_amount,
                 payment_type=PaymentType(record.payment_type),
+                payment_amount=record.payment_amount,
+                payment_weight=record.payment_weight,
+                payment_quality=record.payment_quality,
                 payment_due_date=record.payment_due_date,
                 supplier_id=record.supplier_id,
                 retailer_id=record.retailer_id,
                 creator_id=record.creator_id,
                 confirmed_by=record.confirmed_by,
                 rejected_by=record.rejected_by,
-                custom_fields=record.custom_fields,
             )
 
     def details(self, product_id: int) -> Optional[ProductDetailsItem]:
@@ -129,8 +135,10 @@ class ProductsRepo:
                 weight=record.weight,
                 quality=record.quality,
                 rate_per_gram=record.rate_per_gram,
-                total_amount=record.total_amount,
                 payment_type=PaymentType(record.payment_type).label,
+                payment_amount=record.payment_amount,
+                payment_weight=record.payment_weight,
+                payment_quality=record.payment_quality,
                 payment_due_date=record.payment_due_date.isoformat(),
                 created_at=int(Timestamp.from_datetime(record.created_at)),
                 supplier_id=record.supplier_id,
@@ -166,7 +174,6 @@ class ProductsRepo:
             query = query.filter(ProductTable.retailer_id == retailer_id)
 
         total = query.count()
-        amount_sum = query.with_entities(func.sum(ProductTable.total_amount)).scalar()
 
         order_by_field = (
             ProductTable.created_at
@@ -189,8 +196,10 @@ class ProductsRepo:
                     weight=record.weight,
                     quality=record.quality,
                     rate_per_gram=record.rate_per_gram,
-                    total_amount=record.total_amount,
                     payment_type=PaymentType(record.payment_type).label,
+                    payment_amount=record.payment_amount,
+                    payment_weight=record.payment_weight,
+                    payment_quality=record.payment_quality,
                     payment_due_date=record.payment_due_date.isoformat(),
                     created_at=int(Timestamp.from_datetime(record.created_at)),
                     images=tuple(
@@ -228,7 +237,7 @@ class ProductsRepo:
         retailer_id: Optional[int],
     ) -> ProductStats:
         query = self._session.query(
-            func.sum(ProductTable.total_amount).label("total"),
+            func.sum(ProductTable.payment_amount).label("total"),
             func.count(ProductTable.id).label("count"),
         )
 

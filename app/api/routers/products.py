@@ -20,10 +20,12 @@ class ProductForm(BaseModel):
     name: str = Field(..., min_length=1, max_length=64)
     date: date
     weight: Decimal = Field(..., gt=0)
-    quality: Decimal = Field(..., ge=0, le=100)
+    quality: Decimal = Field(..., gt=0, le=100)
     rate_per_gram: Decimal = Field(..., gt=0)
-    total_amount: Decimal = Field(..., gt=0)
     payment_type: PaymentType
+    payment_amount: Optional[Decimal] = Field(None, gt=0)
+    payment_quality: Optional[Decimal] = Field(None, gt=0, le=100)
+    payment_weight: Optional[Decimal] = Field(None, gt=0)
     payment_due_date: date
     retailer_id: int
     image_id: Optional[int]
@@ -46,6 +48,48 @@ def create_product(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="The user is not a supplier.",
         )
+
+    if item.payment_type == PaymentType.CASH:
+        if item.payment_amount is None:
+            raise HTTPException(
+                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                detail=[
+                    {
+                        "type": "payment_amount_required",
+                        "loc": ["body", "payment_amount"],
+                        "msg": "Payment amount is required for cash payment.",
+                        "input": item.payment_amount,
+                        "ctx": {},
+                    }
+                ],
+            )
+    else:
+        if item.payment_quality is None:
+            raise HTTPException(
+                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                detail=[
+                    {
+                        "type": "payment_quality_required",
+                        "loc": ["body", "payment_quality"],
+                        "msg": "Payment quality is required for fine payment.",
+                        "input": item.payment_quality,
+                        "ctx": {},
+                    }
+                ],
+            )
+        elif item.payment_weight is None:
+            raise HTTPException(
+                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                detail=[
+                    {
+                        "type": "payment_weight_required",
+                        "loc": ["body", "payment_weight"],
+                        "msg": "Payment weight is required for fine payment.",
+                        "input": item.payment_weight,
+                        "ctx": {},
+                    }
+                ],
+            )
 
     with uow:
         retailer = uow.retailers.by_id(item.retailer_id)
@@ -80,16 +124,18 @@ def create_product(
             weight=item.weight,
             quality=item.quality,
             rate_per_gram=item.rate_per_gram,
-            total_amount=item.total_amount,
-            payment_due_date=item.payment_due_date,
             payment_type=item.payment_type,
-            custom_fields={},
+            payment_amount=item.payment_amount,
+            payment_weight=item.payment_weight,
+            payment_quality=item.payment_quality,
+            payment_due_date=item.payment_due_date,
             supplier_id=user.supplier_id,
             retailer_id=retailer.id,
             creator_id=user.id,
             confirmed_by=None,
             rejected_by=None,
         )
+        product.validate()
         product_id = uow.products.create(product)
         product = replace(product, id=product_id)
 

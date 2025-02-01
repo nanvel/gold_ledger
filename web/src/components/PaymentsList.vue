@@ -38,7 +38,7 @@
               {{ payment.date }}
             </td>
             <td>
-              {{ payment.total_amount }}
+              {{ payment.amount }}
             </td>
             <td>
               <timestamp :value="payment.created_at" :show-duration="true" />

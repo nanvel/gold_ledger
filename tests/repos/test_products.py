@@ -30,18 +30,19 @@ def test_products(container):
             weight=Decimal(1),
             quality=Decimal(1),
             rate_per_gram=Decimal(1),
-            total_amount=Decimal(1),
             payment_type=PaymentType.CASH,
+            payment_amount=Decimal(1),
+            payment_weight=None,
+            payment_quality=None,
             payment_due_date=date(2021, 1, 1),
             supplier_id=supplier_id,
             retailer_id=retailer_id,
             creator_id=user_id,
             confirmed_by=None,
             rejected_by=None,
-            custom_fields={},
         )
         product1_id = uow.products.create(product1)
-        product2 = replace(product1, id=0, name="Product 2", total_amount=Decimal(2))
+        product2 = replace(product1, id=0, name="Product 2", payment_amount=Decimal(2))
         product2_id = uow.products.create(product2)
 
         result = uow.products.filter(

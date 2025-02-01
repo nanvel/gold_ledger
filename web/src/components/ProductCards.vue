@@ -43,8 +43,8 @@
                   <td>{{ product.rate_per_gram }}</td>
                 </tr>
                 <tr>
-                  <td>Total amount</td>
-                  <td>{{ product.total_amount }}</td>
+                  <td>Amount</td>
+                  <td>{{ product.amount }}</td>
                 </tr>
                 <tr>
                   <td>Status</td>

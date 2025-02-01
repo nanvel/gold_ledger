@@ -45,13 +45,14 @@ def test_activity_message_factory(container):
             weight=Decimal(1),
             quality=Decimal(100),
             rate_per_gram=Decimal(100),
-            total_amount=Decimal(100),
             payment_type=PaymentType.CASH,
+            payment_amount=Decimal(100),
+            payment_weight=None,
+            payment_quality=None,
             payment_due_date=date(2021, 1, 10),
             creator_id=user_id,
             confirmed_by=None,
             rejected_by=None,
-            custom_fields={},
         )
         product_id = uow.products.create(product)
         product = replace(product, id=product_id)
@@ -60,7 +61,7 @@ def test_activity_message_factory(container):
             id=0,
             type=PaymentType.CASH,
             date=date(2021, 1, 1),
-            total_amount=Decimal(100),
+            amount=Decimal(100),
             supplier_id=supplier_id,
             retailer_id=retailer_id,
             creator_id=user_id,
