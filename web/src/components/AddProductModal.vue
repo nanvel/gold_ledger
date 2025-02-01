@@ -48,6 +48,7 @@
           <div class="form-control w-full">
             <div class="label">
               <span class="label-text">Weight</span>
+              <span class="label-text">g</span>
             </div>
             <input
               type="number"
@@ -63,6 +64,7 @@
           <div class="form-control w-full">
             <div class="label">
               <span class="label-text">Quality</span>
+              <span class="label-text">%</span>
             </div>
             <input
               type="number"
@@ -79,6 +81,7 @@
           <div class="form-control w-full">
             <div class="label">
               <span class="label-text">Rate per gram</span>
+              <span class="label-text">₹</span>
             </div>
             <input
               type="number"
@@ -126,6 +129,7 @@
           <div class="form-control w-full">
             <div class="label">
               <span class="label-text">Total amount</span>
+              <span class="label-text">₹</span>
             </div>
             <input
               type="number"
