@@ -49,21 +49,7 @@ def create_product(
             detail="The user is not a supplier.",
         )
 
-    if item.payment_type == PaymentType.CASH:
-        if item.payment_amount is None:
-            raise HTTPException(
-                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-                detail=[
-                    {
-                        "type": "payment_amount_required",
-                        "loc": ["body", "payment_amount"],
-                        "msg": "Payment amount is required for cash payment.",
-                        "input": item.payment_amount,
-                        "ctx": {},
-                    }
-                ],
-            )
-    else:
+    if item.payment_type == PaymentType.FINE:
         if item.payment_quality is None:
             raise HTTPException(
                 status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
@@ -86,6 +72,20 @@ def create_product(
                         "loc": ["body", "payment_weight"],
                         "msg": "Payment weight is required for fine payment.",
                         "input": item.payment_weight,
+                        "ctx": {},
+                    }
+                ],
+            )
+    else:
+        if item.payment_amount is None:
+            raise HTTPException(
+                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                detail=[
+                    {
+                        "type": "payment_amount_required",
+                        "loc": ["body", "payment_amount"],
+                        "msg": "Payment amount is required for cash payment.",
+                        "input": item.payment_amount,
                         "ctx": {},
                     }
                 ],
@@ -204,8 +204,8 @@ def get_product(
         product_details = uow.products.details(product_id)
 
         if not product_details or (
-            product_details.supplier_id != user.supplier_id
-            and product_details.retailer_id != user.retailer_id
+            product_details.supplier.id != user.supplier_id
+            and product_details.retailer.id != user.retailer_id
         ):
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,

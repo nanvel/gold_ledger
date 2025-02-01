@@ -47,6 +47,8 @@ class Payment:
         if self.type == PaymentType.FINE:
             assert self.weight is not None
             assert self.quality is not None
+            assert self.amount is None
         else:
             assert self.weight is None
             assert self.quality is None
+            assert self.amount is not None

@@ -24,7 +24,8 @@ Improvements:
   - [x] activities
   - [x] ui
 - [ ] complete product page
-  - [ ] rate per gram -> rate 
+  - [x] rate per gram -> rate
+  - [ ] include users into response
   - [ ] product details
   - [ ] time / timeline
   - [ ] payment

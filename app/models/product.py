@@ -49,21 +49,17 @@ class Product:
         return replace(self, cancelled_by=user.id)
 
     def validate(self):
-        if self.payment_type == PaymentType.CASH:
-            if self.payment_amount is None:
-                raise ValueError("payment_amount is required for CASH payment type")
-            if self.payment_weight is not None:
-                raise ValueError("payment_weight is not required for CASH payment type")
-            if self.payment_quality is not None:
-                raise ValueError(
-                    "payment_quality is not required for CASH payment type"
-                )
-        else:
+        if self.payment_type == PaymentType.FINE:
             if self.payment_amount is not None:
-                raise ValueError(
-                    "payment_amount is not required for WEIGHT payment type"
-                )
+                raise ValueError("Amount is not required for Fine payment type")
             if self.payment_weight is None:
-                raise ValueError("payment_weight is required for WEIGHT payment type")
+                raise ValueError("Weight is required for Fine payment type")
             if self.payment_quality is None:
-                raise ValueError("payment_quality is required for WEIGHT payment type")
+                raise ValueError("Quality is required for Fine payment type")
+        else:
+            if self.payment_amount is None:
+                raise ValueError("Amount is required for Cash payment type")
+            if self.payment_weight is not None:
+                raise ValueError("Weight is not required for Cash payment type")
+            if self.payment_quality is not None:
+                raise ValueError("Quality is not required for Cash payment type")

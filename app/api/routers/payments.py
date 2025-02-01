@@ -44,18 +44,6 @@ def create_payment(
         )
 
     if item.type == PaymentType.CASH:
-        if item.amount is None:
-            raise HTTPException(
-                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-                detail=[
-                    {
-                        "type": "amount_required",
-                        "loc": ["body", "amount"],
-                        "msg": "Amount is required for cash payment.",
-                    }
-                ],
-            )
-    else:
         if item.weight is None:
             raise HTTPException(
                 status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
@@ -76,6 +64,18 @@ def create_payment(
                         "type": "quality_required",
                         "loc": ["body", "quality"],
                         "msg": "Quality is required for fine payment.",
+                    }
+                ],
+            )
+    else:
+        if item.amount is None:
+            raise HTTPException(
+                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                detail=[
+                    {
+                        "type": "amount_required",
+                        "loc": ["body", "amount"],
+                        "msg": "Amount is required for cash payment.",
                     }
                 ],
             )

@@ -18,6 +18,19 @@ class ProductImage:
 
 
 @dataclass(frozen=True)
+class ProductStore:
+    id: int
+    name: str
+
+
+@dataclass(frozen=True)
+class ProductUser:
+    id: int
+    name: str
+    email: str
+
+
+@dataclass(frozen=True)
 class ProductSearchItem:
     id: int
     name: str
@@ -51,13 +64,13 @@ class ProductDetailsItem:
     payment_quality: Optional[Decimal]
     payment_due_date: str
     created_at: int
-    supplier_id: int
-    retailer_id: int
-    creator_id: int
+    supplier: ProductStore
+    retailer: ProductStore
+    creator: ProductUser
     images: Tuple[ProductImage, ...]
-    confirmed_by: Optional[int]
-    rejected_by: Optional[int]
-    cancelled_by: Optional[int]
+    confirmed_by: Optional[ProductUser]
+    rejected_by: Optional[ProductUser]
+    cancelled_by: Optional[ProductUser]
 
 
 @dataclass(frozen=True)
@@ -145,9 +158,13 @@ class ProductsRepo:
                 payment_quality=record.payment_quality,
                 payment_due_date=record.payment_due_date.isoformat(),
                 created_at=int(Timestamp.from_datetime(record.created_at)),
-                supplier_id=record.supplier_id,
-                retailer_id=record.retailer_id,
-                creator_id=record.creator_id,
+                supplier=ProductStore(id=record.supplier.id, name=record.supplier.name),
+                retailer=ProductStore(id=record.retailer.id, name=record.retailer.name),
+                creator=ProductUser(
+                    id=record.creator.id,
+                    name=record.creator.name,
+                    email=record.creator.username,
+                ),
                 images=tuple(
                     ProductImage(
                         id=image.id,
@@ -157,9 +174,33 @@ class ProductsRepo:
                     )
                     for image in record.images
                 ),
-                confirmed_by=record.confirmed_by,
-                rejected_by=record.rejected_by,
-                cancelled_by=record.cancelled_by,
+                confirmed_by=(
+                    ProductUser(
+                        id=record.confirmed_by_user.id,
+                        name=record.confirmed_by_user.name,
+                        email=record.confirmed_by_user.username,
+                    )
+                    if record.confirmed_by
+                    else None
+                ),
+                rejected_by=(
+                    ProductUser(
+                        id=record.rejected_by_user.id,
+                        name=record.rejected_by_user.name,
+                        email=record.rejected_by_user.username,
+                    )
+                    if record.rejected_by
+                    else None
+                ),
+                cancelled_by=(
+                    ProductUser(
+                        id=record.cancelled_by_user.id,
+                        name=record.cancelled_by_user.name,
+                        email=record.cancelled_by_user.username,
+                    )
+                    if record.cancelled_by
+                    else None
+                ),
             )
 
     def filter(

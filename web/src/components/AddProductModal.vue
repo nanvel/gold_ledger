@@ -297,9 +297,9 @@ const clearFields = () => {
   weight.value = 0;
   quality.value = 0;
   rate.value = 0;
-  paymentAmount.value = null;
-  paymentWeight.value = null;
-  paymentQuality.value = null;
+  paymentAmount.value = 0;
+  paymentWeight.value = 0;
+  paymentQuality.value = 0;
   paymentType.value = 1;
   paymentDueDate.value = new Date();
   imageId.value = null;
