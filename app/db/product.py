@@ -27,7 +27,7 @@ class ProductTable(Base):
     date: Mapped[date]
     weight: Mapped[Decimal] = mapped_column(type_=sa.DECIMAL)
     quality: Mapped[Decimal] = mapped_column(type_=sa.DECIMAL)
-    rate_per_gram: Mapped[Decimal] = mapped_column(type_=sa.DECIMAL)
+    rate: Mapped[Decimal] = mapped_column(type_=sa.DECIMAL)
 
     payment_type: Mapped[int] = mapped_column(server_default="1")
     payment_amount: Mapped[Decimal] = mapped_column(type_=sa.DECIMAL, nullable=True)
@@ -40,8 +40,25 @@ class ProductTable(Base):
     creator_id: Mapped[int] = mapped_column(sa.ForeignKey("users.id"))
     confirmed_by = mapped_column(sa.ForeignKey("users.id"), nullable=True)
     rejected_by = mapped_column(sa.ForeignKey("users.id"), nullable=True)
+    cancelled_by = mapped_column(sa.ForeignKey("users.id"), nullable=True)
 
     images: Mapped[List[ImageTable]] = relationship(secondary=product_image_association)
+    supplier: Mapped["SupplierTable"] = relationship(
+        "SupplierTable", foreign_keys=[supplier_id]
+    )
+    retailer: Mapped["RetailerTable"] = relationship(
+        "RetailerTable", foreign_keys=[retailer_id]
+    )
+    creator: Mapped["UserTable"] = relationship("UserTable", foreign_keys=[creator_id])
+    confirmed_by_user: Mapped["UserTable"] = relationship(
+        "UserTable", foreign_keys=[confirmed_by]
+    )
+    rejected_by_user: Mapped["UserTable"] = relationship(
+        "UserTable", foreign_keys=[rejected_by]
+    )
+    cancelled_by_user: Mapped["UserTable"] = relationship(
+        "UserTable", foreign_keys=[cancelled_by]
+    )
 
     created_at: Mapped[datetime] = mapped_column(server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(

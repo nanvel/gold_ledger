@@ -44,7 +44,7 @@ def test_activity_message_factory(container):
             retailer_id=retailer_id,
             weight=Decimal(1),
             quality=Decimal(100),
-            rate_per_gram=Decimal(100),
+            rate=Decimal(100),
             payment_type=PaymentType.CASH,
             payment_amount=Decimal(100),
             payment_weight=None,
@@ -53,6 +53,7 @@ def test_activity_message_factory(container):
             creator_id=user_id,
             confirmed_by=None,
             rejected_by=None,
+            cancelled_by=None,
         )
         product_id = uow.products.create(product)
         product = replace(product, id=product_id)
@@ -69,6 +70,7 @@ def test_activity_message_factory(container):
             rejected_by=None,
             weight=None,
             quality=None,
+            cancelled_by=None,
         )
         payment_id = uow.payments.create(payment)
         payment = replace(payment, id=payment_id)
@@ -176,4 +178,38 @@ def test_activity_message_factory(container):
                 uow=uow,
             )
             == f"User Name ({supplier_id}:Supplier Name) has rejected a payment of ₹100 (Cash)"
+        )
+
+        assert (
+            factory.from_activity(
+                Activity(
+                    id=0,
+                    type=ActivityType.PRODUCT_CANCELLED,
+                    user_id=user_id,
+                    supplier_id=supplier_id,
+                    retailer_id=retailer_id,
+                    product_id=product_id,
+                    payment_id=None,
+                    message="",
+                ),
+                uow=uow,
+            )
+            == f"User Name ({supplier_id}:Supplier Name) has cancelled Product Name"
+        )
+
+        assert (
+            factory.from_activity(
+                Activity(
+                    id=0,
+                    type=ActivityType.PAYMENT_CANCELLED,
+                    user_id=user_id,
+                    supplier_id=supplier_id,
+                    retailer_id=retailer_id,
+                    product_id=None,
+                    payment_id=payment_id,
+                    message="",
+                ),
+                uow=uow,
+            )
+            == f"User Name ({retailer_id}:Retailer Name) has cancelled payment ₹100 (Cash)"
         )

@@ -29,7 +29,7 @@ def test_products(container):
             date=date(2021, 1, 1),
             weight=Decimal(1),
             quality=Decimal(1),
-            rate_per_gram=Decimal(1),
+            rate=Decimal(1),
             payment_type=PaymentType.CASH,
             payment_amount=Decimal(1),
             payment_weight=None,
@@ -40,6 +40,7 @@ def test_products(container):
             creator_id=user_id,
             confirmed_by=None,
             rejected_by=None,
+            cancelled_by=None,
         )
         product1_id = uow.products.create(product1)
         product2 = replace(product1, id=0, name="Product 2", payment_amount=Decimal(2))

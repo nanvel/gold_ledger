@@ -10,11 +10,37 @@ Improvements:
     - [x] only replace table, not filters
   - [x] units for each input
   - [x] show errors below
-- [ ] product section improvements
-  - [ ] payment_amount, payment_weight, payment_quality, payment_due_date, payment_type
-    - [ ] db
-    - [ ] ui
-  - [ ] border for payment section in product
+- [x] product section improvements
+  - [x] payment_amount, payment_weight, payment_quality, payment_due_date, payment_type
+    - [x] db
+    - [x] ui
+  - [x] border for payment section in product
+- [x] remove retailer and supplier pages
+  - [x] make entire activity a link to product or payment
+- [x] cancel payment/activity
+  - [x] db
+  - [x] move bl to models
+  - [x] api
+  - [x] activities
+  - [x] ui
+- [ ] complete product page
+  - [x] rate per gram -> rate
+  - [ ] include users into response
+  - [ ] product details
+  - [ ] time / timeline
+  - [ ] payment
+  - [ ] status
+  - [ ] store names
+  - [ ] people
+    - [ ] creator
+    - [ ] confirmed/rejected
+  - [ ] photo
+  - [ ] activity
+  - [ ] actions
+  - [ ] overdue payment?
+- [ ] complete payment page
+  - [ ] link from payments table
+  - [ ] show status
 - [ ] compute due payments / products
 - [ ] confirmation modal for accept/reject
 
@@ -28,7 +54,6 @@ Other:
 - [ ] color circles for status
 - [ ] show retailer and supplier in payments and products
 - [ ] improve recent on small screen
-- [ ] make entire activity a link to product or payment
 - [ ] cancel payment / product
 - [ ] due payments page
 - [ ] message bus

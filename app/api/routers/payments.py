@@ -44,18 +44,6 @@ def create_payment(
         )
 
     if item.type == PaymentType.CASH:
-        if item.amount is None:
-            raise HTTPException(
-                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-                detail=[
-                    {
-                        "type": "amount_required",
-                        "loc": ["body", "amount"],
-                        "msg": "Amount is required for cash payment.",
-                    }
-                ],
-            )
-    else:
         if item.weight is None:
             raise HTTPException(
                 status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
@@ -76,6 +64,18 @@ def create_payment(
                         "type": "quality_required",
                         "loc": ["body", "quality"],
                         "msg": "Quality is required for fine payment.",
+                    }
+                ],
+            )
+    else:
+        if item.amount is None:
+            raise HTTPException(
+                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                detail=[
+                    {
+                        "type": "amount_required",
+                        "loc": ["body", "amount"],
+                        "msg": "Amount is required for cash payment.",
                     }
                 ],
             )
@@ -101,6 +101,7 @@ def create_payment(
             creator_id=user.id,
             confirmed_by=None,
             rejected_by=None,
+            cancelled_by=None,
         )
         payment.validate()
         payment_id = uow.payments.create(payment)
@@ -171,7 +172,7 @@ def get_payment(
         ):
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
-                detail="The payment was not found.",
+                detail="The payment was not found",
             )
 
         return payment_details
@@ -195,14 +196,10 @@ def confirm_payment(
         if not payment or payment.supplier_id != user.supplier_id:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
-                detail="The payment was not found.",
+                detail="The payment was not found",
             )
 
-        assert payment.rejected_by is None
-        assert payment.confirmed_by is None
-
-        payment = replace(payment, confirmed_by=user.id)
-
+        payment = payment.confirm(user)
         uow.payments.update(payment)
 
         activity = Activity(
@@ -238,19 +235,55 @@ def reject_payment(
         if not payment or payment.supplier_id != user.supplier_id:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
-                detail="The payment was not found.",
+                detail="The payment was not found",
             )
 
-        assert payment.rejected_by is None
-        assert payment.confirmed_by is None
-
-        payment = replace(payment, rejected_by=user.id)
-
+        payment = payment.reject(user)
         uow.payments.update(payment)
 
         activity = Activity(
             id=0,
             type=ActivityType.PAYMENT_REJECTED,
+            user_id=user.id,
+            supplier_id=payment.supplier_id,
+            retailer_id=payment.retailer_id,
+            product_id=None,
+            payment_id=payment.id,
+            message="",
+        )
+        activity = replace(
+            activity,
+            message=activity_message_factory.from_activity(activity, uow),
+        )
+        uow.activities.create(activity)
+
+    return UpdateResponse(success=True)
+
+
+@router.post("/payments/{payment_id}/cancel")
+@inject
+def cancel_payment(
+    payment_id: int,
+    user: User = Depends(get_active_user),
+    uow: UnitOfWork = Depends(Provide[Container.uow]),
+    activity_message_factory=Depends(Provide[Container.activity_message_factory]),
+) -> UpdateResponse:
+    with uow:
+        payment = uow.payments.by_id(payment_id)
+
+        if not payment or payment.retailer_id != user.retailer_id:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="The payment was not found",
+            )
+
+        payment = payment.cancel(user)
+        uow.payments.update(payment)
+
+        # TODO: use message bus
+        activity = Activity(
+            id=0,
+            type=ActivityType.PAYMENT_CANCELLED,
             user_id=user.id,
             supplier_id=payment.supplier_id,
             retailer_id=payment.retailer_id,

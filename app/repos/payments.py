@@ -25,6 +25,7 @@ class PaymentSearchItem:
     created_at: int
     confirmed_by: Optional[int]
     rejected_by: Optional[int]
+    cancelled_by: Optional[int]
 
 
 @dataclass(frozen=True)
@@ -40,6 +41,7 @@ class PaymentDetailsItem:
     creator_id: int
     confirmed_by: Optional[int]
     rejected_by: Optional[int]
+    cancelled_by: Optional[int]
     created_at: int
 
 
@@ -79,6 +81,7 @@ class PaymentsRepo:
         if record:
             record.confirmed_by = payment.confirmed_by
             record.rejected_by = payment.rejected_by
+            record.cancelled_by = payment.cancelled_by
 
             self._session.commit()
 
@@ -98,6 +101,7 @@ class PaymentsRepo:
                 creator_id=record.creator_id,
                 confirmed_by=record.confirmed_by,
                 rejected_by=record.rejected_by,
+                cancelled_by=record.cancelled_by,
             )
 
     def details(self, payment_id: int) -> Optional[PaymentDetailsItem]:
@@ -116,6 +120,7 @@ class PaymentsRepo:
                 creator_id=record.creator_id,
                 confirmed_by=record.confirmed_by,
                 rejected_by=record.rejected_by,
+                cancelled_by=record.cancelled_by,
                 created_at=int(Timestamp.from_datetime(record.created_at)),
             )
 
@@ -161,6 +166,7 @@ class PaymentsRepo:
                     created_at=int(Timestamp.from_datetime(record.created_at)),
                     confirmed_by=record.confirmed_by,
                     rejected_by=record.rejected_by,
+                    cancelled_by=record.cancelled_by,
                 )
                 for record in records
             ),
@@ -171,6 +177,7 @@ class PaymentsRepo:
         supplier_id: Optional[int],
         retailer_id: Optional[int],
     ) -> PaymentsStats:
+        # TODO: rewrite, user cancelled as well
         query = self._session.query(
             func.sum(PaymentTable.amount).label("total"),
             func.count(PaymentTable.id).label("count"),

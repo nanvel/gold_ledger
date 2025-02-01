@@ -21,7 +21,7 @@ class ProductForm(BaseModel):
     date: date
     weight: Decimal = Field(..., gt=0)
     quality: Decimal = Field(..., gt=0, le=100)
-    rate_per_gram: Decimal = Field(..., gt=0)
+    rate: Decimal = Field(..., gt=0)
     payment_type: PaymentType
     payment_amount: Optional[Decimal] = Field(None, gt=0)
     payment_quality: Optional[Decimal] = Field(None, gt=0, le=100)
@@ -49,21 +49,7 @@ def create_product(
             detail="The user is not a supplier.",
         )
 
-    if item.payment_type == PaymentType.CASH:
-        if item.payment_amount is None:
-            raise HTTPException(
-                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-                detail=[
-                    {
-                        "type": "payment_amount_required",
-                        "loc": ["body", "payment_amount"],
-                        "msg": "Payment amount is required for cash payment.",
-                        "input": item.payment_amount,
-                        "ctx": {},
-                    }
-                ],
-            )
-    else:
+    if item.payment_type == PaymentType.FINE:
         if item.payment_quality is None:
             raise HTTPException(
                 status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
@@ -90,6 +76,20 @@ def create_product(
                     }
                 ],
             )
+    else:
+        if item.payment_amount is None:
+            raise HTTPException(
+                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                detail=[
+                    {
+                        "type": "payment_amount_required",
+                        "loc": ["body", "payment_amount"],
+                        "msg": "Payment amount is required for cash payment.",
+                        "input": item.payment_amount,
+                        "ctx": {},
+                    }
+                ],
+            )
 
     with uow:
         retailer = uow.retailers.by_id(item.retailer_id)
@@ -97,7 +97,7 @@ def create_product(
         if retailer is None:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
-                detail="The retailer store was not found.",
+                detail="The retailer store was not found",
             )
 
         if item.image_id:
@@ -106,7 +106,7 @@ def create_product(
             if image is None or not image.supplier_id:
                 raise HTTPException(
                     status_code=status.HTTP_404_NOT_FOUND,
-                    detail="The image was not found.",
+                    detail="The image was not found",
                 )
 
             if image.supplier_id != user.supplier_id:
@@ -123,7 +123,7 @@ def create_product(
             date=item.date,
             weight=item.weight,
             quality=item.quality,
-            rate_per_gram=item.rate_per_gram,
+            rate=item.rate,
             payment_type=item.payment_type,
             payment_amount=item.payment_amount,
             payment_weight=item.payment_weight,
@@ -134,6 +134,7 @@ def create_product(
             creator_id=user.id,
             confirmed_by=None,
             rejected_by=None,
+            cancelled_by=None,
         )
         product.validate()
         product_id = uow.products.create(product)
@@ -203,12 +204,12 @@ def get_product(
         product_details = uow.products.details(product_id)
 
         if not product_details or (
-            product_details.supplier_id != user.supplier_id
-            and product_details.retailer_id != user.retailer_id
+            product_details.supplier.id != user.supplier_id
+            and product_details.retailer.id != user.retailer_id
         ):
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
-                detail="The product was not found.",
+                detail="The product was not found",
             )
 
         return product_details
@@ -232,14 +233,10 @@ def confirm_product(
         if not product or product.retailer_id != user.retailer_id:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
-                detail="The product was not found.",
+                detail="The product was not found",
             )
 
-        assert product.rejected_by is None
-        assert product.confirmed_by is None
-
-        product = replace(product, confirmed_by=user.id)
-
+        product = product.confirm(user)
         uow.products.update(product)
 
         activity = Activity(
@@ -275,19 +272,54 @@ def reject_product(
         if not product or product.retailer_id != user.retailer_id:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
-                detail="The product was not found.",
+                detail="The product was not found",
             )
 
-        assert product.rejected_by is None
-        assert product.confirmed_by is None
-
-        product = replace(product, rejected_by=user.id)
-
+        product = product.reject(user)
         uow.products.update(product)
 
         activity = Activity(
             id=0,
             type=ActivityType.PRODUCT_REJECTED,
+            user_id=user.id,
+            supplier_id=product.supplier_id,
+            retailer_id=product.retailer_id,
+            product_id=product_id,
+            payment_id=None,
+            message="",
+        )
+        activity = replace(
+            activity,
+            message=activity_message_factory.from_activity(activity, uow=uow),
+        )
+        uow.activities.create(activity)
+
+    return UpdateResponse(success=True)
+
+
+@router.post("/products/{product_id}/cancel")
+@inject
+def cancel_product(
+    product_id: int,
+    user: User = Depends(get_active_user),
+    uow: UnitOfWork = Depends(Provide[Container.uow]),
+    activity_message_factory=Depends(Provide[Container.activity_message_factory]),
+) -> UpdateResponse:
+    with uow:
+        product = uow.products.by_id(product_id)
+
+        if not product or product.supplier_id != user.supplier_id:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="The product was not found",
+            )
+
+        product = product.cancel(user)
+        uow.products.update(product)
+
+        activity = Activity(
+            id=0,
+            type=ActivityType.PRODUCT_CANCELLED,
             user_id=user.id,
             supplier_id=product.supplier_id,
             retailer_id=product.retailer_id,

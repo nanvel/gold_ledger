@@ -80,20 +80,18 @@
           </div>
           <div class="form-control w-full">
             <div class="label">
-              <span class="label-text">Rate per gram</span>
-              <span class="label-text">₹</span>
+              <span class="label-text">Rate</span>
+              <span class="label-text">₹/g</span>
             </div>
             <input
               type="number"
               class="input input-bordered w-full input-md text-lg"
-              v-model="ratePerGram"
+              v-model="rate"
               min="0"
               step="0.1"
             />
-            <div class="label" v-if="ratePerGramError">
-              <span class="label-text-alt text-error">{{
-                ratePerGramError
-              }}</span>
+            <div class="label" v-if="rateError">
+              <span class="label-text-alt text-error">{{ rateError }}</span>
             </div>
           </div>
           <div class="form-control w-full pb-4">
@@ -261,8 +259,8 @@ const weight = ref(0);
 const weightError = ref(null);
 const quality = ref(0);
 const qualityError = ref(null);
-const ratePerGram = ref(0);
-const ratePerGramError = ref(null);
+const rate = ref(0);
+const rateError = ref(null);
 const paymentType = ref(1);
 const paymentTypeError = ref(null);
 const paymentAmount = ref(0);
@@ -298,10 +296,10 @@ const clearFields = () => {
   date.value = new Date();
   weight.value = 0;
   quality.value = 0;
-  ratePerGram.value = 0;
-  paymentAmount.value = null;
-  paymentWeight.value = null;
-  paymentQuality.value = null;
+  rate.value = 0;
+  paymentAmount.value = 0;
+  paymentWeight.value = 0;
+  paymentQuality.value = 0;
   paymentType.value = 1;
   paymentDueDate.value = new Date();
   imageId.value = null;
@@ -337,7 +335,7 @@ watch(
     date,
     weight,
     quality,
-    ratePerGram,
+    rate,
     paymentAmount,
     paymentQuality,
     paymentWeight,
@@ -349,7 +347,7 @@ watch(
     dateError.value = null;
     weightError.value = null;
     qualityError.value = null;
-    ratePerGramError.value = null;
+    rateError.value = null;
     paymentAmountError.value = null;
     paymentWeightError.value = null;
     paymentQualityError.value = null;
@@ -365,7 +363,7 @@ const addProduct = async () => {
     date: dateToStr(date.value),
     weight: weight.value,
     quality: quality.value,
-    rate_per_gram: ratePerGram.value,
+    rate: rate.value,
     payment_type: paymentType.value,
     payment_due_date: dateToStr(paymentDueDate.value),
     retailer_id: retailer.value.id,
@@ -388,7 +386,7 @@ const addProduct = async () => {
     dateError.value = parseError(e, "date");
     weightError.value = parseError(e, "weight");
     qualityError.value = parseError(e, "quality");
-    ratePerGramError.value = parseError(e, "rate_per_gram");
+    rateError.value = parseError(e, "rate");
     paymentTypeError.value = parseError(e, "payment_type");
     paymentAmountError.value = parseError(e, "payment_amount");
     paymentQualityError.value = parseError(e, "payment_quality");

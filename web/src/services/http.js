@@ -78,9 +78,15 @@ async function handleResponse(response, args) {
       const toast = useToast();
       // get error message from body or default to response status
       if (response.status === 500) {
-        toast.error("Internal server error.");
+        toast.error("Internal server error");
       } else {
-        toast.error(data?.message || response.status.toString());
+        toast.error(
+          (data?.detail &&
+            (typeof data.detail === "string" ||
+              data.detail instanceof String) &&
+            data.detail) ||
+            response.status.toString(),
+        );
       }
     }
 

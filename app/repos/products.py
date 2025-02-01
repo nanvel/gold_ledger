@@ -18,13 +18,26 @@ class ProductImage:
 
 
 @dataclass(frozen=True)
+class ProductStore:
+    id: int
+    name: str
+
+
+@dataclass(frozen=True)
+class ProductUser:
+    id: int
+    name: str
+    email: str
+
+
+@dataclass(frozen=True)
 class ProductSearchItem:
     id: int
     name: str
     date: str
     weight: Decimal
     quality: Decimal
-    rate_per_gram: Decimal
+    rate: Decimal
     payment_type: str
     payment_amount: Optional[Decimal]
     payment_weight: Optional[Decimal]
@@ -34,6 +47,7 @@ class ProductSearchItem:
     images: Tuple[ProductImage, ...]
     confirmed_by: Optional[int]
     rejected_by: Optional[int]
+    cancelled_by: Optional[int]
 
 
 @dataclass(frozen=True)
@@ -43,19 +57,20 @@ class ProductDetailsItem:
     date: str
     weight: Decimal
     quality: Decimal
-    rate_per_gram: Decimal
+    rate: Decimal
     payment_type: str
     payment_amount: Optional[Decimal]
     payment_weight: Optional[Decimal]
     payment_quality: Optional[Decimal]
     payment_due_date: str
     created_at: int
-    supplier_id: int
-    retailer_id: int
-    creator_id: int
+    supplier: ProductStore
+    retailer: ProductStore
+    creator: ProductUser
     images: Tuple[ProductImage, ...]
-    confirmed_by: Optional[int]
-    rejected_by: Optional[int]
+    confirmed_by: Optional[ProductUser]
+    rejected_by: Optional[ProductUser]
+    cancelled_by: Optional[ProductUser]
 
 
 @dataclass(frozen=True)
@@ -75,7 +90,7 @@ class ProductsRepo:
             date=product.date,
             weight=product.weight,
             quality=product.quality,
-            rate_per_gram=product.rate_per_gram,
+            rate=product.rate,
             payment_type=product.payment_type.value,
             payment_amount=product.payment_amount,
             payment_weight=product.payment_weight,
@@ -98,6 +113,7 @@ class ProductsRepo:
         if record:
             record.confirmed_by = product.confirmed_by
             record.rejected_by = product.rejected_by
+            record.cancelled_by = product.cancelled_by
 
             self._session.commit()
 
@@ -111,7 +127,7 @@ class ProductsRepo:
                 date=record.date,
                 weight=record.weight,
                 quality=record.quality,
-                rate_per_gram=record.rate_per_gram,
+                rate=record.rate,
                 payment_type=PaymentType(record.payment_type),
                 payment_amount=record.payment_amount,
                 payment_weight=record.payment_weight,
@@ -122,6 +138,7 @@ class ProductsRepo:
                 creator_id=record.creator_id,
                 confirmed_by=record.confirmed_by,
                 rejected_by=record.rejected_by,
+                cancelled_by=record.cancelled_by,
             )
 
     def details(self, product_id: int) -> Optional[ProductDetailsItem]:
@@ -134,16 +151,20 @@ class ProductsRepo:
                 date=record.date.isoformat(),
                 weight=record.weight,
                 quality=record.quality,
-                rate_per_gram=record.rate_per_gram,
+                rate=record.rate,
                 payment_type=PaymentType(record.payment_type).label,
                 payment_amount=record.payment_amount,
                 payment_weight=record.payment_weight,
                 payment_quality=record.payment_quality,
                 payment_due_date=record.payment_due_date.isoformat(),
                 created_at=int(Timestamp.from_datetime(record.created_at)),
-                supplier_id=record.supplier_id,
-                retailer_id=record.retailer_id,
-                creator_id=record.creator_id,
+                supplier=ProductStore(id=record.supplier.id, name=record.supplier.name),
+                retailer=ProductStore(id=record.retailer.id, name=record.retailer.name),
+                creator=ProductUser(
+                    id=record.creator.id,
+                    name=record.creator.name,
+                    email=record.creator.username,
+                ),
                 images=tuple(
                     ProductImage(
                         id=image.id,
@@ -153,8 +174,33 @@ class ProductsRepo:
                     )
                     for image in record.images
                 ),
-                confirmed_by=record.confirmed_by,
-                rejected_by=record.rejected_by,
+                confirmed_by=(
+                    ProductUser(
+                        id=record.confirmed_by_user.id,
+                        name=record.confirmed_by_user.name,
+                        email=record.confirmed_by_user.username,
+                    )
+                    if record.confirmed_by
+                    else None
+                ),
+                rejected_by=(
+                    ProductUser(
+                        id=record.rejected_by_user.id,
+                        name=record.rejected_by_user.name,
+                        email=record.rejected_by_user.username,
+                    )
+                    if record.rejected_by
+                    else None
+                ),
+                cancelled_by=(
+                    ProductUser(
+                        id=record.cancelled_by_user.id,
+                        name=record.cancelled_by_user.name,
+                        email=record.cancelled_by_user.username,
+                    )
+                    if record.cancelled_by
+                    else None
+                ),
             )
 
     def filter(
@@ -195,7 +241,7 @@ class ProductsRepo:
                     date=record.date.isoformat(),
                     weight=record.weight,
                     quality=record.quality,
-                    rate_per_gram=record.rate_per_gram,
+                    rate=record.rate,
                     payment_type=PaymentType(record.payment_type).label,
                     payment_amount=record.payment_amount,
                     payment_weight=record.payment_weight,
@@ -213,6 +259,7 @@ class ProductsRepo:
                     ),
                     confirmed_by=record.confirmed_by,
                     rejected_by=record.rejected_by,
+                    cancelled_by=record.cancelled_by,
                 )
                 for record in records
             ),
