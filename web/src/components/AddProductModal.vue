@@ -96,99 +96,7 @@
               }}</span>
             </div>
           </div>
-          <div class="form-control w-full">
-            <div class="label">
-              <span class="label-text">Payment type</span>
-            </div>
-            <div role="tablist" class="tabs tabs-boxed border-neutral border">
-              <a
-                role="tab"
-                :class="{ tab: true, 'tab-active': paymentType === 1 }"
-                v-on:click="paymentType = 1"
-                >Cash</a
-              >
-              <a
-                role="tab"
-                :class="{ tab: true, 'tab-active': paymentType === 2 }"
-                v-on:click="paymentType = 2"
-                >RTGS</a
-              >
-              <a
-                role="tab"
-                :class="{ tab: true, 'tab-active': paymentType === 3 }"
-                v-on:click="paymentType = 3"
-                >Fine</a
-              >
-            </div>
-            <div class="label" v-if="paymentTypeError">
-              <span class="label-text-alt text-error">{{
-                paymentTypeError
-              }}</span>
-            </div>
-          </div>
-          <div class="form-control w-full">
-            <div class="label">
-              <span class="label-text">Payment type</span>
-              <span class="label-text text-error" v-if="paymentTypeError">{{
-                paymentTypeError
-              }}</span>
-            </div>
-            <div role="tablist" class="tabs tabs-boxed border-neutral border">
-              <a
-                role="tab"
-                :class="{ tab: true, 'tab-active': paymentType === 1 }"
-                v-on:click="paymentType = 1"
-                >Cash</a
-              >
-              <a
-                role="tab"
-                :class="{ tab: true, 'tab-active': paymentType === 2 }"
-                v-on:click="paymentType = 2"
-                >RTGS</a
-              >
-              <a
-                role="tab"
-                :class="{ tab: true, 'tab-active': paymentType === 3 }"
-                v-on:click="paymentType = 3"
-                >Fine</a
-              >
-            </div>
-          </div>
-          <div class="form-control w-full">
-            <div class="label">
-              <span class="label-text">Total amount</span>
-              <span class="label-text">₹</span>
-            </div>
-            <input
-              type="number"
-              class="input input-bordered w-full input-md text-lg"
-              v-model="totalAmount"
-              min="0"
-              step="0.1"
-            />
-            <div class="label" v-if="totalAmountError">
-              <span class="label-text-alt text-error">{{
-                totalAmountError
-              }}</span>
-            </div>
-          </div>
-          <div class="form-control w-full">
-            <div class="label">
-              <span class="label-text">Payment due date</span>
-            </div>
-            <input
-              type="date"
-              class="input input-bordered w-full input-md text-lg"
-              :value="dateToStr(paymentDueDate)"
-              @input="paymentDueDate = $event.target.valueAsDate"
-            />
-            <div class="label" v-if="paymentDueDateError">
-              <span class="label-text-alt text-error">{{
-                paymentDueDateError
-              }}</span>
-            </div>
-          </div>
-          <div class="form-control w-full">
+          <div class="form-control w-full pb-4">
             <div class="label">
               <span class="label-text">Image</span>
             </div>
@@ -209,6 +117,109 @@
             <div v-if="imageLoading">Uploading ...</div>
             <div class="label" v-if="imageIdError && !imageLoading">
               <span class="label-text-alt text-error">{{ imageIdError }}</span>
+            </div>
+          </div>
+          <div class="p-4 rounded-md bg-base-300">
+            <div class="form-control w-full">
+              <div class="label">
+                <span class="label-text">Payment type</span>
+              </div>
+              <div role="tablist" class="tabs tabs-boxed border-neutral border">
+                <a
+                  role="tab"
+                  :class="{ tab: true, 'tab-active': paymentType === 1 }"
+                  v-on:click="paymentType = 1"
+                  >Cash</a
+                >
+                <a
+                  role="tab"
+                  :class="{ tab: true, 'tab-active': paymentType === 2 }"
+                  v-on:click="paymentType = 2"
+                  >RTGS</a
+                >
+                <a
+                  role="tab"
+                  :class="{ tab: true, 'tab-active': paymentType === 3 }"
+                  v-on:click="paymentType = 3"
+                  >Fine</a
+                >
+              </div>
+              <div class="label" v-if="paymentTypeError">
+                <span class="label-text-alt text-error">{{
+                  paymentTypeError
+                }}</span>
+              </div>
+            </div>
+            <div class="form-control w-full" v-if="paymentType !== 3">
+              <div class="label">
+                <span class="label-text">Amount</span>
+                <span class="label-text">₹</span>
+              </div>
+              <input
+                type="number"
+                class="input input-bordered w-full input-md text-lg"
+                v-model="paymentAmount"
+                min="0"
+                step="0.1"
+              />
+              <div class="label" v-if="paymentAmountError">
+                <span class="label-text-alt text-error">{{
+                  paymentAmountError
+                }}</span>
+              </div>
+            </div>
+            <div class="form-control w-full" v-if="paymentType === 3">
+              <div class="label">
+                <span class="label-text">Weight</span>
+                <span class="label-text">g</span>
+              </div>
+              <input
+                type="number"
+                class="input input-bordered w-full input-md text-lg"
+                v-model="paymentWeight"
+                min="0"
+                step="0.1"
+              />
+              <div class="label" v-if="paymentWeightError">
+                <span class="label-text-alt text-error">{{
+                  paymentWeightError
+                }}</span>
+              </div>
+            </div>
+            <div class="form-control w-full" v-if="paymentType === 3">
+              <div class="label">
+                <span class="label-text">Quality</span>
+                <span class="label-text">%</span>
+              </div>
+              <input
+                type="number"
+                class="input input-bordered w-full input-md text-lg"
+                v-model="paymentQuality"
+                min="0"
+                max="100"
+                step="0.1"
+              />
+              <div class="label" v-if="paymentQualityError">
+                <span class="label-text-alt text-error">{{
+                  paymentQualityError
+                }}</span>
+              </div>
+            </div>
+            <div class="form-control w-full">
+              <div class="label">
+                <span class="label-text">Due date</span>
+              </div>
+              <input
+                type="date"
+                class="input input-bordered w-full input-md text-lg"
+                :value="dateToStr(paymentDueDate)"
+                @input="paymentDueDate = $event.target.valueAsDate"
+              />
+              <div class="label" v-if="paymentDueDateError">
+                <span class="label-text-alt text-error">{{
+                  paymentDueDateError
+                }}</span>
+              </div>
             </div>
           </div>
         </form>
@@ -252,10 +263,14 @@ const quality = ref(0);
 const qualityError = ref(null);
 const ratePerGram = ref(0);
 const ratePerGramError = ref(null);
-const totalAmount = ref(0);
-const totalAmountError = ref(null);
 const paymentType = ref(1);
 const paymentTypeError = ref(null);
+const paymentAmount = ref(0);
+const paymentAmountError = ref(null);
+const paymentWeight = ref(0);
+const paymentWeightError = ref(null);
+const paymentQuality = ref(0);
+const paymentQualityError = ref(null);
 const paymentDueDate = ref(new Date());
 const paymentDueDateError = ref(null);
 const loading = ref(false);
@@ -284,7 +299,9 @@ const clearFields = () => {
   weight.value = 0;
   quality.value = 0;
   ratePerGram.value = 0;
-  totalAmount.value = 0;
+  paymentAmount.value = null;
+  paymentWeight.value = null;
+  paymentQuality.value = null;
   paymentType.value = 1;
   paymentDueDate.value = new Date();
   imageId.value = null;
@@ -321,7 +338,9 @@ watch(
     weight,
     quality,
     ratePerGram,
-    totalAmount,
+    paymentAmount,
+    paymentQuality,
+    paymentWeight,
     paymentType,
     paymentDueDate,
   ],
@@ -331,7 +350,9 @@ watch(
     weightError.value = null;
     qualityError.value = null;
     ratePerGramError.value = null;
-    totalAmountError.value = null;
+    paymentAmountError.value = null;
+    paymentWeightError.value = null;
+    paymentQualityError.value = null;
     paymentDueDateError.value = null;
     paymentTypeError.value = null;
   },
@@ -339,24 +360,25 @@ watch(
 
 const addProduct = async () => {
   loading.value = true;
+  const data = {
+    name: name.value,
+    date: dateToStr(date.value),
+    weight: weight.value,
+    quality: quality.value,
+    rate_per_gram: ratePerGram.value,
+    payment_type: paymentType.value,
+    payment_due_date: dateToStr(paymentDueDate.value),
+    retailer_id: retailer.value.id,
+    image_id: imageId.value,
+  };
+  if (paymentType.value === 3) {
+    data["payment_weight"] = paymentWeight.value;
+    data["payment_quality"] = paymentQuality.value;
+  } else {
+    data["payment_amount"] = paymentAmount.value;
+  }
   try {
-    await httpClient.post(
-      `/api/products`,
-      {
-        name: name.value,
-        date: dateToStr(date.value),
-        weight: weight.value,
-        quality: quality.value,
-        rate_per_gram: ratePerGram.value,
-        total_amount: totalAmount.value,
-        payment_type: paymentType.value,
-        payment_due_date: dateToStr(paymentDueDate.value),
-        retailer_id: retailer.value.id,
-        image_id: imageId.value,
-      },
-      null,
-      { showToast: false },
-    );
+    await httpClient.post(`/api/products`, data, null, { showToast: false });
     add_product.close();
     clearFields();
     emit("productAdded");
@@ -367,8 +389,10 @@ const addProduct = async () => {
     weightError.value = parseError(e, "weight");
     qualityError.value = parseError(e, "quality");
     ratePerGramError.value = parseError(e, "rate_per_gram");
-    totalAmountError.value = parseError(e, "total_amount");
     paymentTypeError.value = parseError(e, "payment_type");
+    paymentAmountError.value = parseError(e, "payment_amount");
+    paymentQualityError.value = parseError(e, "payment_quality");
+    paymentWeightError.value = parseError(e, "payment_weight");
     paymentDueDateError.value = parseError(e, "payment_due_date");
     imageIdError.value = parseError(e, "image_id");
   } finally {

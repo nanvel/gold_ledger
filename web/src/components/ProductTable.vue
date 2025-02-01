@@ -5,7 +5,7 @@
         <tr>
           <th>Name</th>
           <th>Date</th>
-          <th>Total</th>
+          <th>Amount</th>
           <th>Created</th>
           <th>Status</th>
         </tr>
@@ -21,7 +21,7 @@
             {{ product.date }}
           </td>
           <td>
-            {{ product.total_amount }}
+            {{ product.amount }}
           </td>
           <td>
             <timestamp :value="product.created_at" :show-duration="true" />

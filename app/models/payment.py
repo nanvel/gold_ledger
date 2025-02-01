@@ -13,7 +13,7 @@ class Payment:
     date: date
     weight: Optional[Decimal]
     quality: Optional[Decimal]
-    total_amount: Decimal
+    amount: Decimal
     supplier_id: int
     retailer_id: int
     creator_id: int

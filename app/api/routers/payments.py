@@ -20,8 +20,8 @@ class PaymentForm(BaseModel):
     type: PaymentType
     date: date
     weight: Optional[Decimal] = Field(None, gt=0)
-    quality: Optional[Decimal] = Field(None, ge=0, le=100)
-    total_amount: Decimal = Field(..., gt=0)
+    quality: Optional[Decimal] = Field(None, gt=0, le=100)
+    amount: Optional[Decimal] = Field(None, gt=0)
     supplier_id: int
 
 
@@ -43,6 +43,43 @@ def create_payment(
             detail="The user is not a retailer.",
         )
 
+    if item.type == PaymentType.CASH:
+        if item.amount is None:
+            raise HTTPException(
+                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                detail=[
+                    {
+                        "type": "amount_required",
+                        "loc": ["body", "amount"],
+                        "msg": "Amount is required for cash payment.",
+                    }
+                ],
+            )
+    else:
+        if item.weight is None:
+            raise HTTPException(
+                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                detail=[
+                    {
+                        "type": "weight_required",
+                        "loc": ["body", "weight"],
+                        "msg": "Weight is required for fine payment.",
+                    }
+                ],
+            )
+
+        if item.quality is None:
+            raise HTTPException(
+                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                detail=[
+                    {
+                        "type": "quality_required",
+                        "loc": ["body", "quality"],
+                        "msg": "Quality is required for fine payment.",
+                    }
+                ],
+            )
+
     with uow:
         supplier = uow.suppliers.by_id(item.supplier_id)
 
@@ -58,7 +95,7 @@ def create_payment(
             date=item.date,
             weight=item.weight,
             quality=item.quality,
-            total_amount=item.total_amount,
+            amount=item.amount,
             retailer_id=user.retailer_id,
             supplier_id=supplier.id,
             creator_id=user.id,

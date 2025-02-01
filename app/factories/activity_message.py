@@ -38,7 +38,7 @@ class ActivityMessageFactory:
             else:
                 return (
                     f"{user.display_name} ({retailer.id}:{retailer.name}) "
-                    f"has added a payment of ₹{payment.total_amount} ({payment.type.label})"
+                    f"has added a payment of ₹{payment.amount} ({payment.type.label})"
                 )
         elif activity.type == ActivityType.PAYMENT_CONFIRMED:
             user = uow.users.by_id(activity.user_id)
@@ -52,7 +52,7 @@ class ActivityMessageFactory:
             else:
                 return (
                     f"{user.display_name} ({supplier.id}:{supplier.name}) "
-                    f"has confirmed a payment of ₹{payment.total_amount} ({payment.type.label})"
+                    f"has confirmed a payment of ₹{payment.amount} ({payment.type.label})"
                 )
         elif activity.type == ActivityType.PAYMENT_REJECTED:
             user = uow.users.by_id(activity.user_id)
@@ -65,7 +65,7 @@ class ActivityMessageFactory:
                 )
             return (
                 f"{user.display_name} ({supplier.id}:{supplier.name}) "
-                f"has rejected a payment of ₹{payment.total_amount} ({payment.type.label})"
+                f"has rejected a payment of ₹{payment.amount} ({payment.type.label})"
             )
         else:
             raise ValueError(f"Unknown activity type: {activity.type}")
