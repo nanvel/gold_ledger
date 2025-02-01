@@ -9,6 +9,7 @@ from app.db import PaymentTable
 from app.models import (
     Payment,
     PaymentOrderBy,
+    PaymentStatus,
     PaymentType,
     Timestamp,
 )
@@ -26,6 +27,7 @@ class PaymentSearchItem:
     confirmed_by: Optional[int]
     rejected_by: Optional[int]
     cancelled_by: Optional[int]
+    status: str
 
 
 @dataclass(frozen=True)
@@ -43,6 +45,7 @@ class PaymentDetailsItem:
     rejected_by: Optional[int]
     cancelled_by: Optional[int]
     created_at: int
+    status: str
 
 
 @dataclass(frozen=True)
@@ -67,6 +70,7 @@ class PaymentsRepo:
             supplier_id=payment.supplier_id,
             retailer_id=payment.retailer_id,
             creator_id=payment.creator_id,
+            status=payment.status.value,
         )
 
         self._session.add(record)
@@ -82,6 +86,7 @@ class PaymentsRepo:
             record.confirmed_by = payment.confirmed_by
             record.rejected_by = payment.rejected_by
             record.cancelled_by = payment.cancelled_by
+            record.status = payment.status.value
 
             self._session.commit()
 
@@ -122,6 +127,7 @@ class PaymentsRepo:
                 rejected_by=record.rejected_by,
                 cancelled_by=record.cancelled_by,
                 created_at=int(Timestamp.from_datetime(record.created_at)),
+                status=PaymentStatus(record.status).label,
             )
 
     def filter(
@@ -167,6 +173,7 @@ class PaymentsRepo:
                     confirmed_by=record.confirmed_by,
                     rejected_by=record.rejected_by,
                     cancelled_by=record.cancelled_by,
+                    status=PaymentStatus(record.status).slug,
                 )
                 for record in records
             ),

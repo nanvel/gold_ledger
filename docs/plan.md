@@ -38,9 +38,10 @@ Improvements:
   - [x] activity
   - [x] actions
   - [x] confirmation modal for product
-  - [ ] add status for product and payment
+  - [x] add status for product and payment
+  - [x] product status refactor
+  - [ ] params table
   - [ ] confirmation modals for payment
-  - [ ] product status refactor
   - [ ] person component
   - [ ] two columns on large screen?
 - [ ] complete payment page
