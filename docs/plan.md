@@ -37,7 +37,9 @@ Improvements:
   - [x] photo
   - [x] activity
   - [x] actions
-  - [ ] confirmation modal
+  - [x] confirmation modal for product
+  - [ ] add status for product and payment
+  - [ ] confirmation modals for payment
   - [ ] product status refactor
   - [ ] person component
   - [ ] two columns on large screen?
