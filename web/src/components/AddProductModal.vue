@@ -128,6 +128,34 @@
           </div>
           <div class="form-control w-full">
             <div class="label">
+              <span class="label-text">Payment type</span>
+              <span class="label-text text-error" v-if="paymentTypeError">{{
+                paymentTypeError
+              }}</span>
+            </div>
+            <div role="tablist" class="tabs tabs-boxed border-neutral border">
+              <a
+                role="tab"
+                :class="{ tab: true, 'tab-active': paymentType === 1 }"
+                v-on:click="paymentType = 1"
+                >Cash</a
+              >
+              <a
+                role="tab"
+                :class="{ tab: true, 'tab-active': paymentType === 2 }"
+                v-on:click="paymentType = 2"
+                >RTGS</a
+              >
+              <a
+                role="tab"
+                :class="{ tab: true, 'tab-active': paymentType === 3 }"
+                v-on:click="paymentType = 3"
+                >Fine</a
+              >
+            </div>
+          </div>
+          <div class="form-control w-full">
+            <div class="label">
               <span class="label-text">Total amount</span>
               <span class="label-text">₹</span>
             </div>

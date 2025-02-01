@@ -75,8 +75,6 @@ Other:
 - [ ] incremental log on dynamodb
 - [ ] tablist component
 - [ ] email updates
-
-Deploy:
 - [ ] Mumbai region
 
 Other:
