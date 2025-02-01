@@ -1,6 +1,11 @@
 <template>
-  <div class="flex flex-col space-y-2">
-    <div class="overflow-x-auto">
+  <div class="flex flex-col space-y-4">
+    <placeholder
+      v-if="!activities?.length && !loading"
+      text="There were no activities recorded"
+    />
+    <placeholder v-if="loading" loading text="Loading" />
+    <div class="overflow-x-auto" v-if="activities?.length && !loading">
       <table class="table table-zebra">
         <thead>
           <tr>
@@ -152,6 +157,7 @@ import Timestamp from "@/components/Timestamp.vue";
 import { useMeStore } from "@/stores/index.js";
 import { storeToRefs } from "pinia";
 import { RouterLink } from "vue-router";
+import Placeholder from "@/components/Placeholder.vue";
 
 const props = defineProps({
   retailerId: {

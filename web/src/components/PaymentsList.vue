@@ -1,6 +1,6 @@
 <template>
-  <div class="flex flex-col space-y-2">
-    <div class="flex flex-col space-y-1 py-2 mt-4">
+  <div class="flex flex-col space-y-4">
+    <div class="flex flex-col space-y-1 py-2">
       <div>Products received: {{ totalProducts }}</div>
       <div>Payments confirmed: {{ totalPayments }}</div>
       <div>
@@ -13,37 +13,40 @@
         <supplier-picker-modal v-else v-on:selected="setSupplier" />
       </div>
     </div>
-    <div class="flex flex-col space-y-2">
-      <div class="overflow-x-auto">
-        <table class="table table-zebra">
-          <thead>
-            <tr>
-              <th>Type</th>
-              <th>Date</th>
-              <th>Total</th>
-              <th>Created</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="payment in payments" :key="payment.id">
-              <td>
-                {{ payment.type }}
-              </td>
-              <td>
-                {{ payment.date }}
-              </td>
-              <td>
-                {{ payment.total_amount }}
-              </td>
-              <td>
-                <timestamp :value="payment.created_at" :show-duration="true" />
-              </td>
-              <td>{{ parseStatus(payment) }}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+    <placeholder
+      v-if="!payments?.length && !loading"
+      text="No payments found"
+    />
+    <placeholder v-if="loading" loading text="Loading" />
+    <div class="overflow-x-auto" v-if="payments?.length && !loading">
+      <table class="table table-zebra">
+        <thead>
+          <tr>
+            <th>Type</th>
+            <th>Date</th>
+            <th>Total</th>
+            <th>Created</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="payment in payments" :key="payment.id">
+            <td>
+              {{ payment.type }}
+            </td>
+            <td>
+              {{ payment.date }}
+            </td>
+            <td>
+              {{ payment.total_amount }}
+            </td>
+            <td>
+              <timestamp :value="payment.created_at" :show-duration="true" />
+            </td>
+            <td>{{ parseStatus(payment) }}</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
     <div class="join mt-8" v-if="!loading && total > 0">
       <button
@@ -73,6 +76,7 @@ import { httpClient } from "@/services/http.js";
 import Timestamp from "@/components/Timestamp.vue";
 import RetailerPickerModal from "@/components/RetailerPickerModal.vue";
 import SupplierPickerModal from "@/components/SupplierPickerModal.vue";
+import Placeholder from "@/components/Placeholder.vue";
 
 const props = defineProps({
   retailerId: Number,

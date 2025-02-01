@@ -25,7 +25,10 @@
           :error="newPasswordRepeatError"
         />
       </form>
-      <div v-if="error" class="mt-4 whitespace-pre-line text-sm text-error">
+      <div
+        v-if="error"
+        class="mt-4 whitespace-pre-line text-sm text-error text-sm"
+      >
         {{ error }}
       </div>
       <div class="modal-action justify-between">

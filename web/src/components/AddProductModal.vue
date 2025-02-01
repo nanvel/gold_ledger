@@ -20,9 +20,6 @@
           <div class="form-control w-full">
             <div class="label">
               <span class="label-text">Name</span>
-              <span class="label-text text-error" v-if="nameError">{{
-                nameError
-              }}</span>
             </div>
             <input
               type="text"
@@ -30,13 +27,13 @@
               v-model="name"
               autofocus
             />
+            <div class="label" v-if="nameError">
+              <span class="label-text-alt text-error">{{ nameError }}</span>
+            </div>
           </div>
           <div class="form-control w-full">
             <div class="label">
               <span class="label-text">Date</span>
-              <span class="label-text text-error" v-if="dateError">{{
-                dateError
-              }}</span>
             </div>
             <input
               type="date"
@@ -44,13 +41,14 @@
               :value="dateToStr(date)"
               @input="date = $event.target.valueAsDate"
             />
+            <div class="label" v-if="dateError">
+              <span class="label-text-alt text-error">{{ dateError }}</span>
+            </div>
           </div>
           <div class="form-control w-full">
             <div class="label">
               <span class="label-text">Weight</span>
-              <span class="label-text text-error" v-if="weightError">{{
-                weightError
-              }}</span>
+              <span class="label-text">g</span>
             </div>
             <input
               type="number"
@@ -59,13 +57,14 @@
               min="0"
               step="0.1"
             />
+            <div class="label" v-if="weightError">
+              <span class="label-text-alt text-error">{{ weightError }}</span>
+            </div>
           </div>
           <div class="form-control w-full">
             <div class="label">
               <span class="label-text">Quality</span>
-              <span class="label-text text-error" v-if="qualityError">{{
-                qualityError
-              }}</span>
+              <span class="label-text">%</span>
             </div>
             <input
               type="number"
@@ -75,13 +74,14 @@
               max="100"
               step="0.1"
             />
+            <div class="label" v-if="qualityError">
+              <span class="label-text-alt text-error">{{ qualityError }}</span>
+            </div>
           </div>
           <div class="form-control w-full">
             <div class="label">
               <span class="label-text">Rate per gram</span>
-              <span class="label-text text-error" v-if="ratePerGramError">{{
-                ratePerGramError
-              }}</span>
+              <span class="label-text">₹</span>
             </div>
             <input
               type="number"
@@ -90,6 +90,41 @@
               min="0"
               step="0.1"
             />
+            <div class="label" v-if="ratePerGramError">
+              <span class="label-text-alt text-error">{{
+                ratePerGramError
+              }}</span>
+            </div>
+          </div>
+          <div class="form-control w-full">
+            <div class="label">
+              <span class="label-text">Payment type</span>
+            </div>
+            <div role="tablist" class="tabs tabs-boxed border-neutral border">
+              <a
+                role="tab"
+                :class="{ tab: true, 'tab-active': paymentType === 1 }"
+                v-on:click="paymentType = 1"
+                >Cash</a
+              >
+              <a
+                role="tab"
+                :class="{ tab: true, 'tab-active': paymentType === 2 }"
+                v-on:click="paymentType = 2"
+                >RTGS</a
+              >
+              <a
+                role="tab"
+                :class="{ tab: true, 'tab-active': paymentType === 3 }"
+                v-on:click="paymentType = 3"
+                >Fine</a
+              >
+            </div>
+            <div class="label" v-if="paymentTypeError">
+              <span class="label-text-alt text-error">{{
+                paymentTypeError
+              }}</span>
+            </div>
           </div>
           <div class="form-control w-full">
             <div class="label">
@@ -122,9 +157,7 @@
           <div class="form-control w-full">
             <div class="label">
               <span class="label-text">Total amount</span>
-              <span class="label-text text-error" v-if="totalAmountError">{{
-                totalAmountError
-              }}</span>
+              <span class="label-text">₹</span>
             </div>
             <input
               type="number"
@@ -133,13 +166,15 @@
               min="0"
               step="0.1"
             />
+            <div class="label" v-if="totalAmountError">
+              <span class="label-text-alt text-error">{{
+                totalAmountError
+              }}</span>
+            </div>
           </div>
           <div class="form-control w-full">
             <div class="label">
               <span class="label-text">Payment due date</span>
-              <span class="label-text text-error" v-if="paymentDueDateError">{{
-                paymentDueDateError
-              }}</span>
             </div>
             <input
               type="date"
@@ -147,6 +182,11 @@
               :value="dateToStr(paymentDueDate)"
               @input="paymentDueDate = $event.target.valueAsDate"
             />
+            <div class="label" v-if="paymentDueDateError">
+              <span class="label-text-alt text-error">{{
+                paymentDueDateError
+              }}</span>
+            </div>
           </div>
           <div class="form-control w-full">
             <div class="label">
@@ -157,20 +197,22 @@
               @change="onFileChanged($event)"
               accept="image/*"
               class="file-input file-input-bordered file-input-md w-full text-lg"
-              capture="environment"
             />
-            <div v-if="formImageThumb && !formImageLoading">
+            <div v-if="imageThumb && !imageLoading">
               <img
-                v-if="formImageThumb"
-                :src="formImageThumb"
+                v-if="imageThumb"
+                :src="imageThumb"
                 alt="Product image"
                 class="mt-2 rounded-lg max-h-60"
               />
             </div>
-            <div v-if="formImageLoading">Uploading ...</div>
+            <div v-if="imageLoading">Uploading ...</div>
+            <div class="label" v-if="imageIdError && !imageLoading">
+              <span class="label-text-alt text-error">{{ imageIdError }}</span>
+            </div>
           </div>
         </form>
-        <div v-if="error" class="mt-4 whitespace-pre-line text-error">
+        <div v-if="error" class="mt-4 whitespace-pre-line text-error text-sm">
           {{ error }}
         </div>
         <div class="modal-action justify-between">
@@ -217,9 +259,10 @@ const paymentTypeError = ref(null);
 const paymentDueDate = ref(new Date());
 const paymentDueDateError = ref(null);
 const loading = ref(false);
-const formImageId = ref(null);
-const formImageThumb = ref(null);
-const formImageLoading = ref(false);
+const imageId = ref(null);
+const imageIdError = ref(null);
+const imageThumb = ref(null);
+const imageLoading = ref(false);
 const error = ref("");
 
 const emit = defineEmits(["productAdded"]);
@@ -244,22 +287,22 @@ const clearFields = () => {
   totalAmount.value = 0;
   paymentType.value = 1;
   paymentDueDate.value = new Date();
-  formImageId.value = null;
-  formImageThumb.value = null;
-  formImageLoading.value = false;
+  imageId.value = null;
+  imageThumb.value = null;
+  imageLoading.value = false;
   error.value = null;
 };
 
 const onFileChanged = async (event) => {
-  formImageLoading.value = true;
+  imageLoading.value = true;
   try {
     const body = new FormData();
     body.append("file", event.target.files[0]);
     const result = await httpClient.post(`/api/images/upload`, null, body);
-    formImageId.value = result["id"];
-    formImageThumb.value = result["thumb_url"];
+    imageId.value = result["id"];
+    imageThumb.value = result["thumb_url"];
   } finally {
-    formImageLoading.value = false;
+    imageLoading.value = false;
   }
 };
 
@@ -309,7 +352,7 @@ const addProduct = async () => {
         payment_type: paymentType.value,
         payment_due_date: dateToStr(paymentDueDate.value),
         retailer_id: retailer.value.id,
-        image_id: formImageId.value,
+        image_id: imageId.value,
       },
       null,
       { showToast: false },
@@ -326,6 +369,8 @@ const addProduct = async () => {
     ratePerGramError.value = parseError(e, "rate_per_gram");
     totalAmountError.value = parseError(e, "total_amount");
     paymentTypeError.value = parseError(e, "payment_type");
+    paymentDueDateError.value = parseError(e, "payment_due_date");
+    imageIdError.value = parseError(e, "image_id");
   } finally {
     loading.value = false;
   }

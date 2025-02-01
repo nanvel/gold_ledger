@@ -20,9 +20,6 @@
           <div class="form-control w-full">
             <div class="label">
               <span class="label-text">Payment type</span>
-              <span class="label-text text-error" v-if="typeError">{{
-                typeError
-              }}</span>
             </div>
             <div role="tablist" class="tabs tabs-boxed border border-neutral">
               <a
@@ -44,14 +41,14 @@
                 >Fine</a
               >
             </div>
+            <div class="label" v-if="typeError">
+              <span class="label-text-alt text-error">{{ typeError }}</span>
+            </div>
           </div>
 
           <div class="form-control w-full">
             <div class="label">
               <span class="label-text">Date</span>
-              <span class="label-text text-error" v-if="dateError">{{
-                dateError
-              }}</span>
             </div>
             <input
               type="date"
@@ -60,13 +57,14 @@
               @input="date = $event.target.valueAsDate"
               autofocus
             />
+            <div class="label" v-if="dateError">
+              <span class="label-text-alt text-error">{{ dateError }}</span>
+            </div>
           </div>
           <div class="form-control w-full" v-if="type === 3">
             <div class="label">
               <span class="label-text">Weight</span>
-              <span class="label-text text-error" v-if="weightError">{{
-                weightError
-              }}</span>
+              <span class="label-text">g</span>
             </div>
             <input
               type="number"
@@ -75,13 +73,14 @@
               min="0"
               step="0.1"
             />
+            <div class="label" v-if="weightError">
+              <span class="label-text-alt text-error">{{ weightError }}</span>
+            </div>
           </div>
           <div class="form-control w-full" v-if="type === 3">
             <div class="label">
               <span class="label-text">Quality</span>
-              <span class="label-text text-error" v-if="qualityError">{{
-                qualityError
-              }}</span>
+              <span class="label-text">%</span>
             </div>
             <input
               type="number"
@@ -91,13 +90,14 @@
               max="100"
               step="0.1"
             />
+            <div class="label" v-if="qualityError">
+              <span class="label-text-alt text-error">{{ qualityError }}</span>
+            </div>
           </div>
           <div class="form-control w-full" v-if="type !== 3">
             <div class="label">
               <span class="label-text">Total amount</span>
-              <span class="label-text text-error" v-if="totalAmountError">{{
-                totalAmountError
-              }}</span>
+              <span class="label-text">₹</span>
             </div>
             <input
               type="number"
@@ -106,9 +106,14 @@
               min="0"
               step="0.1"
             />
+            <div class="label" v-if="totalAmountError">
+              <span class="label-text-alt text-error">{{
+                totalAmountError
+              }}</span>
+            </div>
           </div>
         </form>
-        <div v-if="error" class="mt-4 whitespace-pre-line text-error">
+        <div v-if="error" class="mt-4 whitespace-pre-line text-error text-sm">
           {{ error }}
         </div>
         <div class="modal-action justify-between">

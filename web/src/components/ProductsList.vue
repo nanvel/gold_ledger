@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col space-y-2">
+  <div class="flex flex-col space-y-4">
     <div class="flex flex-row space-x-2 mt-8 justify-between">
       <div class="join">
         <button
@@ -23,6 +23,12 @@
         <supplier-picker-modal v-else v-on:selected="setSupplier" />
       </div>
     </div>
+
+    <Placeholder
+      v-if="!products?.length && !loading"
+      text="No products found"
+    />
+    <Placeholder v-if="loading" loading text="Loading" />
 
     <ProductTable
       :products="products"
@@ -61,6 +67,7 @@ import ProductTable from "@/components/ProductTable.vue";
 import ProductCards from "@/components/ProductCards.vue";
 import SupplierPickerModal from "@/components/SupplierPickerModal.vue";
 import RetailerPickerModal from "@/components/RetailerPickerModal.vue";
+import Placeholder from "@/components/Placeholder.vue";
 
 const props = defineProps({
   retailerId: Number,
