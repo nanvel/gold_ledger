@@ -8,12 +8,9 @@
   <dialog id="change_name" class="modal">
     <div class="modal-box">
       <form v-on:submit.prevent="addStaff" class="space-y-2">
-        <label class="form-control w-full">
+        <div class="form-control w-full">
           <div class="label">
             <span class="label-text">Name</span>
-            <span class="label-text text-error" v-if="nameError">{{
-              nameError
-            }}</span>
           </div>
           <input
             type="text"
@@ -22,9 +19,12 @@
             v-model="name"
             autofocus
           />
-        </label>
+          <div class="label" v-if="nameError">
+            <span class="label-text-alt text-error">{{ nameError }}</span>
+          </div>
+        </div>
       </form>
-      <div v-if="error" class="mt-4 whitespace-pre-line text-error">
+      <div v-if="error" class="mt-4 whitespace-pre-line text-error text-sm">
         {{ error }}
       </div>
       <div class="modal-action justify-between">
@@ -44,7 +44,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref, watch } from "vue";
+import { ref, watch } from "vue";
 import { httpClient } from "@/services/http.js";
 import { useToast } from "vue-toastification";
 

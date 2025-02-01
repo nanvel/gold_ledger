@@ -8,6 +8,8 @@ Improvements:
     - [x] use the component
     - [x] add border
     - [x] only replace table, not filters
+  - [ ] units for each input
+  - [ ] show errors below
   - [ ] confirmation modal for accept/reject
   - [ ] border for payment section in product
   - [ ] refine cards ui

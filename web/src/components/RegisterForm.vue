@@ -33,10 +33,7 @@
       >
         <div class="form-control w-full">
           <div class="label">
-            <span class="label-text">Store name</span
-            ><span class="label-text text-error" v-if="nameError">{{
-              nameError
-            }}</span>
+            <span class="label-text">Store name</span>
           </div>
           <input
             type="text"
@@ -47,14 +44,14 @@
             class="input input-bordered w-full max-w-sm input-md text-lg"
             v-model="name"
           />
+          <div class="label" v-if="nameError">
+            <span class="label-text-alt text-error">{{ nameError }}</span>
+          </div>
         </div>
 
         <div class="form-control w-full">
           <div class="label">
-            <span class="label-text">Email address</span
-            ><span class="label-text text-error" v-if="emailError">{{
-              emailError
-            }}</span>
+            <span class="label-text">Email address</span>
           </div>
           <input
             type="email"
@@ -65,6 +62,9 @@
             class="input input-bordered w-full max-w-sm input-md-text-lg"
             v-model="email"
           />
+          <div class="label" v-if="emailError">
+            <span class="label-text-alt text-error">{{ emailError }}</span>
+          </div>
         </div>
 
         <password-input
@@ -74,7 +74,7 @@
         />
         <password-input v-model="passwordRepeat" label="Repeat password" />
 
-        <div v-if="error" class="mt-4 whitespace-pre-line text-error">
+        <div v-if="error" class="mt-4 whitespace-pre-line text-error text-sm">
           {{ error }}
         </div>
 

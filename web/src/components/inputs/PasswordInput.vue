@@ -2,7 +2,6 @@
   <div class="form-control w-full">
     <div class="label">
       <span class="label-text">{{ props.label }}</span>
-      <span class="label-text text-error" v-if="error">{{ error }}</span>
     </div>
     <input
       type="password"
@@ -13,6 +12,9 @@
       :value="modelValue"
       @input="emit('update:modelValue', $event.target.value)"
     />
+    <div class="label" v-if="error">
+      <span class="label-text-alt text-error">{{ error }}</span>
+    </div>
   </div>
 </template>
 

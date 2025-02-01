@@ -8,12 +8,9 @@
   <dialog id="add_staff" class="modal">
     <div class="modal-box">
       <form v-on:submit.prevent="addStaff" class="space-y-2">
-        <label class="form-control w-full">
+        <div class="form-control w-full">
           <div class="label">
             <span class="label-text">Email</span>
-            <span class="label-text text-error" v-if="emailError">{{
-              emailError
-            }}</span>
           </div>
           <input
             type="email"
@@ -22,39 +19,22 @@
             v-model="email"
             autofocus
           />
-        </label>
-        <label class="form-control w-full">
-          <div class="label">
-            <span class="label-text">Password</span>
-            <span class="label-text text-error" v-if="passwordError">{{
-              passwordError
-            }}</span>
+          <div class="label" v-if="emailError">
+            <span class="label-text-alt text-error">{{ emailError }}</span>
           </div>
-          <input
-            type="password"
-            required
-            class="input input-bordered w-full input-md text-lg"
-            v-model="password"
-            autofocus
-          />
-        </label>
-        <label class="form-control w-full">
-          <div class="label">
-            <span class="label-text">Repeat password</span>
-            <span class="label-text text-error" v-if="passwordRepeatError">{{
-              passwordRepeatError
-            }}</span>
-          </div>
-          <input
-            type="password"
-            required
-            class="input input-bordered w-full input-md text-lg"
-            v-model="passwordRepeat"
-            autofocus
-          />
-        </label>
+        </div>
+        <password-input
+          v-model="password"
+          label="Password"
+          :error="passwordError"
+        />
+        <password-input
+          v-model="passwordRepeat"
+          label="Repeat password"
+          :error="passwordRepeatError"
+        />
       </form>
-      <div v-if="error" class="mt-4 whitespace-pre-line text-error">
+      <div v-if="error" class="mt-4 whitespace-pre-line text-error text-sm">
         {{ error }}
       </div>
       <div class="modal-action justify-between">
@@ -77,6 +57,7 @@
 import { ref, watch } from "vue";
 import { httpClient } from "@/services/http.js";
 import { useToast } from "vue-toastification";
+import PasswordInput from "@/components/inputs/PasswordInput.vue";
 
 const email = ref("");
 const emailError = ref(null);

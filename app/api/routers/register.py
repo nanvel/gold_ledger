@@ -35,8 +35,16 @@ def register_store(
 
         if user is not None:
             raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail="The email was already registered.",
+                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                detail=[
+                    {
+                        "type": "email_exists",
+                        "loc": ["body", "email"],
+                        "msg": "The email already exists",
+                        "input": item.email,
+                        "ctx": {},
+                    }
+                ],
             )
 
         user_id = uow.users.create(

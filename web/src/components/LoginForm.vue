@@ -16,9 +16,6 @@
         <div class="form-control w-full">
           <div class="label">
             <span class="label-text">Email address</span>
-            <span class="label-text text-error" v-if="usernameError">{{
-              usernameError
-            }}</span>
           </div>
           <input
             type="email"
@@ -30,6 +27,9 @@
             v-model="username"
             autofocus
           />
+          <div class="label" v-if="usernameError">
+            <span class="label-text-alt text-error">{{ usernameError }}</span>
+          </div>
         </div>
 
         <password-input
@@ -39,7 +39,7 @@
           :error="passwordError"
         />
 
-        <div v-if="error" class="mt-4 whitespace-pre-line text-error">
+        <div v-if="error" class="mt-4 whitespace-pre-line text-error text-sm">
           {{ error }}
         </div>
 
