@@ -10,11 +10,15 @@ Improvements:
     - [x] only replace table, not filters
   - [x] units for each input
   - [x] show errors below
-- [ ] product section improvements
-  - [ ] payment_amount, payment_weight, payment_quality, payment_due_date, payment_type
-    - [ ] db
-    - [ ] ui
-  - [ ] border for payment section in product
+- [x] product section improvements
+  - [x] payment_amount, payment_weight, payment_quality, payment_due_date, payment_type
+    - [x] db
+    - [x] ui
+  - [x] border for payment section in product
+- [x] remove retailer and supplier pages
+  - [x] make entire activity a link to product or payment
+- [ ] complete product page
+- [ ] complete payment page
 - [ ] compute due payments / products
 - [ ] confirmation modal for accept/reject
 
@@ -28,7 +32,6 @@ Other:
 - [ ] color circles for status
 - [ ] show retailer and supplier in payments and products
 - [ ] improve recent on small screen
-- [ ] make entire activity a link to product or payment
 - [ ] cancel payment / product
 - [ ] due payments page
 - [ ] message bus
