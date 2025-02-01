@@ -6,7 +6,14 @@ from sqlalchemy.orm import Session
 from sqlalchemy.sql import func
 
 from app.db import ImageTable, ProductTable
-from app.models import Image, PaymentType, Product, ProductOrderBy, Timestamp
+from app.models import (
+    Image,
+    PaymentType,
+    Product,
+    ProductOrderBy,
+    ProductStatus,
+    Timestamp,
+)
 
 
 @dataclass(frozen=True)
@@ -48,6 +55,7 @@ class ProductSearchItem:
     confirmed_by: Optional[int]
     rejected_by: Optional[int]
     cancelled_by: Optional[int]
+    status: str
 
 
 @dataclass(frozen=True)
@@ -71,6 +79,7 @@ class ProductDetailsItem:
     confirmed_by: Optional[ProductUser]
     rejected_by: Optional[ProductUser]
     cancelled_by: Optional[ProductUser]
+    status: str
 
 
 @dataclass(frozen=True)
@@ -99,6 +108,7 @@ class ProductsRepo:
             supplier_id=product.supplier_id,
             retailer_id=product.retailer_id,
             creator_id=product.creator_id,
+            status=product.status.value,
         )
 
         self._session.add(record)
@@ -114,6 +124,7 @@ class ProductsRepo:
             record.confirmed_by = product.confirmed_by
             record.rejected_by = product.rejected_by
             record.cancelled_by = product.cancelled_by
+            record.status = product.status.value
 
             self._session.commit()
 
@@ -201,6 +212,7 @@ class ProductsRepo:
                     if record.cancelled_by
                     else None
                 ),
+                status=ProductStatus(record.status).slug,
             )
 
     def filter(
@@ -260,6 +272,7 @@ class ProductsRepo:
                     confirmed_by=record.confirmed_by,
                     rejected_by=record.rejected_by,
                     cancelled_by=record.cancelled_by,
+                    status=ProductStatus(record.status).slug,
                 )
                 for record in records
             ),

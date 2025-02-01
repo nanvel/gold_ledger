@@ -3,6 +3,7 @@ from datetime import date
 from decimal import Decimal
 from typing import Optional
 
+from .payment_status import PaymentStatus
 from .payment_type import PaymentType
 from .user import User
 
@@ -21,6 +22,16 @@ class Payment:
     confirmed_by: Optional[int]
     rejected_by: Optional[int]
     cancelled_by: Optional[int]
+
+    @property
+    def status(self) -> PaymentStatus:
+        if self.confirmed_by is not None:
+            return PaymentStatus.CONFIRMED
+        if self.rejected_by is not None:
+            return PaymentStatus.REJECTED
+        if self.cancelled_by is not None:
+            return PaymentStatus.CANCELED
+        return PaymentStatus.PENDING
 
     def confirm(self, user: User):
         assert self.confirmed_by is None
