@@ -28,10 +28,13 @@ class ProductTable(Base):
     weight: Mapped[Decimal] = mapped_column(type_=sa.DECIMAL)
     quality: Mapped[Decimal] = mapped_column(type_=sa.DECIMAL)
     rate_per_gram: Mapped[Decimal] = mapped_column(type_=sa.DECIMAL)
-    total_amount: Mapped[Decimal] = mapped_column(type_=sa.DECIMAL)
+
     payment_type: Mapped[int] = mapped_column(server_default="1")
+    payment_amount: Mapped[Decimal] = mapped_column(type_=sa.DECIMAL, nullable=True)
+    payment_quality: Mapped[Decimal] = mapped_column(type_=sa.DECIMAL, nullable=True)
+    payment_weight: Mapped[Decimal] = mapped_column(type_=sa.DECIMAL, nullable=True)
     payment_due_date: Mapped[date] = mapped_column(server_default="2025-12-31")
-    custom_fields: Mapped[dict] = mapped_column(type_=sa.JSON)
+
     supplier_id: Mapped[int] = mapped_column(sa.ForeignKey("suppliers.id"))
     retailer_id: Mapped[int] = mapped_column(sa.ForeignKey("retailers.id"), index=True)
     creator_id: Mapped[int] = mapped_column(sa.ForeignKey("users.id"))
