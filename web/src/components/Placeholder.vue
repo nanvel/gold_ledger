@@ -1,5 +1,7 @@
 <template>
-  <div class="h-full rounded text-center flex flex-col justify-center">
+  <div
+    class="rounded text-center flex flex-col justify-center py-4 border border-neutral"
+  >
     <div class="flex-row space-x-4">
       <svg
         aria-hidden="true"

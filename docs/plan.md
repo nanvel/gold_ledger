@@ -3,7 +3,11 @@
 Improvements:
 - [ ] UI improvements
   - [x] sticky header
-  - [ ] empty list placeholders
+  - [x] empty list placeholders
+    - [x] component
+    - [x] use the component
+    - [x] add border
+    - [x] only replace table, not filters
   - [ ] confirmation modal for accept/reject
   - [ ] border for payment section in product
   - [ ] refine cards ui
@@ -14,6 +18,11 @@ Improvements:
   - [ ] refine payment page
   - [ ] color circles for status
   - [ ] show retailer and supplier in payments and products
+  - [ ] improve recent on small screen
+  - [ ] make entire activity a link to product or payment
+- [ ] payment on product form
+  - [ ] payment_amount, payment_weight, payment_quality, payment_due_date, payment_type
+- [ ] cancel payment / product
 - [ ] due payments page
 - [ ] message bus
   - [ ] record IPs for activities

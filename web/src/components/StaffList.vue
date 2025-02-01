@@ -1,5 +1,6 @@
 <template>
   <div class="overflow-x-auto">
+    <placeholder v-if="loading" loading />
     <table class="table table-sm table-zebra" v-if="staff.length && !loading">
       <thead>
         <tr>
@@ -25,6 +26,7 @@
 import { onMounted, ref } from "vue";
 import Timestamp from "@/components/Timestamp.vue";
 import { httpClient } from "@/services/http.js";
+import Placeholder from "@/components/Placeholder.vue";
 
 const loading = ref(false);
 const staff = ref([]);
