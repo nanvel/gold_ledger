@@ -18,15 +18,16 @@ Improvements:
 - [x] remove retailer and supplier pages
   - [x] make entire activity a link to product or payment
 - [ ] cancel payment/activity
-  - [ ] db
-  - [ ] move bl to models
-  - [ ] api
-  - [ ] activities
+  - [x] db
+  - [x] move bl to models
+  - [x] api
+  - [x] activities
   - [ ] ui
 - [ ] complete product page
   - [ ] product details
   - [ ] time / timeline
   - [ ] payment
+  - [ ] status
   - [ ] store names
   - [ ] people
     - [ ] creator
@@ -36,6 +37,8 @@ Improvements:
   - [ ] actions
   - [ ] overdue payment?
 - [ ] complete payment page
+  - [ ] link from payments table
+  - [ ] show status
 - [ ] compute due payments / products
 - [ ] confirmation modal for accept/reject
 

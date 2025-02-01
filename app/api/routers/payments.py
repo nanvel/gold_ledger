@@ -172,7 +172,7 @@ def get_payment(
         ):
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
-                detail="The payment was not found.",
+                detail="The payment was not found",
             )
 
         return payment_details
@@ -196,7 +196,7 @@ def confirm_payment(
         if not payment or payment.supplier_id != user.supplier_id:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
-                detail="The payment was not found.",
+                detail="The payment was not found",
             )
 
         payment = payment.confirm(user)
@@ -235,7 +235,7 @@ def reject_payment(
         if not payment or payment.supplier_id != user.supplier_id:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
-                detail="The payment was not found.",
+                detail="The payment was not found",
             )
 
         payment = payment.reject(user)
@@ -274,7 +274,7 @@ def cancel_payment(
         if not payment or payment.retailer_id != user.retailer_id:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
-                detail="The payment was not found.",
+                detail="The payment was not found",
             )
 
         payment = payment.cancel(user)

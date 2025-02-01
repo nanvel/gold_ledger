@@ -97,7 +97,7 @@ def create_product(
         if retailer is None:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
-                detail="The retailer store was not found.",
+                detail="The retailer store was not found",
             )
 
         if item.image_id:
@@ -106,7 +106,7 @@ def create_product(
             if image is None or not image.supplier_id:
                 raise HTTPException(
                     status_code=status.HTTP_404_NOT_FOUND,
-                    detail="The image was not found.",
+                    detail="The image was not found",
                 )
 
             if image.supplier_id != user.supplier_id:
@@ -209,7 +209,7 @@ def get_product(
         ):
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
-                detail="The product was not found.",
+                detail="The product was not found",
             )
 
         return product_details
@@ -233,7 +233,7 @@ def confirm_product(
         if not product or product.retailer_id != user.retailer_id:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
-                detail="The product was not found.",
+                detail="The product was not found",
             )
 
         product = product.confirm(user)
@@ -272,7 +272,7 @@ def reject_product(
         if not product or product.retailer_id != user.retailer_id:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
-                detail="The product was not found.",
+                detail="The product was not found",
             )
 
         product = product.reject(user)
@@ -311,7 +311,7 @@ def cancel_product(
         if not product or product.supplier_id != user.supplier_id:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
-                detail="The product was not found.",
+                detail="The product was not found",
             )
 
         product = product.cancel(user)

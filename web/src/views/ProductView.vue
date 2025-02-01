@@ -49,16 +49,30 @@
       <div
         v-if="
           details &&
-          !(details.confirmed_by || details.rejected_by) &&
-          isRetailer
+          !(details.confirmed_by || details.rejected_by || details.cancelled_by)
         "
         class="flex flex-row space-x-2"
       >
-        <button class="btn btn-primary" v-on:click="confirmProduct">
+        <button
+          class="btn btn-primary"
+          v-on:click="confirmProduct"
+          v-if="isRetailer"
+        >
           Confirm
         </button>
-        <button class="btn btn-secondary" v-on:click="rejectProduct">
+        <button
+          class="btn btn-secondary"
+          v-on:click="rejectProduct"
+          v-if="isRetailer"
+        >
           Reject
+        </button>
+        <button
+          class="btn btn-secondary"
+          v-on:click="cancelProduct"
+          v-if="!isRetailer"
+        >
+          Cancel
         </button>
       </div>
     </article>
@@ -93,6 +107,15 @@ const confirmProduct = async () => {
 const rejectProduct = async () => {
   try {
     await httpClient.post(`/api/products/${productId.value}/reject`);
+    await loadProduct();
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const cancelProduct = async () => {
+  try {
+    await httpClient.post(`/api/products/${productId.value}/cancel`);
     await loadProduct();
   } catch (error) {
     console.error(error);

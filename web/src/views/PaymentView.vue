@@ -43,16 +43,30 @@
       <div
         v-if="
           details &&
-          !(details.confirmed_by || details.rejected_by) &&
-          isSupplier
+          !(details.confirmed_by || details.rejected_by || details.cancelled_by)
         "
         class="flex flex-row space-x-2"
       >
-        <button class="btn btn-primary" v-on:click="confirmPayment">
+        <button
+          class="btn btn-primary"
+          v-on:click="confirmPayment"
+          v-if="isSupplier"
+        >
           Confirm
         </button>
-        <button class="btn btn-secondary" v-on:click="rejectPayment">
+        <button
+          class="btn btn-secondary"
+          v-on:click="rejectPayment"
+          v-if="isSupplier"
+        >
           Reject
+        </button>
+        <button
+          class="btn btn-secondary"
+          v-on:click="cancelPayment"
+          v-if="!isSupplier"
+        >
+          Cancel
         </button>
       </div>
     </article>
@@ -87,6 +101,15 @@ const confirmPayment = async () => {
 const rejectPayment = async () => {
   try {
     await httpClient.post(`/api/payments/${paymentId.value}/reject`);
+    await loadPayment();
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const cancelPayment = async () => {
+  try {
+    await httpClient.post(`/api/payments/${paymentId.value}/cancel`);
     await loadPayment();
   } catch (error) {
     console.error(error);
