@@ -25,24 +25,28 @@ Improvements:
   - [x] ui
 - [ ] complete product page
   - [x] rate per gram -> rate
-  - [ ] include users into response
-  - [ ] product details
-  - [ ] time / timeline
-  - [ ] payment
-  - [ ] status
-  - [ ] store names
-  - [ ] people
-    - [ ] creator
-    - [ ] confirmed/rejected
-  - [ ] photo
-  - [ ] activity
-  - [ ] actions
-  - [ ] overdue payment?
+  - [x] include users into response
+  - [x] product details
+  - [x] time / timeline
+  - [x] payment
+  - [x] status
+  - [x] store names
+  - [x] people
+    - [x] creator
+    - [x] confirmed/rejected
+  - [x] photo
+  - [x] activity
+  - [x] actions
+  - [ ] confirmation modal
+  - [ ] product status refactor
+  - [ ] person component
+  - [ ] two columns on large screen?
 - [ ] complete payment page
   - [ ] link from payments table
   - [ ] show status
 - [ ] compute due payments / products
 - [ ] confirmation modal for accept/reject
+- [ ] overdue payments on the product page? (paid/not paid)
 
 Other:
 - [ ] refine cards ui

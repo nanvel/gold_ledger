@@ -40,27 +40,21 @@
           "
           class="flex flex-row space-x-2"
         >
-          <button
-            class="btn btn-primary btn-sm"
-            v-on:click="confirmProduct"
+          <confirm-product-modal
+            :product="details"
             v-if="isRetailer"
-          >
-            Confirm
-          </button>
-          <button
-            class="btn btn-secondary btn-sm"
-            v-on:click="rejectProduct"
+            v-on:done="onAction"
+          />
+          <reject-product-modal
+            :product="details"
             v-if="isRetailer"
-          >
-            Reject
-          </button>
-          <button
-            class="btn btn-secondary btn-sm"
-            v-on:click="cancelProduct"
+            v-on:done="onAction"
+          />
+          <cancel-product-modal
+            :product="details"
             v-if="!isRetailer"
-          >
-            Cancel
-          </button>
+            v-on:done="onAction"
+          />
         </div>
       </div>
 
@@ -173,7 +167,7 @@
         </div>
       </div>
 
-      <activities-table :product-id="details.id" />
+      <activities-table :product-id="details.id" :key="activitiesKey" />
     </div>
   </Navbar>
 </template>
@@ -187,6 +181,9 @@ import { useMeStore } from "@/stores/index.js";
 import { storeToRefs } from "pinia";
 import Timestamp from "@/components/Timestamp.vue";
 import ActivitiesTable from "@/components/ActivitiesTable.vue";
+import ConfirmProductModal from "@/components/ConfirmProductModal.vue";
+import RejectProductModal from "@/components/RejectProductModal.vue";
+import CancelProductModal from "@/components/CancelProductModal.vue";
 
 const meStore = useMeStore();
 
@@ -195,6 +192,7 @@ const { isRetailer } = storeToRefs(meStore);
 const productId = ref(parseInt(router.currentRoute.value.params.id));
 const details = ref(null);
 const loading = ref(true);
+const activitiesKey = ref(0);
 
 const status = computed(() => {
   if (details.value.confirmed_by) {
@@ -209,31 +207,9 @@ const status = computed(() => {
   return "Pending";
 });
 
-const confirmProduct = async () => {
-  try {
-    await httpClient.post(`/api/products/${productId.value}/confirm`);
-    await loadProduct();
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-const rejectProduct = async () => {
-  try {
-    await httpClient.post(`/api/products/${productId.value}/reject`);
-    await loadProduct();
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-const cancelProduct = async () => {
-  try {
-    await httpClient.post(`/api/products/${productId.value}/cancel`);
-    await loadProduct();
-  } catch (error) {
-    console.error(error);
-  }
+const onAction = async () => {
+  await loadProduct();
+  activitiesKey.value += 1;
 };
 
 const loadProduct = async () => {
