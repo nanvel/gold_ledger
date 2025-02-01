@@ -34,6 +34,7 @@ class ProductSearchItem:
     images: Tuple[ProductImage, ...]
     confirmed_by: Optional[int]
     rejected_by: Optional[int]
+    cancelled_by: Optional[int]
 
 
 @dataclass(frozen=True)
@@ -56,6 +57,7 @@ class ProductDetailsItem:
     images: Tuple[ProductImage, ...]
     confirmed_by: Optional[int]
     rejected_by: Optional[int]
+    cancelled_by: Optional[int]
 
 
 @dataclass(frozen=True)
@@ -98,6 +100,7 @@ class ProductsRepo:
         if record:
             record.confirmed_by = product.confirmed_by
             record.rejected_by = product.rejected_by
+            record.cancelled_by = product.cancelled_by
 
             self._session.commit()
 
@@ -122,6 +125,7 @@ class ProductsRepo:
                 creator_id=record.creator_id,
                 confirmed_by=record.confirmed_by,
                 rejected_by=record.rejected_by,
+                cancelled_by=record.cancelled_by,
             )
 
     def details(self, product_id: int) -> Optional[ProductDetailsItem]:
@@ -155,6 +159,7 @@ class ProductsRepo:
                 ),
                 confirmed_by=record.confirmed_by,
                 rejected_by=record.rejected_by,
+                cancelled_by=record.cancelled_by,
             )
 
     def filter(
@@ -213,6 +218,7 @@ class ProductsRepo:
                     ),
                     confirmed_by=record.confirmed_by,
                     rejected_by=record.rejected_by,
+                    cancelled_by=record.cancelled_by,
                 )
                 for record in records
             ),

@@ -15,6 +15,8 @@ class ActivityType(int, Enum):
     PAYMENT_ADDED = ActivityTypeValue(value=4, label="Payment Added")
     PAYMENT_CONFIRMED = ActivityTypeValue(value=5, label="Payment Confirmed")
     PAYMENT_REJECTED = ActivityTypeValue(value=6, label="Payment Rejected")
+    PRODUCT_CANCELLED = ActivityTypeValue(value=7, label="Product Cancelled")
+    PAYMENT_CANCELLED = ActivityTypeValue(value=8, label="Payment Cancelled")
 
     def __new__(cls, arg):
         obj = int.__new__(cls, arg.value)

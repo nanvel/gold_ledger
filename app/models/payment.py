@@ -1,9 +1,10 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from datetime import date
 from decimal import Decimal
 from typing import Optional
 
 from .payment_type import PaymentType
+from .user import User
 
 
 @dataclass(frozen=True)
@@ -19,6 +20,28 @@ class Payment:
     creator_id: int
     confirmed_by: Optional[int]
     rejected_by: Optional[int]
+    cancelled_by: Optional[int]
+
+    def confirm(self, user: User):
+        assert self.confirmed_by is None
+        assert self.rejected_by is None
+        assert self.cancelled_by is None
+        assert user.supplier_id == self.supplier_id
+        return replace(self, confirmed_by=user.id)
+
+    def reject(self, user: User):
+        assert self.confirmed_by is None
+        assert self.rejected_by is None
+        assert self.cancelled_by is None
+        assert user.supplier_id == self.supplier_id
+        return replace(self, rejected_by=user.id)
+
+    def cancel(self, user: User):
+        assert self.confirmed_by is None
+        assert self.rejected_by is None
+        assert self.cancelled_by is None
+        assert user.retailer_id == self.retailer_id
+        return replace(self, cancelled_by=user.id)
 
     def validate(self):
         if self.type == PaymentType.FINE:

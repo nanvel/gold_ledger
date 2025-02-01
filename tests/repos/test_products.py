@@ -40,6 +40,7 @@ def test_products(container):
             creator_id=user_id,
             confirmed_by=None,
             rejected_by=None,
+            cancelled_by=None,
         )
         product1_id = uow.products.create(product1)
         product2 = replace(product1, id=0, name="Product 2", payment_amount=Decimal(2))

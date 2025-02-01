@@ -134,6 +134,7 @@ def create_product(
             creator_id=user.id,
             confirmed_by=None,
             rejected_by=None,
+            cancelled_by=None,
         )
         product.validate()
         product_id = uow.products.create(product)
@@ -235,11 +236,7 @@ def confirm_product(
                 detail="The product was not found.",
             )
 
-        assert product.rejected_by is None
-        assert product.confirmed_by is None
-
-        product = replace(product, confirmed_by=user.id)
-
+        product = product.confirm(user)
         uow.products.update(product)
 
         activity = Activity(
@@ -278,16 +275,51 @@ def reject_product(
                 detail="The product was not found.",
             )
 
-        assert product.rejected_by is None
-        assert product.confirmed_by is None
-
-        product = replace(product, rejected_by=user.id)
-
+        product = product.reject(user)
         uow.products.update(product)
 
         activity = Activity(
             id=0,
             type=ActivityType.PRODUCT_REJECTED,
+            user_id=user.id,
+            supplier_id=product.supplier_id,
+            retailer_id=product.retailer_id,
+            product_id=product_id,
+            payment_id=None,
+            message="",
+        )
+        activity = replace(
+            activity,
+            message=activity_message_factory.from_activity(activity, uow=uow),
+        )
+        uow.activities.create(activity)
+
+    return UpdateResponse(success=True)
+
+
+@router.post("/products/{product_id}/cancel")
+@inject
+def cancel_product(
+    product_id: int,
+    user: User = Depends(get_active_user),
+    uow: UnitOfWork = Depends(Provide[Container.uow]),
+    activity_message_factory=Depends(Provide[Container.activity_message_factory]),
+) -> UpdateResponse:
+    with uow:
+        product = uow.products.by_id(product_id)
+
+        if not product or product.supplier_id != user.supplier_id:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="The product was not found.",
+            )
+
+        product = product.cancel(user)
+        uow.products.update(product)
+
+        activity = Activity(
+            id=0,
+            type=ActivityType.PRODUCT_CANCELLED,
             user_id=user.id,
             supplier_id=product.supplier_id,
             retailer_id=product.retailer_id,

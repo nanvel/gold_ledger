@@ -67,5 +67,24 @@ class ActivityMessageFactory:
                 f"{user.display_name} ({supplier.id}:{supplier.name}) "
                 f"has rejected a payment of ₹{payment.amount} ({payment.type.label})"
             )
+        elif activity.type == ActivityType.PRODUCT_CANCELLED:
+            user = uow.users.by_id(activity.user_id)
+            product = uow.products.by_id(activity.product_id)
+            supplier = uow.suppliers.by_id(activity.supplier_id)
+            return f"{user.display_name} ({supplier.id}:{supplier.name}) has cancelled {product.name}"
+        elif activity.type == ActivityType.PAYMENT_CANCELLED:
+            user = uow.users.by_id(activity.user_id)
+            payment = uow.payments.by_id(activity.payment_id)
+            retailer = uow.retailers.by_id(activity.retailer_id)
+            if payment.type == PaymentType.FINE:
+                return (
+                    f"{user.display_name} ({retailer.id}:{retailer.name}) "
+                    f"has cancelled payment {payment.weight}g {payment.quality}% ({payment.type.label})"
+                )
+            else:
+                return (
+                    f"{user.display_name} ({retailer.id}:{retailer.name}) "
+                    f"has cancelled payment ₹{payment.amount} ({payment.type.label})"
+                )
         else:
             raise ValueError(f"Unknown activity type: {activity.type}")
