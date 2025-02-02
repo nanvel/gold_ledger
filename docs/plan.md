@@ -42,9 +42,9 @@ Improvements:
   - [x] product status refactor
   - [x] params table
   - [x] name for staff
-  - [ ] descriptive table component
-  - [ ] ensure statuses have colors
-  - [ ] vite warnings
+  - [x] descriptive table component
+  - [x] ensure statuses have colors
+  - [x] vite warnings
 - [ ] complete payment page
   - [ ] confirmation modals for payment
   - [ ] link from payments table
