@@ -1,66 +1,12 @@
 # Plan
 
-Improvements:
-- [x] UI improvements
-  - [x] sticky header
-  - [x] empty list placeholders
-    - [x] component
-    - [x] use the component
-    - [x] add border
-    - [x] only replace table, not filters
-  - [x] units for each input
-  - [x] show errors below
-- [x] product section improvements
-  - [x] payment_amount, payment_weight, payment_quality, payment_due_date, payment_type
-    - [x] db
-    - [x] ui
-  - [x] border for payment section in product
-- [x] remove retailer and supplier pages
-  - [x] make entire activity a link to product or payment
-- [x] cancel payment/activity
-  - [x] db
-  - [x] move bl to models
-  - [x] api
-  - [x] activities
-  - [x] ui
-- [ ] complete product page
-  - [x] rate per gram -> rate
-  - [x] include users into response
-  - [x] product details
-  - [x] time / timeline
-  - [x] payment
-  - [x] status
-  - [x] store names
-  - [x] people
-    - [x] creator
-    - [x] confirmed/rejected
-  - [x] photo
-  - [x] activity
-  - [x] actions
-  - [x] confirmation modal for product
-  - [x] add status for product and payment
-  - [x] product status refactor
-  - [x] params table
-  - [x] name for staff
-  - [x] descriptive table component
-  - [x] ensure statuses have colors
-  - [x] vite warnings
-- [x] complete payment page
-  - [x] update payments repo 
-  - [x] confirmation modals for payment
-  - [x] show status
-- [ ] products table
-  - [ ] show either retailer or supplier
-  - [ ] show status
-  - [ ] refactor cards view
-- [ ] payments table
-  - [ ] link from payments table
-
 Payments summary:
-- [ ] study messages
+- [x] study messages
+- [ ] service for due
 - [ ] due payments
 
 DDB for activities:
+- [ ] message bus
 - [ ] ddb table
 - [ ] refactor activities repo
 
