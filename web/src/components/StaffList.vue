@@ -5,6 +5,7 @@
       <thead>
         <tr>
           <th>Email</th>
+          <th>Name</th>
           <th>Created</th>
         </tr>
       </thead>
@@ -12,6 +13,9 @@
         <tr v-for="s in staff" :key="s.id">
           <td>
             {{ s.email }}
+          </td>
+          <td>
+            {{ s.name }}
           </td>
           <td>
             <timestamp :value="s.created_at" />

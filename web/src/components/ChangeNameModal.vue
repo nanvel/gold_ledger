@@ -47,6 +47,7 @@
 import { ref, watch } from "vue";
 import { httpClient } from "@/services/http.js";
 import { useToast } from "vue-toastification";
+import { parseError } from "@/services/http.js";
 
 const props = defineProps({
   name: String,
@@ -87,13 +88,8 @@ const addStaff = async () => {
     clearFields();
     toast.success("Name changed successfully");
   } catch (e) {
-    if (e.detail?.length) {
-      if (e.detail[0]["loc"][1] === "name") {
-        nameError.value = e.detail[0]["msg"];
-      }
-    }
-
-    console.log(e);
+    error.value = parseError(e);
+    nameError.value = parseError(e, "name");
   } finally {
     loading.value = false;
   }
