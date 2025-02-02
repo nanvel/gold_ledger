@@ -1,81 +1,72 @@
 <template>
   <Navbar>
-    <article class="prose lg:prose-xl py-4 px-2" v-if="details">
-      <h2>{{ details.name }}</h2>
-
-      <div class="overflow-x-auto">
-        <table class="table table-zebra table-sm">
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Value</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Date</td>
-              <td>{{ details.date }}</td>
-            </tr>
-            <tr>
-              <td>Type</td>
-              <td>{{ details.type }}</td>
-            </tr>
-            <tr>
-              <td>Weight</td>
-              <td>{{ details.weight }} g</td>
-            </tr>
-            <tr>
-              <td>Quality</td>
-              <td>{{ details.quality }} %</td>
-            </tr>
-            <tr>
-              <td>Amount</td>
-              <td>{{ details.amount }} ₹</td>
-            </tr>
-          </tbody>
-        </table>
+    <div class="flex flex-col space-y-4 pt-4" v-if="details">
+      <div class="text-lg">
+        Payment: {{ details.type }}
+        <StatusBadge :status="details.status" />
+      </div>
+      <div>
+        <div class="badge badge-neutral">
+          {{ details.retailer.id }} : {{ details.retailer.name }}
+        </div>
+        paid to
+        <div class="badge badge-neutral">
+          {{ details.supplier.id }} : {{ details.supplier.name }}
+        </div>
+        on
+        {{ details.date }}
+      </div>
+      <div class="flex flex-row items-center space-x-4">
+        <div
+          v-if="
+            details &&
+            !(
+              details.confirmed_by ||
+              details.rejected_by ||
+              details.cancelled_by
+            )
+          "
+          class="flex flex-row space-x-2"
+        >
+          <confirm-payment-modal
+            :payment="details"
+            v-if="isSupplier"
+            v-on:done="onAction"
+          />
+          <reject-payment-modal
+            :payment="details"
+            v-if="isSupplier"
+            v-on:done="onAction"
+          />
+          <cancel-payment-modal
+            :payment="details"
+            v-if="!isSupplier"
+            v-on:done="onAction"
+          />
+        </div>
       </div>
 
-      <div
-        v-if="
-          details &&
-          !(details.confirmed_by || details.rejected_by || details.cancelled_by)
-        "
-        class="flex flex-row space-x-2"
-      >
-        <button
-          class="btn btn-primary"
-          v-on:click="confirmPayment"
-          v-if="isSupplier"
-        >
-          Confirm
-        </button>
-        <button
-          class="btn btn-secondary"
-          v-on:click="rejectPayment"
-          v-if="isSupplier"
-        >
-          Reject
-        </button>
-        <button
-          class="btn btn-secondary"
-          v-on:click="cancelPayment"
-          v-if="!isSupplier"
-        >
-          Cancel
-        </button>
-      </div>
-    </article>
+      <descriptive-table :rows="tableRows" />
+
+      <activities-table :payment-id="details.id" :key="activitiesKey" />
+    </div>
   </Navbar>
 </template>
 
 <script setup>
-import { onMounted, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { httpClient } from "@/services/http.js";
 import router from "@/router/index.js";
 import Navbar from "@/components/Navbar.vue";
 import { useMeStore } from "@/stores/index.js";
 import { storeToRefs } from "pinia";
+import ActivitiesTable from "@/components/ActivitiesTable.vue";
+import StatusBadge from "@/components/StatusBadge.vue";
+import DescriptiveTable from "@/components/DescriptiveTable.vue";
+import ConfirmPaymentModal from "@/components/ConfirmPaymentModal.vue";
+import RejectPaymentModal from "@/components/RejectPaymentModal.vue";
+import CancelPaymentModal from "@/components/CancelPaymentModal.vue";
+import { timestampToString } from "@/services/time.js";
 
 const meStore = useMeStore();
 
@@ -84,33 +75,48 @@ const { isSupplier } = storeToRefs(meStore);
 const paymentId = ref(parseInt(router.currentRoute.value.params.id));
 const details = ref(null);
 const loading = ref(true);
+const activitiesKey = ref(0);
 
-const confirmPayment = async () => {
-  try {
-    await httpClient.post(`/api/payments/${paymentId.value}/confirm`);
-    await loadPayment();
-  } catch (error) {
-    console.error(error);
+const tableRows = computed(() => {
+  if (!details.value) {
+    return [];
   }
-};
+  const res = [["Type", `${details.value.type}`]];
 
-const rejectPayment = async () => {
-  try {
-    await httpClient.post(`/api/payments/${paymentId.value}/reject`);
-    await loadPayment();
-  } catch (error) {
-    console.error(error);
+  if (details.value.type === "Fine") {
+    res.push(["Weight", `${details.weight}g`]);
+    res.push(["Quality", `${details.quality}%`]);
+  } else {
+    res.push(["Amount", `${details.value.amount}₹`]);
   }
-};
 
-const cancelPayment = async () => {
-  try {
-    await httpClient.post(`/api/payments/${paymentId.value}/cancel`);
-    await loadPayment();
-  } catch (error) {
-    console.error(error);
+  res.push([
+    "Created by",
+    details.value.creator.name || details.value.creator.email,
+  ]);
+  res.push(["Created at", timestampToString(details.value.created_at)]);
+
+  if (details.value.confirmed_by) {
+    res.push([
+      "Confirmed by",
+      details.value.confirmed_by.name || details.value.confirmed_by.email,
+    ]);
   }
-};
+  if (details.value.rejected_by) {
+    res.push([
+      "Rejected by",
+      details.value.rejected_by.name || details.value.rejected_by.email,
+    ]);
+  }
+  if (details.value.canceled_by) {
+    res.push([
+      "Canceled by",
+      details.value.canceled_by.name || details.value.canceled_by.email,
+    ]);
+  }
+
+  return res;
+});
 
 const loadPayment = async () => {
   loading.value = true;
@@ -121,6 +127,11 @@ const loadPayment = async () => {
   } finally {
     loading.value = false;
   }
+};
+
+const onAction = async () => {
+  await loadPayment();
+  activitiesKey.value += 1;
 };
 
 onMounted(async () => {

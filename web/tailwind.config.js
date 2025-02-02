@@ -8,5 +8,14 @@ export default {
   daisyui: {
     themes: ["light", "dark", "cupcake"],
   },
-  safelist: ["badge-success", "badge-info", "badge-warning", "badge-error"],
+  safelist: [
+    "badge-success",
+    "badge-info",
+    "badge-warning",
+    "badge-error",
+    "badge-lg",
+    "badge-md",
+    "table-sm",
+    "table-md",
+  ],
 };

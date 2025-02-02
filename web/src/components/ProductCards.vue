@@ -10,6 +10,7 @@
           <RouterLink :to="`/products/${product.id}`">{{
             product.name
           }}</RouterLink>
+          <status-badge :status="product.status" size="md" />
         </h2>
         <div>
           <img
@@ -17,42 +18,11 @@
             :src="product.images[0].thumb_url"
             :alt="product.name"
           />
-          <div class="overflow-x-auto">
-            <table class="table table-zebra">
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Value</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>Date</td>
-                  <td>{{ product.date }}</td>
-                </tr>
-                <tr>
-                  <td>Weight</td>
-                  <td>{{ product.weight }} g</td>
-                </tr>
-                <tr>
-                  <td>Quality</td>
-                  <td>{{ product.quality }} %</td>
-                </tr>
-                <tr>
-                  <td>Rate</td>
-                  <td>{{ product.rate }} ₹/g</td>
-                </tr>
-                <tr>
-                  <td>Amount</td>
-                  <td>{{ product.amount }} ₹</td>
-                </tr>
-                <tr>
-                  <td>Status</td>
-                  <td>{{ parseStatus(product) }}</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+          <descriptive-table
+            :rows="tableRows(product)"
+            size="sm"
+            class="mt-2"
+          />
         </div>
       </div>
     </div>
@@ -61,18 +31,44 @@
 
 <script setup>
 import { RouterLink } from "vue-router";
+import DescriptiveTable from "@/components/DescriptiveTable.vue";
+import StatusBadge from "@/components/StatusBadge.vue";
+import { timestampToString } from "@/services/time.js";
+import { useMeStore } from "@/stores/index.js";
+import { storeToRefs } from "pinia";
 
 const props = defineProps({
   products: Array,
 });
 
-const parseStatus = (product) => {
-  if (product.rejected_by) {
-    return "Rejected";
-  } else if (product.confirmed_by) {
-    return "Confirmed";
+const meStore = useMeStore();
+const { isSupplier } = storeToRefs(meStore);
+
+const tableRows = (product) => {
+  const res = [
+    ["Date", product.date],
+    ["Weight", `${product.weight}g`],
+    ["Quality", `${product.quality}%`],
+    ["Rate", `${product.quality}₹/g`],
+  ];
+  if (isSupplier) {
+    res.push(["Retailer", `${product.retailer.id} : ${product.retailer.name}`]);
   } else {
-    return "Pending";
+    res.push(["Supplier", `${product.supplier.id} : ${product.supplier.name}`]);
   }
+  if (product.payment_type === "Fine") {
+    res.push([
+      "Payment",
+      `${product.payment_type} ${product.payment_weight}g @ ${product.payment_quality}% by ${product.payment_due_date}`,
+    ]);
+  } else {
+    res.push([
+      "Payment",
+      `${product.payment_type} ${product.payment_amount}₹ by ${product.payment_due_date}`,
+    ]);
+  }
+
+  res.push(["Created", timestampToString(product.created_at)]);
+  return res;
 };
 </script>

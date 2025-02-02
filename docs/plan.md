@@ -45,15 +45,35 @@ Improvements:
   - [x] descriptive table component
   - [x] ensure statuses have colors
   - [x] vite warnings
-- [ ] complete payment page
-  - [ ] confirmation modals for payment
-  - [ ] link from payments table
+- [x] complete payment page
+  - [x] update payments repo 
+  - [x] confirmation modals for payment
+  - [x] show status
+- [ ] products table
+  - [ ] show either retailer or supplier
   - [ ] show status
-- [ ] compute due payments / products
-- [ ] confirmation modal for accept/reject
-- [ ] overdue payments on the product page? (paid/not paid)
+  - [ ] refactor cards view
+- [ ] payments table
+  - [ ] link from payments table
+
+Payments summary:
+- [ ] study messages
+- [ ] due payments
+
+DDB for activities:
+- [ ] ddb table
+- [ ] refactor activities repo
+
+Deployment:
+- [ ] refactor server folder
+- [ ] use the new domain
+- [ ] Mumbai region
 
 Other:
+- [ ] use slug instead of label in payment type
+- [ ] order table values by clicking on table header
+- [ ] compute due payments / products
+- [ ] overdue payments on the product page? (paid/not paid)
 - [ ] refine cards ui
 - [ ] refine tables ui
 - [ ] refine products page
@@ -110,6 +130,7 @@ Other:
 - [ ] tablist component
 - [ ] email updates
 - [ ] Mumbai region
+- [ ] filter by status (products and payments)
 
 Other:
 - [ ] Security

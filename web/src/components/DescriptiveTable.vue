@@ -1,6 +1,6 @@
 <template>
   <div class="overflow-x-auto">
-    <table class="table table-md table-zebra w-auto">
+    <table :class="['table', `table-${props.size}`, 'table-zebra', 'w-auto']">
       <tbody>
         <tr v-for="row in props.rows" :key="row[0]">
           <td>{{ row[0] }}</td>
@@ -14,5 +14,9 @@
 <script setup>
 const props = defineProps({
   rows: Array,
+  size: {
+    type: String,
+    default: "md",
+  },
 });
 </script>

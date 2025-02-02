@@ -2,7 +2,7 @@ from datetime import date, datetime
 from decimal import Decimal
 
 import sqlalchemy as sa
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.sql import func
 
 from .base import Base
@@ -24,6 +24,23 @@ class PaymentTable(Base):
     rejected_by = mapped_column(sa.ForeignKey("users.id"), nullable=True)
     cancelled_by = mapped_column(sa.ForeignKey("users.id"), nullable=True)
     status: Mapped[int] = mapped_column(server_default="1")
+
+    supplier: Mapped["SupplierTable"] = relationship(
+        "SupplierTable", foreign_keys=[supplier_id]
+    )
+    retailer: Mapped["RetailerTable"] = relationship(
+        "RetailerTable", foreign_keys=[retailer_id]
+    )
+    creator: Mapped["UserTable"] = relationship("UserTable", foreign_keys=[creator_id])
+    confirmed_by_user: Mapped["UserTable"] = relationship(
+        "UserTable", foreign_keys=[confirmed_by]
+    )
+    rejected_by_user: Mapped["UserTable"] = relationship(
+        "UserTable", foreign_keys=[rejected_by]
+    )
+    cancelled_by_user: Mapped["UserTable"] = relationship(
+        "UserTable", foreign_keys=[cancelled_by]
+    )
 
     created_at: Mapped[datetime] = mapped_column(server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(

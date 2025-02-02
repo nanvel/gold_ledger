@@ -167,8 +167,8 @@ def get_payment(
         payment_details = uow.payments.details(payment_id)
 
         if not payment_details or (
-            payment_details.supplier_id != user.supplier_id
-            and payment_details.retailer_id != user.retailer_id
+            payment_details.supplier.id != user.supplier_id
+            and payment_details.retailer.id != user.retailer_id
         ):
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,

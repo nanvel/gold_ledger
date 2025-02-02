@@ -16,6 +16,19 @@ from app.models import (
 
 
 @dataclass(frozen=True)
+class PaymentStore:
+    id: int
+    name: str
+
+
+@dataclass(frozen=True)
+class PaymentUser:
+    id: int
+    name: str
+    email: str
+
+
+@dataclass(frozen=True)
 class PaymentSearchItem:
     id: int
     type: str
@@ -24,10 +37,9 @@ class PaymentSearchItem:
     quality: Optional[Decimal]
     amount: Optional[Decimal]
     created_at: int
-    confirmed_by: Optional[int]
-    rejected_by: Optional[int]
-    cancelled_by: Optional[int]
     status: str
+    retailer: PaymentStore
+    supplier: PaymentStore
 
 
 @dataclass(frozen=True)
@@ -38,12 +50,12 @@ class PaymentDetailsItem:
     weight: Optional[Decimal]
     quality: Optional[Decimal]
     amount: Optional[Decimal]
-    supplier_id: int
-    retailer_id: int
-    creator_id: int
-    confirmed_by: Optional[int]
-    rejected_by: Optional[int]
-    cancelled_by: Optional[int]
+    supplier: PaymentStore
+    retailer: PaymentStore
+    creator: PaymentUser
+    confirmed_by: Optional[PaymentUser]
+    rejected_by: Optional[PaymentUser]
+    cancelled_by: Optional[PaymentUser]
     created_at: int
     status: str
 
@@ -120,14 +132,42 @@ class PaymentsRepo:
                 weight=record.weight,
                 quality=record.quality,
                 amount=record.amount,
-                supplier_id=record.supplier_id,
-                retailer_id=record.retailer_id,
-                creator_id=record.creator_id,
-                confirmed_by=record.confirmed_by,
-                rejected_by=record.rejected_by,
-                cancelled_by=record.cancelled_by,
+                supplier=PaymentStore(id=record.supplier.id, name=record.supplier.name),
+                retailer=PaymentStore(id=record.retailer.id, name=record.retailer.name),
+                creator=PaymentUser(
+                    id=record.creator.id,
+                    name=record.creator.name,
+                    email=record.creator.username,
+                ),
+                confirmed_by=(
+                    PaymentUser(
+                        id=record.confirmed_by_user.id,
+                        name=record.confirmed_by_user.name,
+                        email=record.confirmed_by_user.username,
+                    )
+                    if record.confirmed_by
+                    else None
+                ),
+                rejected_by=(
+                    PaymentUser(
+                        id=record.rejected_by_user.id,
+                        name=record.rejected_by_user.name,
+                        email=record.rejected_by_user.username,
+                    )
+                    if record.rejected_by
+                    else None
+                ),
+                cancelled_by=(
+                    PaymentUser(
+                        id=record.cancelled_by_user.id,
+                        name=record.cancelled_by_user.name,
+                        email=record.cancelled_by_user.username,
+                    )
+                    if record.cancelled_by
+                    else None
+                ),
                 created_at=int(Timestamp.from_datetime(record.created_at)),
-                status=PaymentStatus(record.status).label,
+                status=PaymentStatus(record.status).slug,
             )
 
     def filter(
@@ -170,10 +210,13 @@ class PaymentsRepo:
                     quality=record.quality,
                     amount=record.amount,
                     created_at=int(Timestamp.from_datetime(record.created_at)),
-                    confirmed_by=record.confirmed_by,
-                    rejected_by=record.rejected_by,
-                    cancelled_by=record.cancelled_by,
                     status=PaymentStatus(record.status).slug,
+                    retailer=PaymentStore(
+                        id=record.retailer.id, name=record.retailer.name
+                    ),
+                    supplier=PaymentStore(
+                        id=record.supplier.id, name=record.supplier.name
+                    ),
                 )
                 for record in records
             ),
