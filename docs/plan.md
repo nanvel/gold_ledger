@@ -41,8 +41,7 @@ Improvements:
   - [x] add status for product and payment
   - [x] product status refactor
   - [x] params table
-  - [ ] name for staff
-  - [ ] person component
+  - [x] name for staff
   - [ ] descriptive table component
   - [ ] ensure statuses have colors
   - [ ] vite warnings

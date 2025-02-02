@@ -1,11 +1,11 @@
 <template>
-  <div :class="['badge', 'capitalize', badge, 'ml-2']">
+  <div :class="['badge', 'badge-lg', 'capitalize', badge, 'ml-2']">
     {{ props.status }}
   </div>
 </template>
 
 <script setup>
-import { defineProps, computed } from "vue";
+import { computed } from "vue";
 
 const props = defineProps({
   status: String,
