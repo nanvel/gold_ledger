@@ -7,12 +7,12 @@
         <template v-if="myName?.length">{{ myName }} |</template> {{ myEmail }}
       </div>
 
-      <div class="flex flex-row space-x-4">
+      <div class="flex flex-row space-x-4" v-if="myEmail">
         <button class="btn btn-sm btn-primary" v-on:click="logout">
           Log out
         </button>
         <change-password-modal />
-        <ChangeNameModal :name="myName" v-on:name-changed="meStore.setName" />
+        <ChangeNameModal :name="myName" v-on:name-changed="onNameChanged" />
       </div>
 
       <h3 class="text-2xl font-semibold">Theme</h3>
@@ -72,6 +72,11 @@ const themes = [
 
 const setTheme = (theme) => {
   meStore.setTheme(theme);
+};
+
+const onNameChanged = (name) => {
+  meStore.setName(name);
+  staffListVersion.value += 1;
 };
 
 const logout = async () => {

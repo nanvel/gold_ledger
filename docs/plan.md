@@ -40,11 +40,14 @@ Improvements:
   - [x] confirmation modal for product
   - [x] add status for product and payment
   - [x] product status refactor
-  - [ ] params table
-  - [ ] confirmation modals for payment
+  - [x] params table
+  - [ ] name for staff
   - [ ] person component
-  - [ ] two columns on large screen?
+  - [ ] descriptive table component
+  - [ ] ensure statuses have colors
+  - [ ] vite warnings
 - [ ] complete payment page
+  - [ ] confirmation modals for payment
   - [ ] link from payments table
   - [ ] show status
 - [ ] compute due payments / products
