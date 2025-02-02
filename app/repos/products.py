@@ -3,7 +3,6 @@ from decimal import Decimal
 from typing import Optional, Tuple
 
 from sqlalchemy.orm import Session
-from sqlalchemy.sql import func
 
 from app.db import ImageTable, ProductTable
 from app.models import (
@@ -292,33 +291,3 @@ class ProductsRepo:
             product.images.append(image)
 
         self._session.commit()
-
-    def stats(
-        self,
-        supplier_id: Optional[int],
-        retailer_id: Optional[int],
-    ) -> ProductStats:
-        query = self._session.query(
-            func.sum(ProductTable.payment_amount).label("total"),
-            func.count(ProductTable.id).label("count"),
-        )
-
-        if supplier_id:
-            query = query.filter(ProductTable.supplier_id == supplier_id)
-        if retailer_id:
-            query = query.filter(ProductTable.retailer_id == retailer_id)
-
-        total_received, number_received = query.filter(
-            ProductTable.confirmed_by.isnot(None)
-        ).first() or (Decimal(0), 0)
-
-        total_ontime = query.filter(
-            ProductTable.confirmed_by.isnot(None),
-            ProductTable.payment_due_date <= func.now(),
-        ).scalar() or Decimal(0)
-
-        return ProductStats(
-            total_received=total_received or Decimal(0),
-            number_received=number_received or 0,
-            total_ontime=total_ontime or Decimal(0),
-        )

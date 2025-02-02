@@ -3,7 +3,6 @@ from decimal import Decimal
 from typing import Optional, Tuple
 
 from sqlalchemy.orm import Session
-from sqlalchemy.sql import func
 
 from app.db import PaymentTable
 from app.models import (
@@ -220,36 +219,4 @@ class PaymentsRepo:
                 )
                 for record in records
             ),
-        )
-
-    def stats(
-        self,
-        supplier_id: Optional[int],
-        retailer_id: Optional[int],
-    ) -> PaymentsStats:
-        # TODO: rewrite, user cancelled as well
-        query = self._session.query(
-            func.sum(PaymentTable.amount).label("total"),
-            func.count(PaymentTable.id).label("count"),
-        )
-
-        if supplier_id:
-            query = query.filter(PaymentTable.supplier_id == supplier_id)
-        if retailer_id:
-            query = query.filter(PaymentTable.retailer_id == retailer_id)
-
-        total_paid, number_paid = query.filter(
-            PaymentTable.confirmed_by.isnot(None)
-        ).first() or (Decimal(0), 0)
-
-        total_pending, number_pending = query.filter(
-            PaymentTable.confirmed_by.is_(None),
-            PaymentTable.rejected_by.is_(None),
-        ).first() or (Decimal(0), 0)
-
-        return PaymentsStats(
-            total_paid=total_paid or Decimal(0),
-            total_pending=total_pending or Decimal(0),
-            number_paid=number_paid or 0,
-            number_pending=number_pending or 0,
         )
