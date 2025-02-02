@@ -37,10 +37,9 @@ class PaymentSearchItem:
     quality: Optional[Decimal]
     amount: Optional[Decimal]
     created_at: int
-    confirmed_by: Optional[int]
-    rejected_by: Optional[int]
-    cancelled_by: Optional[int]
     status: str
+    retailer: PaymentStore
+    supplier: PaymentStore
 
 
 @dataclass(frozen=True)
@@ -211,10 +210,13 @@ class PaymentsRepo:
                     quality=record.quality,
                     amount=record.amount,
                     created_at=int(Timestamp.from_datetime(record.created_at)),
-                    confirmed_by=record.confirmed_by,
-                    rejected_by=record.rejected_by,
-                    cancelled_by=record.cancelled_by,
                     status=PaymentStatus(record.status).slug,
+                    retailer=PaymentStore(
+                        id=record.retailer.id, name=record.retailer.name
+                    ),
+                    supplier=PaymentStore(
+                        id=record.supplier.id, name=record.supplier.name
+                    ),
                 )
                 for record in records
             ),

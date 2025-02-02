@@ -1,12 +1,5 @@
 <template>
   <div class="flex flex-col space-y-4">
-    <div class="flex flex-col space-y-1 py-2">
-      <div>Products received: {{ totalProducts }}</div>
-      <div>Payments confirmed: {{ totalPayments }}</div>
-      <div>
-        Pending payments: {{ totalPending }} ({{ totalOverdue }} overdue)
-      </div>
-    </div>
     <div class="flex flex-row space-x-2 mt-4 justify-between">
       <div>
         <retailer-picker-modal v-if="isSupplier" v-on:selected="setRetailer" />
@@ -22,28 +15,30 @@
       <table class="table table-zebra">
         <thead>
           <tr>
-            <th>Type</th>
+            <th>Payment</th>
+            <th>{{ isSupplier ? "Retailer" : "Supplier" }}</th>
             <th>Date</th>
-            <th>Total</th>
-            <th>Created</th>
             <th>Status</th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="payment in payments" :key="payment.id">
             <td>
-              {{ payment.type }}
+              <RouterLink :to="`/payments/${payment.id}`" class="link">{{
+                paymentStr(payment)
+              }}</RouterLink>
+            </td>
+            <td>
+              {{
+                isSupplier
+                  ? `${payment.retailer.id} : ${payment.retailer.name}`
+                  : `${payment.supplier.id} : ${payment.supplier.name}`
+              }}
             </td>
             <td>
               {{ payment.date }}
             </td>
-            <td>
-              {{ payment.amount }}
-            </td>
-            <td>
-              <timestamp :value="payment.created_at" :show-duration="true" />
-            </td>
-            <td>{{ parseStatus(payment) }}</td>
+            <td><status-badge :status="payment.status" size="sm" /></td>
           </tr>
         </tbody>
       </table>
@@ -77,56 +72,34 @@ import Timestamp from "@/components/Timestamp.vue";
 import RetailerPickerModal from "@/components/RetailerPickerModal.vue";
 import SupplierPickerModal from "@/components/SupplierPickerModal.vue";
 import Placeholder from "@/components/Placeholder.vue";
+import StatusBadge from "@/components/StatusBadge.vue";
+import { useMeStore } from "@/stores/index.js";
+import { storeToRefs } from "pinia";
+import { RouterLink } from "vue-router";
 
 const props = defineProps({
   retailerId: Number,
   supplierId: Number,
 });
 
+const meStore = useMeStore();
+const { isSupplier } = storeToRefs(meStore);
+
 const payments = ref([]);
 const total = ref(0);
 const page = ref(1);
 const limit = ref(20);
 const loading = ref(false);
-const totalProducts = ref(0);
-const totalPayments = ref(0);
-const totalPending = ref(0);
-const totalOverdue = ref(0);
 const supplierId = ref(props.supplierId);
 const retailerId = ref(props.retailerId);
 
-const isSupplier = computed(() => props.supplierId);
-
 const pages = computed(() => Math.ceil(total.value / limit.value));
 
-const parseStatus = (payment) => {
-  if (payment.rejected_by) {
-    return "Rejected";
-  } else if (payment.confirmed_by) {
-    return "Confirmed";
+const paymentStr = (payment) => {
+  if (payment.type === "Fine") {
+    return `${payment.type} ${payment.weight}g @ ${payment.quality}%`;
   } else {
-    return "Pending";
-  }
-};
-
-const loadSummary = async () => {
-  loading.value = true;
-  try {
-    let q = "";
-    if (retailerId.value && supplierId.value) {
-      q = `?retailer_id=${retailerId.value}&supplier_id=${supplierId.value}`;
-    } else if (retailerId.value) {
-      q = `?retailer_id=${retailerId.value}`;
-    } else if (supplierId.value) {
-      q = `?supplier_id=${supplierId.value}`;
-    }
-    const resp = await httpClient.get(`/api/payments-summary${q}`, null, null);
-    totalProducts.value = resp["total_products"];
-    totalPayments.value = resp["total_payments"];
-    totalPending.value = resp["total_pending"];
-    totalOverdue.value = resp["total_overdue"];
-  } finally {
-    loading.value = false;
+    return `${payment.type} ${payment.amount}₹`;
   }
 };
 
@@ -152,17 +125,14 @@ const loadPage = async (p) => {
 const setSupplier = (supplier) => {
   supplierId.value = supplier?.id;
   loadPage(1);
-  loadSummary();
 };
 
 const setRetailer = (retailer) => {
   retailerId.value = retailer?.id;
   loadPage(1);
-  loadSummary();
 };
 
 onMounted(async () => {
   await loadPage(1);
-  await loadSummary();
 });
 </script>
