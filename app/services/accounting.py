@@ -151,7 +151,7 @@ class Accounting:
                 if supplier_id in result:
                     result[supplier_id][payment_type.slug]["confirmed"] = total
                 else:
-                    result[retailer_id] = {}
+                    result[supplier_id] = {}
                     result[supplier_id][payment_type.slug] = {
                         "products": 0,
                         "confirmed": total,
@@ -172,7 +172,7 @@ class Accounting:
                 if supplier_id in result:
                     result[supplier_id][payment_type.slug]["pending"] = total
                 else:
-                    result[retailer_id] = {}
+                    result[supplier_id] = {}
                     result[supplier_id][payment_type.slug] = {
                         "products": 0,
                         "confirmed": 0,
