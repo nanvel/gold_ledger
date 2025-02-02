@@ -46,11 +46,11 @@ Improvements:
   - [x] ensure statuses have colors
   - [x] vite warnings
 - [ ] complete payment page
+  - [ ] update payments repo 
   - [ ] confirmation modals for payment
   - [ ] link from payments table
   - [ ] show status
 - [ ] compute due payments / products
-- [ ] confirmation modal for accept/reject
 - [ ] overdue payments on the product page? (paid/not paid)
 
 Other:
