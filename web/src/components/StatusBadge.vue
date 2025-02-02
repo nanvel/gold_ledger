@@ -1,5 +1,5 @@
 <template>
-  <div :class="['badge', 'badge-lg', 'capitalize', badge, 'ml-2']">
+  <div :class="['badge', `badge-${props.size}`, 'capitalize', badge, 'ml-2']">
     {{ props.status }}
   </div>
 </template>
@@ -9,6 +9,10 @@ import { computed } from "vue";
 
 const props = defineProps({
   status: String,
+  size: {
+    type: String,
+    default: "lg",
+  },
 });
 
 const colorMap = {

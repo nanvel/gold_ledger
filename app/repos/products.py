@@ -52,10 +52,9 @@ class ProductSearchItem:
     payment_due_date: str
     created_at: int
     images: Tuple[ProductImage, ...]
-    confirmed_by: Optional[int]
-    rejected_by: Optional[int]
-    cancelled_by: Optional[int]
     status: str
+    retailer: Optional[ProductStore]
+    supplier: Optional[ProductStore]
 
 
 @dataclass(frozen=True)
@@ -269,10 +268,13 @@ class ProductsRepo:
                         )
                         for image in record.images
                     ),
-                    confirmed_by=record.confirmed_by,
-                    rejected_by=record.rejected_by,
-                    cancelled_by=record.cancelled_by,
                     status=ProductStatus(record.status).slug,
+                    retailer=ProductStore(
+                        id=record.retailer.id, name=record.retailer.name
+                    ),
+                    supplier=ProductStore(
+                        id=record.supplier.id, name=record.supplier.name
+                    ),
                 )
                 for record in records
             ),

@@ -4,29 +4,33 @@
       <thead>
         <tr>
           <th>Name</th>
+          <th>{{ isSupplier ? "Retailer" : "Supplier" }}</th>
           <th>Date</th>
-          <th>Amount</th>
-          <th>Created</th>
+          <th>Payment</th>
           <th>Status</th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="product in props.products" :key="product.id">
           <td>
-            <RouterLink :to="`/products/${product.id}`">{{
+            <RouterLink :to="`/products/${product.id}`" class="link">{{
               product.name
             }}</RouterLink>
+          </td>
+          <td>
+            {{
+              isSupplier
+                ? `${product.retailer.id} : ${product.retailer.name}`
+                : `${product.supplier.id} : ${product.supplier.name}`
+            }}
           </td>
           <td>
             {{ product.date }}
           </td>
           <td>
-            {{ product.amount }}
+            {{ computePayment(product) }}
           </td>
-          <td>
-            <timestamp :value="product.created_at" :show-duration="true" />
-          </td>
-          <td>{{ parseStatus(product) }}</td>
+          <td><status-badge :status="product.status" size="md" /></td>
         </tr>
       </tbody>
     </table>
@@ -35,19 +39,22 @@
 
 <script setup>
 import { RouterLink } from "vue-router";
-import Timestamp from "@/components/Timestamp.vue";
+import StatusBadge from "@/components/StatusBadge.vue";
+import { useMeStore } from "@/stores/index.js";
+import { storeToRefs } from "pinia";
 
 const props = defineProps({
   products: Array,
 });
 
-const parseStatus = (product) => {
-  if (product.rejected_by) {
-    return "Rejected";
-  } else if (product.confirmed_by) {
-    return "Confirmed";
+const meStore = useMeStore();
+const { isSupplier } = storeToRefs(meStore);
+
+const computePayment = (product) => {
+  if (product.payment_type === "Fine") {
+    return `${product.payment_type} ${product.payment_weight}g @ ${product.payment_quality}% by ${product.payment_due_date}`;
   } else {
-    return "Pending";
+    return `${product.payment_type} ${product.payment_amount}₹ by ${product.payment_due_date}`;
   }
 };
 </script>
