@@ -81,7 +81,7 @@ class ProductsRepo:
                 cancelled_by=record.cancelled_by,
             )
 
-    def details(self, product_id: int) -> Optional[DisplayProduct]:
+    def display(self, product_id: int) -> Optional[DisplayProduct]:
         record = self._session.query(ProductTable).filter_by(id=product_id).first()
 
         if record:

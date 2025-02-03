@@ -71,7 +71,7 @@ class PaymentsRepo:
                 cancelled_by=record.cancelled_by,
             )
 
-    def details(self, payment_id: int) -> Optional[DisplayPayment]:
+    def display(self, payment_id: int) -> Optional[DisplayPayment]:
         record = self._session.query(PaymentTable).filter_by(id=payment_id).first()
 
         if record:

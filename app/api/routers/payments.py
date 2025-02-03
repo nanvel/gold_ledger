@@ -132,7 +132,7 @@ def get_payment(
     uow: UnitOfWork = Depends(Provide[Container.uow]),
 ) -> DisplayPayment:
     with uow:
-        payment_details = uow.payments.details(payment_id)
+        payment_details = uow.payments.display(payment_id)
 
         if not payment_details or (
             payment_details.supplier.id != user.supplier_id

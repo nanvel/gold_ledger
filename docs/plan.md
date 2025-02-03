@@ -19,17 +19,20 @@ DDB for activities:
 - [x] move creation to use cases
 - [x] make ProductDetails and PaymentDetails models
   - [x] use them
+- [x] rid of activities pg table
+- [x] detail -> dipslay
 - [ ] build message inside event, rid of the factory
+  - [ ] tests 
+- [ ] remove factories
 - [ ] event = product + anything else related like action type
 - [ ] move actions to use cases
 - [ ] message bus
   - [x] check the architecture book
   - [ ] event creation
   - [ ] event handling
-- [ ] rid of activities pg table
-  - [ ] db
-  - [ ] model
 - [ ] ddb table
+- [ ] ddb connection
+- [ ] new repo
 - [ ] refactor activities repo
 
 Deployment:

@@ -149,7 +149,7 @@ def get_product(
     uow: UnitOfWork = Depends(Provide[Container.uow]),
 ) -> DisplayProduct:
     with uow:
-        product_details = uow.products.details(product_id)
+        product_details = uow.products.display(product_id)
 
         if not product_details or (
             product_details.supplier.id != user.supplier_id
