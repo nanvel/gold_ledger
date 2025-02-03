@@ -1,4 +1,3 @@
-from .activity import ActivityTable
 from .base import Base
 from .image import ImageTable
 from .payment import PaymentTable
@@ -9,7 +8,6 @@ from .user import UserTable
 
 
 __all__ = (
-    "ActivityTable",
     "Base",
     "ImageTable",
     "PaymentTable",

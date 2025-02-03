@@ -1,5 +1,6 @@
 from .activity import Activity
 from .activity_type import ActivityType
+from .display_activity import DisplayActivity
 from .display_image import DisplayImage
 from .display_payment import DisplayPayment
 from .display_product import DisplayProduct
@@ -26,6 +27,7 @@ from .user import User
 __all__ = (
     "Activity",
     "ActivityType",
+    "DisplayActivity",
     "DisplayImage",
     "DisplayPayment",
     "DisplayProduct",

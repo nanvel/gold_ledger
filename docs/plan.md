@@ -18,7 +18,7 @@ Payments summary:
 DDB for activities:
 - [x] move creation to use cases
 - [x] make ProductDetails and PaymentDetails models
-  - [ ] use them
+  - [x] use them
 - [ ] build message inside event, rid of the factory
 - [ ] event = product + anything else related like action type
 - [ ] move actions to use cases
@@ -27,6 +27,8 @@ DDB for activities:
   - [ ] event creation
   - [ ] event handling
 - [ ] rid of activities pg table
+  - [ ] db
+  - [ ] model
 - [ ] ddb table
 - [ ] refactor activities repo
 

@@ -9,14 +9,15 @@ class ActivityTypeValue:
 
 
 class ActivityType(int, Enum):
-    PRODUCT_GIVEN = ActivityTypeValue(value=1, label="Product Given")
+    PRODUCT_ADDED = ActivityTypeValue(value=1, label="Product Added")
     PRODUCT_CONFIRMED = ActivityTypeValue(value=2, label="Product Confirmed")
     PRODUCT_REJECTED = ActivityTypeValue(value=3, label="Product Rejected")
-    PAYMENT_ADDED = ActivityTypeValue(value=4, label="Payment Added")
-    PAYMENT_CONFIRMED = ActivityTypeValue(value=5, label="Payment Confirmed")
-    PAYMENT_REJECTED = ActivityTypeValue(value=6, label="Payment Rejected")
-    PRODUCT_CANCELLED = ActivityTypeValue(value=7, label="Product Cancelled")
-    PAYMENT_CANCELLED = ActivityTypeValue(value=8, label="Payment Cancelled")
+    PRODUCT_CANCELLED = ActivityTypeValue(value=4, label="Product Cancelled")
+
+    PAYMENT_ADDED = ActivityTypeValue(value=11, label="Payment Added")
+    PAYMENT_CONFIRMED = ActivityTypeValue(value=12, label="Payment Confirmed")
+    PAYMENT_REJECTED = ActivityTypeValue(value=13, label="Payment Rejected")
+    PAYMENT_CANCELLED = ActivityTypeValue(value=14, label="Payment Cancelled")
 
     def __new__(cls, arg):
         obj = int.__new__(cls, arg.value)
