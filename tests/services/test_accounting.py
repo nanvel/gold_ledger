@@ -92,10 +92,10 @@ def test_accounting(session):
 
     accounting = Accounting(session)
     retailers = accounting._get_retailers(supplier_id)
-    assert retailers == [(retailer_id, "Retailer")]
+    assert retailers == {retailer_id: "Retailer"}
 
     suppliers = accounting._get_suppliers(retailer_id)
-    assert suppliers == [(supplier_id, "Supplier")]
+    assert suppliers == {supplier_id: "Supplier"}
 
     products = accounting._products_for_supplier(
         supplier_id,
@@ -126,8 +126,18 @@ def test_accounting(session):
                 "sum": Decimal("-1"),
                 "due_tomorrow_or_later": Decimal("1"),
                 "due_today_or_later": Decimal("1"),
-                "overdue": Decimal("0"),
-                "due_today": Decimal("0"),
+                "overdue": 0,
+                "due_today": 0,
+            },
+            "fine": {
+                "products": 0,
+                "confirmed": Decimal("0.95000000000000000000"),
+                "pending": 0,
+                "sum": Decimal("0.95000000000000000000"),
+                "due_tomorrow_or_later": 0,
+                "due_today_or_later": 0,
+                "overdue": 0,
+                "due_today": 0,
             },
             "name": "Retailer",
         }
@@ -147,6 +157,16 @@ def test_accounting(session):
                 "overdue": 0,
                 "due_today": Decimal("1"),
             },
+            "fine": {
+                "products": 0,
+                "confirmed": Decimal("0.95000000000000000000"),
+                "pending": 0,
+                "sum": Decimal("0.95000000000000000000"),
+                "due_tomorrow_or_later": 0,
+                "due_today_or_later": 0,
+                "overdue": 0,
+                "due_today": 0,
+            },
             "name": "Retailer",
         }
     }
@@ -165,6 +185,16 @@ def test_accounting(session):
                 "overdue": Decimal("1"),
                 "due_today": Decimal("0"),
             },
+            "fine": {
+                "products": 0,
+                "confirmed": Decimal("0.95000000000000000000"),
+                "pending": 0,
+                "sum": Decimal("0.95000000000000000000"),
+                "due_tomorrow_or_later": 0,
+                "due_today_or_later": 0,
+                "overdue": 0,
+                "due_today": 0,
+            },
             "name": "Retailer",
         }
     }
@@ -182,6 +212,16 @@ def test_accounting(session):
                 "due_today_or_later": 0,
                 "overdue": Decimal("1"),
                 "due_today": Decimal("0"),
+            },
+            "fine": {
+                "products": 0,
+                "confirmed": Decimal("0.95000000000000000000"),
+                "pending": 0,
+                "sum": Decimal("0.95000000000000000000"),
+                "due_tomorrow_or_later": 0,
+                "due_today_or_later": 0,
+                "overdue": 0,
+                "due_today": 0,
             },
             "name": "Supplier",
         }

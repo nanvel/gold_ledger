@@ -40,10 +40,10 @@ class Accounting:
                 status=PaymentStatus.CONFIRMED,
             )
             for retailer_id, total in payments_confirmed:
-                if retailer_id in result:
+                if retailer_id in result and payment_type.slug in result[retailer_id]:
                     result[retailer_id][payment_type.slug]["confirmed"] = total
                 else:
-                    result[retailer_id] = {}
+                    result[retailer_id] = result.get(retailer_id) or {}
                     result[retailer_id][payment_type.slug] = {
                         "products": 0,
                         "confirmed": total,
@@ -61,10 +61,10 @@ class Accounting:
                 status=PaymentStatus.PENDING,
             )
             for retailer_id, total in payments_pending:
-                if retailer_id in result:
+                if retailer_id in result and payment_type.slug in result[retailer_id]:
                     result[retailer_id][payment_type.slug]["pending"] = total
                 else:
-                    result[retailer_id] = {}
+                    result[retailer_id] = result.get(retailer_id) or {}
                     result[retailer_id][payment_type.slug] = {
                         "products": 0,
                         "confirmed": 0,
@@ -113,10 +113,9 @@ class Accounting:
                         )
 
         if result:
-            retailers = self._get_retailers(supplier_id=supplier_id)
-            names = {retailer_id: name for retailer_id, name in retailers}
+            retailer_names = self._get_retailers(supplier_id=supplier_id)
             for retailer_id, retailer in result.items():
-                retailer["name"] = names.get(retailer_id)
+                retailer["name"] = retailer_names.get(retailer_id)
 
         return result
 
@@ -148,10 +147,10 @@ class Accounting:
                 status=PaymentStatus.CONFIRMED,
             )
             for supplier_id, total in payments_confirmed:
-                if supplier_id in result:
+                if supplier_id in result and payment_type.slug in result[supplier_id]:
                     result[supplier_id][payment_type.slug]["confirmed"] = total
                 else:
-                    result[supplier_id] = {}
+                    result[supplier_id] = result.get(supplier_id) or {}
                     result[supplier_id][payment_type.slug] = {
                         "products": 0,
                         "confirmed": total,
@@ -169,10 +168,10 @@ class Accounting:
                 status=PaymentStatus.PENDING,
             )
             for supplier_id, total in payments_pending:
-                if supplier_id in result:
+                if supplier_id in result and payment_type.slug in result[supplier_id]:
                     result[supplier_id][payment_type.slug]["pending"] = total
                 else:
-                    result[supplier_id] = {}
+                    result[supplier_id] = result.get(supplier_id) or {}
                     result[supplier_id][payment_type.slug] = {
                         "products": 0,
                         "confirmed": 0,
@@ -221,10 +220,9 @@ class Accounting:
                         )
 
         if result:
-            retailers = self._get_suppliers(retailer_id=retailer_id)
-            names = {supplier_id: name for supplier_id, name in retailers}
+            supplier_names = self._get_suppliers(retailer_id=retailer_id)
             for supplier_id, supplier in result.items():
-                supplier["name"] = names.get(supplier_id)
+                supplier["name"] = supplier_names.get(supplier_id)
 
         return result
 
@@ -354,7 +352,21 @@ class Accounting:
             )
             .distinct()
         )
-        return [(row.retailer_id, row.name) for row in rows]
+        res = {row.retailer_id: row.name for row in rows}
+        rows = (
+            self._session.query(PaymentTable.retailer_id, RetailerTable.name)
+            .join(RetailerTable, RetailerTable.id == PaymentTable.retailer_id)
+            .filter(
+                PaymentTable.supplier_id == supplier_id,
+                PaymentTable.status.in_(
+                    (PaymentStatus.CONFIRMED.value, PaymentStatus.PENDING.value)
+                ),
+            )
+            .distinct()
+        )
+        for row in rows:
+            res[row.retailer_id] = row.name
+        return res
 
     def _get_suppliers(self, retailer_id):
         rows = (
@@ -366,4 +378,18 @@ class Accounting:
             )
             .distinct()
         )
-        return [(row.supplier_id, row.name) for row in rows]
+        res = {row.supplier_id: row.name for row in rows}
+        rows = (
+            self._session.query(PaymentTable.supplier_id, SupplierTable.name)
+            .join(SupplierTable, SupplierTable.id == PaymentTable.supplier_id)
+            .filter(
+                PaymentTable.retailer_id == retailer_id,
+                PaymentTable.status.in_(
+                    (PaymentStatus.CONFIRMED.value, PaymentStatus.PENDING.value)
+                ),
+            )
+            .distinct()
+        )
+        for row in rows:
+            res[row.supplier_id] = row.name
+        return res
