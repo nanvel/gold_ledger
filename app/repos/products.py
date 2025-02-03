@@ -1,11 +1,14 @@
-from dataclasses import dataclass
-from decimal import Decimal
 from typing import Optional, Tuple
 
 from sqlalchemy.orm import Session
 
 from app.db import ImageTable, ProductTable
 from app.models import (
+    DisplayProduct,
+    DisplayImage,
+    DisplayRetailer,
+    DisplaySupplier,
+    DisplayUser,
     Image,
     PaymentType,
     Product,
@@ -13,78 +16,6 @@ from app.models import (
     ProductStatus,
     Timestamp,
 )
-
-
-@dataclass(frozen=True)
-class ProductImage:
-    id: int
-    url: str
-    thumb_url: str
-    created_at: int
-
-
-@dataclass(frozen=True)
-class ProductStore:
-    id: int
-    name: str
-
-
-@dataclass(frozen=True)
-class ProductUser:
-    id: int
-    name: str
-    email: str
-
-
-@dataclass(frozen=True)
-class ProductSearchItem:
-    id: int
-    name: str
-    date: str
-    weight: Decimal
-    quality: Decimal
-    rate: Decimal
-    payment_type: str
-    payment_amount: Optional[Decimal]
-    payment_weight: Optional[Decimal]
-    payment_quality: Optional[Decimal]
-    payment_due_date: str
-    created_at: int
-    images: Tuple[ProductImage, ...]
-    status: str
-    retailer: Optional[ProductStore]
-    supplier: Optional[ProductStore]
-
-
-@dataclass(frozen=True)
-class ProductDetailsItem:
-    id: int
-    name: str
-    date: str
-    weight: Decimal
-    quality: Decimal
-    rate: Decimal
-    payment_type: str
-    payment_amount: Optional[Decimal]
-    payment_weight: Optional[Decimal]
-    payment_quality: Optional[Decimal]
-    payment_due_date: str
-    created_at: int
-    supplier: ProductStore
-    retailer: ProductStore
-    creator: ProductUser
-    images: Tuple[ProductImage, ...]
-    confirmed_by: Optional[ProductUser]
-    rejected_by: Optional[ProductUser]
-    cancelled_by: Optional[ProductUser]
-    status: str
-
-
-@dataclass(frozen=True)
-class ProductStats:
-    total_received: Decimal
-    number_received: int
-    total_ontime: Decimal
 
 
 class ProductsRepo:
@@ -150,11 +81,11 @@ class ProductsRepo:
                 cancelled_by=record.cancelled_by,
             )
 
-    def details(self, product_id: int) -> Optional[ProductDetailsItem]:
+    def details(self, product_id: int) -> Optional[DisplayProduct]:
         record = self._session.query(ProductTable).filter_by(id=product_id).first()
 
         if record:
-            return ProductDetailsItem(
+            return DisplayProduct(
                 id=record.id,
                 name=record.name,
                 date=record.date.isoformat(),
@@ -167,24 +98,31 @@ class ProductsRepo:
                 payment_quality=record.payment_quality,
                 payment_due_date=record.payment_due_date.isoformat(),
                 created_at=int(Timestamp.from_datetime(record.created_at)),
-                supplier=ProductStore(id=record.supplier.id, name=record.supplier.name),
-                retailer=ProductStore(id=record.retailer.id, name=record.retailer.name),
-                creator=ProductUser(
+                supplier=DisplaySupplier(
+                    id=record.supplier.id, name=record.supplier.name
+                ),
+                retailer=DisplayRetailer(
+                    id=record.retailer.id, name=record.retailer.name
+                ),
+                creator=DisplayUser(
                     id=record.creator.id,
                     name=record.creator.name,
                     email=record.creator.username,
                 ),
                 images=tuple(
-                    ProductImage(
+                    DisplayImage(
                         id=image.id,
                         url=image.url,
                         thumb_url=image.thumb_url,
+                        size=image.size,
+                        width=image.width,
+                        height=image.height,
                         created_at=int(Timestamp.from_datetime(image.created_at)),
                     )
                     for image in record.images
                 ),
                 confirmed_by=(
-                    ProductUser(
+                    DisplayUser(
                         id=record.confirmed_by_user.id,
                         name=record.confirmed_by_user.name,
                         email=record.confirmed_by_user.username,
@@ -193,7 +131,7 @@ class ProductsRepo:
                     else None
                 ),
                 rejected_by=(
-                    ProductUser(
+                    DisplayUser(
                         id=record.rejected_by_user.id,
                         name=record.rejected_by_user.name,
                         email=record.rejected_by_user.username,
@@ -202,7 +140,7 @@ class ProductsRepo:
                     else None
                 ),
                 cancelled_by=(
-                    ProductUser(
+                    DisplayUser(
                         id=record.cancelled_by_user.id,
                         name=record.cancelled_by_user.name,
                         email=record.cancelled_by_user.username,
@@ -221,7 +159,7 @@ class ProductsRepo:
         offset: int,
         order_by: ProductOrderBy = ProductOrderBy.CREATED,
         reverse: bool = True,
-    ) -> Tuple[int, Tuple[ProductSearchItem, ...]]:
+    ) -> Tuple[int, Tuple[DisplayProduct, ...]]:
         query = self._session.query(ProductTable)
 
         if supplier_id:
@@ -245,7 +183,7 @@ class ProductsRepo:
         return (
             total,
             tuple(
-                ProductSearchItem(
+                DisplayProduct(
                     id=record.id,
                     name=record.name,
                     date=record.date.isoformat(),
@@ -259,20 +197,55 @@ class ProductsRepo:
                     payment_due_date=record.payment_due_date.isoformat(),
                     created_at=int(Timestamp.from_datetime(record.created_at)),
                     images=tuple(
-                        ProductImage(
+                        DisplayImage(
                             id=image.id,
                             url=image.url,
                             thumb_url=image.thumb_url,
+                            size=image.size,
+                            width=image.width,
+                            height=image.height,
                             created_at=int(Timestamp.from_datetime(image.created_at)),
                         )
                         for image in record.images
                     ),
                     status=ProductStatus(record.status).slug,
-                    retailer=ProductStore(
+                    retailer=DisplayRetailer(
                         id=record.retailer.id, name=record.retailer.name
                     ),
-                    supplier=ProductStore(
+                    supplier=DisplaySupplier(
                         id=record.supplier.id, name=record.supplier.name
+                    ),
+                    creator=DisplayUser(
+                        id=record.creator.id,
+                        name=record.creator.name,
+                        email=record.creator.username,
+                    ),
+                    confirmed_by=(
+                        DisplayUser(
+                            id=record.confirmed_by_user.id,
+                            name=record.confirmed_by_user.name,
+                            email=record.confirmed_by_user.username,
+                        )
+                        if record.confirmed_by
+                        else None
+                    ),
+                    rejected_by=(
+                        DisplayUser(
+                            id=record.rejected_by_user.id,
+                            name=record.rejected_by_user.name,
+                            email=record.rejected_by_user.username,
+                        )
+                        if record.rejected_by
+                        else None
+                    ),
+                    cancelled_by=(
+                        DisplayUser(
+                            id=record.cancelled_by_user.id,
+                            name=record.cancelled_by_user.name,
+                            email=record.cancelled_by_user.username,
+                        )
+                        if record.cancelled_by
+                        else None
                     ),
                 )
                 for record in records

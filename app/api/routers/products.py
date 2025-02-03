@@ -8,8 +8,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from pydantic import BaseModel, Field
 
 from app.container import Container
-from app.models import Activity, ActivityType, PaymentType, User
-from app.repos.products import ProductDetailsItem, ProductSearchItem
+from app.models import Activity, ActivityType, DisplayProduct, PaymentType, User
 from app.repos.uow import UnitOfWork
 from app.use_cases.add_product import AddProduct
 from .auth import get_active_user
@@ -113,7 +112,7 @@ def add_product(
 
 class ProductsResponse(BaseModel):
     total: int
-    items: Tuple[ProductSearchItem, ...]
+    items: Tuple[DisplayProduct, ...]
 
 
 @router.get("/products")
@@ -148,7 +147,7 @@ def get_product(
     product_id: int,
     user: User = Depends(get_active_user),
     uow: UnitOfWork = Depends(Provide[Container.uow]),
-) -> ProductDetailsItem:
+) -> DisplayProduct:
     with uow:
         product_details = uow.products.details(product_id)
 

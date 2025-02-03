@@ -8,8 +8,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from pydantic import BaseModel, Field
 
 from app.container import Container
-from app.models import Activity, ActivityType, PaymentType, User
-from app.repos.payments import PaymentDetailsItem, PaymentSearchItem
+from app.models import Activity, ActivityType, PaymentType, DisplayPayment, User
 from app.repos.uow import UnitOfWork
 from app.use_cases.add_payment import AddPayment
 from .auth import get_active_user
@@ -96,7 +95,7 @@ def add_payment(
 
 class PaymentsResponse(BaseModel):
     total: int
-    items: Tuple[PaymentSearchItem, ...]
+    items: Tuple[DisplayPayment, ...]
 
 
 @router.get("/payments")
@@ -131,7 +130,7 @@ def get_payment(
     payment_id: int,
     user: User = Depends(get_active_user),
     uow: UnitOfWork = Depends(Provide[Container.uow]),
-) -> PaymentDetailsItem:
+) -> DisplayPayment:
     with uow:
         payment_details = uow.payments.details(payment_id)
 
