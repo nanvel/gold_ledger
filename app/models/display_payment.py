@@ -5,6 +5,7 @@ from typing import Optional
 from .display_retailer import DisplayRetailer
 from .display_supplier import DisplaySupplier
 from .display_user import DisplayUser
+from .payment_type import PaymentType
 
 
 @dataclass(frozen=True)
@@ -23,3 +24,10 @@ class DisplayPayment:
     cancelled_by: Optional[DisplayUser]
     created_at: int
     status: str
+
+    @property
+    def display_amount(self) -> str:
+        if self.type == PaymentType.FINE.slug:
+            return f"{self.type} {self.weight}g {self.quality}%"
+        else:
+            return f"{self.type} {self.amount}₹"

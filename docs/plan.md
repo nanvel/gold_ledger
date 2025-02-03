@@ -22,8 +22,10 @@ DDB for activities:
 - [x] rid of activities pg table
 - [x] detail -> dipslay
 - [ ] build message inside event, rid of the factory
-  - [ ] tests 
+  - [x] message property 
+  - [ ] tests
 - [ ] remove factories
+- [ ] ensure use payment type slug in frontend
 - [ ] event = product + anything else related like action type
 - [ ] move actions to use cases
 - [ ] message bus

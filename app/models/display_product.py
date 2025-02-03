@@ -30,3 +30,7 @@ class DisplayProduct:
     rejected_by: Optional[DisplayUser]
     cancelled_by: Optional[DisplayUser]
     status: str
+
+    @property
+    def display_name(self) -> str:
+        return f"{self.name} ({self.weight}g {self.quality}%)"

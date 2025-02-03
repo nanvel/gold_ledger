@@ -77,7 +77,7 @@ class PaymentsRepo:
         if record:
             return DisplayPayment(
                 id=record.id,
-                type=PaymentType(record.type).label,
+                type=PaymentType(record.type).slug,
                 date=record.date.isoformat(),
                 weight=record.weight,
                 quality=record.quality,
