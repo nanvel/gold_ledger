@@ -5,15 +5,26 @@ Payments summary:
 - [x] service for due
 - [x] due payments
 - [x] swap selector and table view in products
+- [ ] refactor logic, cache
 - [ ] filter by id/name
 - [ ] filter by overdue
 - [ ] filter by due today
 - [ ] order by overdue/due/amount
 - [ ] colors for overdue / amount
+- [ ] show overdue on home?
+- [ ] move language to container
+- [ ] move service to container
 
 DDB for activities:
+- [x] move creation to use cases
+- [ ] make ProductDetails and PaymentDetails models and use them
+- [ ] event = product + anything else related like action type
+- [ ] move actions to use cases
 - [ ] message bus
-  - [ ] check the architecture book 
+  - [x] check the architecture book
+  - [ ] event creation
+  - [ ] event handling
+- [ ] rid of activities pg table
 - [ ] ddb table
 - [ ] refactor activities repo
 

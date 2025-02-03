@@ -8,9 +8,10 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from pydantic import BaseModel, Field
 
 from app.container import Container
-from app.models import Activity, ActivityType, PaymentType, Payment, User
+from app.models import Activity, ActivityType, PaymentType, User
 from app.repos.payments import PaymentDetailsItem, PaymentSearchItem
 from app.repos.uow import UnitOfWork
+from app.use_cases.add_payment import AddPayment
 from .auth import get_active_user
 
 router = APIRouter()
@@ -31,11 +32,10 @@ class PaymentResponse(BaseModel):
 
 @router.post("/payments", status_code=201)
 @inject
-def create_payment(
+def add_payment(
     item: PaymentForm,
     user: User = Depends(get_active_user),
-    uow: UnitOfWork = Depends(Provide[Container.uow]),
-    activity_message_factory=Depends(Provide[Container.activity_message_factory]),
+    use_case: AddPayment = Depends(Provide[Container.add_payment]),
 ) -> PaymentResponse:
     if not user.is_retailer:
         raise HTTPException(
@@ -80,47 +80,16 @@ def create_payment(
                 ],
             )
 
-    with uow:
-        supplier = uow.suppliers.by_id(item.supplier_id)
-
-        if supplier is None:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail="The supplier store was not found.",
-            )
-
-        payment = Payment(
-            id=0,
-            type=item.type,
-            date=item.date,
-            weight=item.weight,
-            quality=item.quality,
-            amount=item.amount,
-            retailer_id=user.retailer_id,
-            supplier_id=supplier.id,
-            creator_id=user.id,
-            confirmed_by=None,
-            rejected_by=None,
-            cancelled_by=None,
-        )
-        payment.validate()
-        payment_id = uow.payments.create(payment)
-
-        activity = Activity(
-            id=0,
-            type=ActivityType.PAYMENT_ADDED,
-            user_id=user.id,
-            supplier_id=supplier.id,
-            retailer_id=user.retailer_id,
-            product_id=None,
-            payment_id=payment_id,
-            message="",
-        )
-        activity = replace(
-            activity,
-            message=activity_message_factory.from_activity(activity, uow),
-        )
-        uow.activities.create(activity)
+    use_case(
+        supplier_id=item.supplier_id,
+        retailer_id=user.retailer_id,
+        creator_id=user.id,
+        type_=item.type,
+        date_=item.date,
+        weight=item.weight,
+        quality=item.quality,
+        amount=item.amount,
+    )
 
     return PaymentResponse(success=True)
 

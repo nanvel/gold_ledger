@@ -2,11 +2,14 @@ from dependency_injector import containers, providers
 from passlib.context import CryptContext
 
 from app.factories.activity_message import ActivityMessageFactory
+from app.messagebus import MessageBus
 from app.resources.database import init_db
 from app.resources.s3_client import init_s3
 from app.repos.uow import UnitOfWork
 from app.services.images import ImagesService
-from app.use_cases.reset_password import ResetPassword
+from app.use_cases.add_payment import AddPayment
+from app.use_cases.add_product import AddProduct
+from app.use_cases.set_password import SetPassword
 
 
 class Container(containers.DeclarativeContainer):
@@ -39,6 +42,8 @@ class Container(containers.DeclarativeContainer):
     db = providers.Resource(init_db, db_uri=config.db_uri)
     s3_client = providers.Resource(init_s3, region=config.aws_region)
 
+    message_bus = providers.Singleton(MessageBus)
+
     activity_message_factory = providers.Singleton(ActivityMessageFactory)
 
     images_service = providers.Singleton(
@@ -51,8 +56,10 @@ class Container(containers.DeclarativeContainer):
 
     uow = providers.Singleton(UnitOfWork, db=db)
 
+    add_payment = providers.Factory(AddPayment, uow=uow)
+    add_product = providers.Factory(AddProduct, uow=uow)
     reset_password = providers.Factory(
-        ResetPassword,
+        SetPassword,
         uow=uow,
         crypt_context=crypt_context,
     )

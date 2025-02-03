@@ -8,9 +8,10 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from pydantic import BaseModel, Field
 
 from app.container import Container
-from app.models import Activity, ActivityType, PaymentType, Product, User
+from app.models import Activity, ActivityType, PaymentType, User
 from app.repos.products import ProductDetailsItem, ProductSearchItem
 from app.repos.uow import UnitOfWork
+from app.use_cases.add_product import AddProduct
 from .auth import get_active_user
 
 router = APIRouter()
@@ -37,11 +38,10 @@ class ProductResponse(BaseModel):
 
 @router.post("/products", status_code=201)
 @inject
-def create_product(
+def add_product(
     item: ProductForm,
     user: User = Depends(get_active_user),
-    uow: UnitOfWork = Depends(Provide[Container.uow]),
-    activity_message_factory=Depends(Provide[Container.activity_message_factory]),
+    use_case: AddProduct = Depends(Provide[Container.add_product]),
 ) -> ProductResponse:
     if not user.is_supplier:
         raise HTTPException(
@@ -91,73 +91,22 @@ def create_product(
                 ],
             )
 
-    with uow:
-        retailer = uow.retailers.by_id(item.retailer_id)
-
-        if retailer is None:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail="The retailer store was not found",
-            )
-
-        if item.image_id:
-            image = uow.images.by_id(item.image_id)
-
-            if image is None or not image.supplier_id:
-                raise HTTPException(
-                    status_code=status.HTTP_404_NOT_FOUND,
-                    detail="The image was not found",
-                )
-
-            if image.supplier_id != user.supplier_id:
-                raise HTTPException(
-                    status_code=status.HTTP_400_BAD_REQUEST,
-                    detail="The image does not belong to the store.",
-                )
-        else:
-            image = None
-
-        product = Product(
-            id=0,
-            name=item.name,
-            date=item.date,
-            weight=item.weight,
-            quality=item.quality,
-            rate=item.rate,
-            payment_type=item.payment_type,
-            payment_amount=item.payment_amount,
-            payment_weight=item.payment_weight,
-            payment_quality=item.payment_quality,
-            payment_due_date=item.payment_due_date,
-            supplier_id=user.supplier_id,
-            retailer_id=retailer.id,
-            creator_id=user.id,
-            confirmed_by=None,
-            rejected_by=None,
-            cancelled_by=None,
-        )
-        product.validate()
-        product_id = uow.products.create(product)
-        product = replace(product, id=product_id)
-
-        if image:
-            uow.products.add_image(product, image)
-
-        activity = Activity(
-            id=0,
-            type=ActivityType.PRODUCT_GIVEN,
-            user_id=user.id,
-            supplier_id=user.supplier_id,
-            retailer_id=retailer.id,
-            product_id=product_id,
-            payment_id=None,
-            message="",
-        )
-        activity = replace(
-            activity,
-            message=activity_message_factory.from_activity(activity, uow=uow),
-        )
-        uow.activities.create(activity)
+    use_case(
+        retailer_id=item.retailer_id,
+        supplier_id=user.supplier_id,
+        creator_id=user.id,
+        name=item.name,
+        date_=item.date,
+        weight=item.weight,
+        quality=item.quality,
+        rate=item.rate,
+        payment_type=item.payment_type,
+        payment_amount=item.payment_amount,
+        payment_weight=item.payment_weight,
+        payment_quality=item.payment_quality,
+        payment_due_date=item.payment_due_date,
+        image_id=item.image_id,
+    )
 
     return ProductResponse(success=True)
 
