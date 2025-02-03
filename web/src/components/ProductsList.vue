@@ -1,6 +1,10 @@
 <template>
   <div class="flex flex-col space-y-4">
     <div class="flex flex-row space-x-2 mt-8 justify-between">
+      <div>
+        <retailer-picker-modal v-if="isSupplier" v-on:selected="setRetailer" />
+        <supplier-picker-modal v-else v-on:selected="setSupplier" />
+      </div>
       <div class="join">
         <button
           class="btn btn-sm join-item"
@@ -16,11 +20,6 @@
         >
           Cards
         </button>
-      </div>
-
-      <div>
-        <retailer-picker-modal v-if="isSupplier" v-on:selected="setRetailer" />
-        <supplier-picker-modal v-else v-on:selected="setSupplier" />
       </div>
     </div>
 

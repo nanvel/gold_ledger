@@ -2,20 +2,35 @@
 
 Payments summary:
 - [x] study messages
-- [ ] service for due
-- [ ] due payments
+- [x] service for due
+- [x] due payments
+- [x] swap selector and table view in products
+- [ ] filter by id/name
+- [ ] filter by overdue
+- [ ] filter by due today
+- [ ] order by overdue/due/amount
+- [ ] colors for overdue / amount
 
 DDB for activities:
 - [ ] message bus
+  - [ ] check the architecture book 
 - [ ] ddb table
 - [ ] refactor activities repo
 
 Deployment:
+- [ ] connect sentry
+- [ ] encode secrets
 - [ ] refactor server folder
+  - [ ] storage options? 
 - [ ] use the new domain
+  - [ ] docs.goldledger.in?
 - [ ] Mumbai region
+- [ ] ensure debug mode is disable in tastypie, no api exposure
 
 Other:
+- [ ] cleanup plan
+- [ ] add product/payment on home
+- [ ] comment for payment
 - [ ] use slug instead of label in payment type
 - [ ] order table values by clicking on table header
 - [ ] compute due payments / products
@@ -128,3 +143,4 @@ Questions:
 - how the store id looks like?
 - Write terms of use?
 - Landing page
+- support link (password loss, etc.)
