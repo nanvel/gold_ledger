@@ -42,7 +42,7 @@
         <add-product-modal v-if="isSupplier" />
         <add-payment-modal v-else />
       </div>
-      <div class="h-full overflow-y-scroll p-2">
+      <div class="overflow-y-scroll p-2">
         <slot></slot>
       </div>
     </div>
