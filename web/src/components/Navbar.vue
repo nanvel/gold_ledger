@@ -39,6 +39,8 @@
             <li><RouterLink to="/settings">Settings</RouterLink></li>
           </ul>
         </div>
+        <add-product-modal v-if="isSupplier" />
+        <add-payment-modal v-else />
       </div>
       <div class="h-full overflow-y-scroll p-2">
         <slot></slot>
@@ -66,9 +68,11 @@ import { useMeStore } from "@/stores/index.js";
 import { onMounted } from "vue";
 import { storeToRefs } from "pinia";
 import { RouterLink } from "vue-router";
+import AddPaymentModal from "@/components/AddPaymentModal.vue";
+import AddProductModal from "@/components/AddProductModal.vue";
 
 const store = useMeStore();
-const { storeName, supplierId, retailerId } = storeToRefs(store);
+const { storeName, supplierId, retailerId, isSupplier } = storeToRefs(store);
 
 onMounted(async () => {
   await store.load();

@@ -96,7 +96,7 @@ const retailerId = ref(props.retailerId);
 const pages = computed(() => Math.ceil(total.value / limit.value));
 
 const paymentStr = (payment) => {
-  if (payment.type === "Fine") {
+  if (payment.type === "fine") {
     return `${payment.type} ${payment.weight}g @ ${payment.quality}%`;
   } else {
     return `${payment.type} ${payment.amount}₹`;

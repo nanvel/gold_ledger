@@ -5,8 +5,7 @@ from fastapi import APIRouter, Depends
 from pydantic import BaseModel
 
 from app.container import Container
-from app.models import User
-from app.repos.activities import ActivitySearchItem
+from app.models import DisplayActivity, User
 from app.repos.uow import UnitOfWork
 from .auth import get_active_user
 
@@ -14,7 +13,7 @@ router = APIRouter()
 
 
 class ResponseItem(BaseModel):
-    items: Tuple[ActivitySearchItem, ...]
+    items: Tuple[DisplayActivity, ...]
     total: int
 
 

@@ -1,5 +1,12 @@
 from .activity import Activity
 from .activity_type import ActivityType
+from .display_activity import DisplayActivity
+from .display_image import DisplayImage
+from .display_payment import DisplayPayment
+from .display_product import DisplayProduct
+from .display_retailer import DisplayRetailer
+from .display_supplier import DisplaySupplier
+from .display_user import DisplayUser
 from .image import Image
 from .payment import Payment
 from .payment_order_by import PaymentOrderBy
@@ -20,6 +27,13 @@ from .user import User
 __all__ = (
     "Activity",
     "ActivityType",
+    "DisplayActivity",
+    "DisplayImage",
+    "DisplayPayment",
+    "DisplayProduct",
+    "DisplayRetailer",
+    "DisplaySupplier",
+    "DisplayUser",
     "Image",
     "Payment",
     "PaymentOrderBy",

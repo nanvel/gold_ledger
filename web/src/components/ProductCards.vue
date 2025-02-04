@@ -56,7 +56,7 @@ const tableRows = (product) => {
   } else {
     res.push(["Supplier", `${product.supplier.id} : ${product.supplier.name}`]);
   }
-  if (product.payment_type === "Fine") {
+  if (product.payment_type === "fine") {
     res.push([
       "Payment",
       `${product.payment_type} ${product.payment_weight}g @ ${product.payment_quality}% by ${product.payment_due_date}`,

@@ -36,9 +36,9 @@ def dev_server():
 
 
 @app.command()
-def reset_password(username: str, password: str):
+def set_password(username: str, password: str):
     with _Container() as container:
-        user = container.reset_password()(
+        user = container.set_password()(
             username=username,
             password=password,
         )

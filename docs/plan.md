@@ -1,21 +1,50 @@
 # Plan
 
+DDB for activities:
+- [x] move creation to use cases
+- [x] make ProductDetails and PaymentDetails models
+  - [x] use them
+- [x] rid of activities pg table
+- [x] detail -> display
+- [x] build message inside event, rid of the factory
+  - [x] message property 
+  - [x] tests
+- [x] remove factories
+- [x] ensure use payment type slug in frontend
+- [x] event = product + anything else related like action type
+- [x] move cancel/confirm/reject to use cases
+- [x] push events in use cases
+- [ ] message bus
+  - [x] check the architecture book
+  - [x] event creation
+- [ ] put back the table and repo
+- [ ] create activities in message bus handler
+- [ ] fix activities api
+
 Payments summary:
 - [x] study messages
 - [x] service for due
 - [x] due payments
 - [x] swap selector and table view in products
+- [ ] refactor logic, cache
 - [ ] filter by id/name
 - [ ] filter by overdue
 - [ ] filter by due today
 - [ ] order by overdue/due/amount
 - [ ] colors for overdue / amount
+- [ ] show overdue on home?
+- [ ] move language to container
+- [ ] move service to container
+- [ ] cache due for supplier/retailer
+- [ ] supplier/retailer cache
+- [ ] groupby due date for products
 
-DDB for activities:
-- [ ] message bus
-  - [ ] check the architecture book 
-- [ ] ddb table
-- [ ] refactor activities repo
+UI more:
+- [ ] disallow past due dates
+- [ ] new payment/product right navbar
+  - [x] button
+  - [ ] refresh products/payments/activities
+- [ ] show pay n amount to by date
 
 Deployment:
 - [ ] connect sentry
@@ -29,6 +58,7 @@ Deployment:
 
 Other:
 - [ ] cleanup plan
+- [ ] timezone - to container
 - [ ] add product/payment on home
 - [ ] comment for payment
 - [ ] use slug instead of label in payment type
@@ -127,6 +157,7 @@ Security:
 - confirm email
 - sending reports via email
 - download records
+- db replication
 
 Questions:
 - validation of product fields?

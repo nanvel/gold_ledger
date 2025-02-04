@@ -1,23 +1,9 @@
-from dataclasses import dataclass
-from typing import Optional, Tuple, Any, Generator
+from typing import Optional, Tuple
 
 from sqlalchemy.orm import Session
 
 from app.db import ActivityTable
-from app.models import Activity, ActivityType, Timestamp
-
-
-@dataclass(frozen=True)
-class ActivitySearchItem:
-    id: int
-    type: str
-    user_id: int
-    supplier_id: int
-    retailer_id: int
-    product_id: Optional[int]
-    payment_id: Optional[int]
-    message: str
-    created_at: int
+from app.models import Activity, ActivityType, DisplayActivity, Timestamp
 
 
 class ActivitiesRepo:
@@ -49,7 +35,7 @@ class ActivitiesRepo:
         payment_id: Optional[int] = None,
         limit: int = 20,
         offset: int = 0,
-    ) -> tuple[int, Tuple[ActivitySearchItem, ...]]:
+    ) -> tuple[int, Tuple[DisplayActivity, ...]]:
         query = self._session.query(ActivityTable)
 
         if supplier_id:
@@ -73,12 +59,9 @@ class ActivitiesRepo:
         )
 
         return total, tuple(
-            ActivitySearchItem(
+            DisplayActivity(
                 id=item.id,
                 type=ActivityType(item.type).label,
-                user_id=item.user_id,
-                supplier_id=item.supplier_id,
-                retailer_id=item.retailer_id,
                 product_id=item.product_id,
                 payment_id=item.payment_id,
                 message=item.message,

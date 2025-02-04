@@ -5,7 +5,7 @@ from passlib.context import CryptContext
 from app.repos.uow import UnitOfWork
 
 
-class ResetPassword:
+class SetPassword:
     def __init__(self, uow: UnitOfWork, crypt_context: CryptContext):
         self._uow = uow
         self._crypt_context = crypt_context

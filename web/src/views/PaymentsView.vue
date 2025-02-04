@@ -1,12 +1,5 @@
 <template>
   <navbar>
-    <div class="my-4">
-      <add-payment-modal
-        v-if="retailerId"
-        v-on:payment-added="paymentsListVersion += 1"
-      />
-    </div>
-
     <payments-list
       :supplier-id="supplierId"
       :retailer-id="retailerId"
@@ -17,7 +10,6 @@
 
 <script setup>
 import Navbar from "@/components/Navbar.vue";
-import AddPaymentModal from "@/components/AddPaymentModal.vue";
 import { useMeStore } from "@/stores/index.js";
 import { storeToRefs } from "pinia";
 import PaymentsList from "@/components/PaymentsList.vue";

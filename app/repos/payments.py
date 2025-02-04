@@ -6,65 +6,16 @@ from sqlalchemy.orm import Session
 
 from app.db import PaymentTable
 from app.models import (
+    DisplayPayment,
+    DisplayRetailer,
+    DisplaySupplier,
+    DisplayUser,
     Payment,
     PaymentOrderBy,
     PaymentStatus,
     PaymentType,
     Timestamp,
 )
-
-
-@dataclass(frozen=True)
-class PaymentStore:
-    id: int
-    name: str
-
-
-@dataclass(frozen=True)
-class PaymentUser:
-    id: int
-    name: str
-    email: str
-
-
-@dataclass(frozen=True)
-class PaymentSearchItem:
-    id: int
-    type: str
-    date: str
-    weight: Optional[Decimal]
-    quality: Optional[Decimal]
-    amount: Optional[Decimal]
-    created_at: int
-    status: str
-    retailer: PaymentStore
-    supplier: PaymentStore
-
-
-@dataclass(frozen=True)
-class PaymentDetailsItem:
-    id: int
-    type: str
-    date: str
-    weight: Optional[Decimal]
-    quality: Optional[Decimal]
-    amount: Optional[Decimal]
-    supplier: PaymentStore
-    retailer: PaymentStore
-    creator: PaymentUser
-    confirmed_by: Optional[PaymentUser]
-    rejected_by: Optional[PaymentUser]
-    cancelled_by: Optional[PaymentUser]
-    created_at: int
-    status: str
-
-
-@dataclass(frozen=True)
-class PaymentsStats:
-    total_paid: Decimal
-    total_pending: Decimal
-    number_paid: int
-    number_pending: int
 
 
 class PaymentsRepo:
@@ -120,26 +71,30 @@ class PaymentsRepo:
                 cancelled_by=record.cancelled_by,
             )
 
-    def details(self, payment_id: int) -> Optional[PaymentDetailsItem]:
+    def display(self, payment_id: int) -> Optional[DisplayPayment]:
         record = self._session.query(PaymentTable).filter_by(id=payment_id).first()
 
         if record:
-            return PaymentDetailsItem(
+            return DisplayPayment(
                 id=record.id,
-                type=PaymentType(record.type).label,
+                type=PaymentType(record.type).slug,
                 date=record.date.isoformat(),
                 weight=record.weight,
                 quality=record.quality,
                 amount=record.amount,
-                supplier=PaymentStore(id=record.supplier.id, name=record.supplier.name),
-                retailer=PaymentStore(id=record.retailer.id, name=record.retailer.name),
-                creator=PaymentUser(
+                supplier=DisplaySupplier(
+                    id=record.supplier.id, name=record.supplier.name
+                ),
+                retailer=DisplayRetailer(
+                    id=record.retailer.id, name=record.retailer.name
+                ),
+                creator=DisplayUser(
                     id=record.creator.id,
                     name=record.creator.name,
                     email=record.creator.username,
                 ),
                 confirmed_by=(
-                    PaymentUser(
+                    DisplayUser(
                         id=record.confirmed_by_user.id,
                         name=record.confirmed_by_user.name,
                         email=record.confirmed_by_user.username,
@@ -148,7 +103,7 @@ class PaymentsRepo:
                     else None
                 ),
                 rejected_by=(
-                    PaymentUser(
+                    DisplayUser(
                         id=record.rejected_by_user.id,
                         name=record.rejected_by_user.name,
                         email=record.rejected_by_user.username,
@@ -157,7 +112,7 @@ class PaymentsRepo:
                     else None
                 ),
                 cancelled_by=(
-                    PaymentUser(
+                    DisplayUser(
                         id=record.cancelled_by_user.id,
                         name=record.cancelled_by_user.name,
                         email=record.cancelled_by_user.username,
@@ -177,7 +132,7 @@ class PaymentsRepo:
         offset: int,
         order_by: PaymentOrderBy = PaymentOrderBy.CREATED,
         reverse: bool = True,
-    ) -> Tuple[int, Tuple[PaymentSearchItem, ...]]:
+    ) -> Tuple[int, Tuple[DisplayPayment, ...]]:
         query = self._session.query(PaymentTable)
 
         if supplier_id:
@@ -201,7 +156,7 @@ class PaymentsRepo:
         return (
             total,
             tuple(
-                PaymentSearchItem(
+                DisplayPayment(
                     id=record.id,
                     type=PaymentType(record.type).slug,
                     date=record.date.isoformat(),
@@ -210,11 +165,43 @@ class PaymentsRepo:
                     amount=record.amount,
                     created_at=int(Timestamp.from_datetime(record.created_at)),
                     status=PaymentStatus(record.status).slug,
-                    retailer=PaymentStore(
+                    retailer=DisplayRetailer(
                         id=record.retailer.id, name=record.retailer.name
                     ),
-                    supplier=PaymentStore(
+                    supplier=DisplaySupplier(
                         id=record.supplier.id, name=record.supplier.name
+                    ),
+                    creator=DisplayUser(
+                        id=record.creator.id,
+                        name=record.creator.name,
+                        email=record.creator.username,
+                    ),
+                    confirmed_by=(
+                        DisplayUser(
+                            id=record.confirmed_by_user.id,
+                            name=record.confirmed_by_user.name,
+                            email=record.confirmed_by_user.username,
+                        )
+                        if record.confirmed_by
+                        else None
+                    ),
+                    rejected_by=(
+                        DisplayUser(
+                            id=record.rejected_by_user.id,
+                            name=record.rejected_by_user.name,
+                            email=record.rejected_by_user.username,
+                        )
+                        if record.rejected_by
+                        else None
+                    ),
+                    cancelled_by=(
+                        DisplayUser(
+                            id=record.cancelled_by_user.id,
+                            name=record.cancelled_by_user.name,
+                            email=record.cancelled_by_user.username,
+                        )
+                        if record.cancelled_by
+                        else None
                     ),
                 )
                 for record in records

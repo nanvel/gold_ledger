@@ -30,8 +30,12 @@ class ActivityTable(Base):
     __table_args__ = (
         sa.PrimaryKeyConstraint("id"),
         sa.Index(
-            "idx_activity_supplier_retailer_created",
+            "idx_activity_supplier_created",
             "supplier_id",
+            "created_at",
+        ),
+        sa.Index(
+            "idx_activity_retailer_created",
             "retailer_id",
             "created_at",
         ),

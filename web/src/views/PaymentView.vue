@@ -83,7 +83,7 @@ const tableRows = computed(() => {
   }
   const res = [["Type", `${details.value.type}`]];
 
-  if (details.value.type === "Fine") {
+  if (details.value.type === "fine") {
     res.push(["Weight", `${details.weight}g`]);
     res.push(["Quality", `${details.quality}%`]);
   } else {
