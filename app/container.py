@@ -1,7 +1,6 @@
 from dependency_injector import containers, providers
 from passlib.context import CryptContext
 
-from app.factories.activity_message import ActivityMessageFactory
 from app.messagebus import MessageBus
 from app.resources.database import init_db
 from app.resources.s3_client import init_s3
@@ -43,8 +42,6 @@ class Container(containers.DeclarativeContainer):
     s3_client = providers.Resource(init_s3, region=config.aws_region)
 
     message_bus = providers.Singleton(MessageBus)
-
-    activity_message_factory = providers.Singleton(ActivityMessageFactory)
 
     images_service = providers.Singleton(
         ImagesService,

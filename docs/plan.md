@@ -14,16 +14,17 @@ Payments summary:
 - [ ] show overdue on home?
 - [ ] move language to container
 - [ ] move service to container
+- [ ] cache due for supplier/retailer
 
 DDB for activities:
 - [x] move creation to use cases
 - [x] make ProductDetails and PaymentDetails models
   - [x] use them
 - [x] rid of activities pg table
-- [x] detail -> dipslay
+- [x] detail -> display
 - [ ] build message inside event, rid of the factory
   - [x] message property 
-  - [ ] tests
+  - [x] tests
 - [ ] remove factories
 - [ ] ensure use payment type slug in frontend
 - [ ] event = product + anything else related like action type
@@ -36,6 +37,13 @@ DDB for activities:
 - [ ] ddb connection
 - [ ] new repo
 - [ ] refactor activities repo
+- [ ] supplier/retailer cache
+- [ ] groupby due date for products
+
+UI more:
+- [ ] disallow past due dates
+- [ ] new payment/product right navbar
+- [ ] show pay n amount to by date
 
 Deployment:
 - [ ] connect sentry
