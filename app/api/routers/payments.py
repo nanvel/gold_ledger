@@ -1,4 +1,3 @@
-from dataclasses import replace
 from datetime import date
 from decimal import Decimal
 from typing import Optional, Tuple
@@ -8,9 +7,12 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from pydantic import BaseModel, Field
 
 from app.container import Container
-from app.models import Activity, ActivityType, PaymentType, DisplayPayment, User
+from app.models import PaymentType, DisplayPayment, User
 from app.repos.uow import UnitOfWork
 from app.use_cases.add_payment import AddPayment
+from app.use_cases.cancel_payment import CancelPayment
+from app.use_cases.confirm_payment import ConfirmPayment
+from app.use_cases.reject_payment import RejectPayment
 from .auth import get_active_user
 
 router = APIRouter()
@@ -25,7 +27,7 @@ class PaymentForm(BaseModel):
     supplier_id: int
 
 
-class PaymentResponse(BaseModel):
+class EmptyResponse(BaseModel):
     success: bool
 
 
@@ -35,7 +37,7 @@ def add_payment(
     item: PaymentForm,
     user: User = Depends(get_active_user),
     use_case: AddPayment = Depends(Provide[Container.add_payment]),
-) -> PaymentResponse:
+) -> EmptyResponse:
     if not user.is_retailer:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
@@ -90,7 +92,7 @@ def add_payment(
         amount=item.amount,
     )
 
-    return PaymentResponse(success=True)
+    return EmptyResponse(success=True)
 
 
 class PaymentsResponse(BaseModel):
@@ -146,47 +148,16 @@ def get_payment(
         return payment_details
 
 
-class UpdateResponse(BaseModel):
-    success: bool
-
-
 @router.post("/payments/{payment_id}/confirm")
 @inject
 def confirm_payment(
     payment_id: int,
     user: User = Depends(get_active_user),
-    uow: UnitOfWork = Depends(Provide[Container.uow]),
-    activity_message_factory=Depends(Provide[Container.activity_message_factory]),
-) -> UpdateResponse:
-    with uow:
-        payment = uow.payments.by_id(payment_id)
+    use_case: ConfirmPayment = Depends(Provide[Container.confirm_payment]),
+) -> EmptyResponse:
+    use_case(user=user, payment_id=payment_id)
 
-        if not payment or payment.supplier_id != user.supplier_id:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail="The payment was not found",
-            )
-
-        payment = payment.confirm(user)
-        uow.payments.update(payment)
-
-        activity = Activity(
-            id=0,
-            type=ActivityType.PAYMENT_CONFIRMED,
-            user_id=user.id,
-            supplier_id=payment.supplier_id,
-            retailer_id=payment.retailer_id,
-            product_id=None,
-            payment_id=payment.id,
-            message="",
-        )
-        activity = replace(
-            activity,
-            message=activity_message_factory.from_activity(activity, uow),
-        )
-        uow.activities.create(activity)
-
-    return UpdateResponse(success=True)
+    return EmptyResponse(success=True)
 
 
 @router.post("/payments/{payment_id}/reject")
@@ -194,38 +165,11 @@ def confirm_payment(
 def reject_payment(
     payment_id: int,
     user: User = Depends(get_active_user),
-    uow: UnitOfWork = Depends(Provide[Container.uow]),
-    activity_message_factory=Depends(Provide[Container.activity_message_factory]),
-) -> UpdateResponse:
-    with uow:
-        payment = uow.payments.by_id(payment_id)
+    use_case: RejectPayment = Depends(Provide[Container.reject_payment]),
+) -> EmptyResponse:
+    use_case(user=user, payment_id=payment_id)
 
-        if not payment or payment.supplier_id != user.supplier_id:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail="The payment was not found",
-            )
-
-        payment = payment.reject(user)
-        uow.payments.update(payment)
-
-        activity = Activity(
-            id=0,
-            type=ActivityType.PAYMENT_REJECTED,
-            user_id=user.id,
-            supplier_id=payment.supplier_id,
-            retailer_id=payment.retailer_id,
-            product_id=None,
-            payment_id=payment.id,
-            message="",
-        )
-        activity = replace(
-            activity,
-            message=activity_message_factory.from_activity(activity, uow),
-        )
-        uow.activities.create(activity)
-
-    return UpdateResponse(success=True)
+    return EmptyResponse(success=True)
 
 
 @router.post("/payments/{payment_id}/cancel")
@@ -233,35 +177,8 @@ def reject_payment(
 def cancel_payment(
     payment_id: int,
     user: User = Depends(get_active_user),
-    uow: UnitOfWork = Depends(Provide[Container.uow]),
-    activity_message_factory=Depends(Provide[Container.activity_message_factory]),
-) -> UpdateResponse:
-    with uow:
-        payment = uow.payments.by_id(payment_id)
+    use_case: CancelPayment = Depends(Provide[Container.cancel_payment]),
+) -> EmptyResponse:
+    use_case(user=user, payment_id=payment_id)
 
-        if not payment or payment.retailer_id != user.retailer_id:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail="The payment was not found",
-            )
-
-        payment = payment.cancel(user)
-        uow.payments.update(payment)
-
-        activity = Activity(
-            id=0,
-            type=ActivityType.PAYMENT_CANCELLED,
-            user_id=user.id,
-            supplier_id=payment.supplier_id,
-            retailer_id=payment.retailer_id,
-            product_id=None,
-            payment_id=payment.id,
-            message="",
-        )
-        activity = replace(
-            activity,
-            message=activity_message_factory.from_activity(activity, uow),
-        )
-        uow.activities.create(activity)
-
-    return UpdateResponse(success=True)
+    return EmptyResponse(success=True)
