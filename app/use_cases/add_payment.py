@@ -4,13 +4,15 @@ from typing import Optional
 
 from fastapi import HTTPException, status
 
+from app.message_bus import MessageBus
 from app.models import Payment, PaymentType
 from app.repos.uow import UnitOfWork
 
 
 class AddPayment:
-    def __init__(self, uow: UnitOfWork):
+    def __init__(self, uow: UnitOfWork, message_bus: MessageBus):
         self._uow = uow
+        self._message_bus = message_bus
 
     def __call__(
         self,

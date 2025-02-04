@@ -30,7 +30,7 @@ DDB for activities:
 - [x] remove factories
 - [x] ensure use payment type slug in frontend
 - [x] event = product + anything else related like action type
-- [ ] move cancel/confirm/reject to use cases
+- [x] move cancel/confirm/reject to use cases
 - [ ] push events in use cases
 - [ ] message bus
   - [x] check the architecture book

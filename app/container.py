@@ -1,7 +1,7 @@
 from dependency_injector import containers, providers
 from passlib.context import CryptContext
 
-from app.messagebus import MessageBus
+from app.message_bus import MessageBus
 from app.resources.database import init_db
 from app.resources.s3_client import init_s3
 from app.repos.uow import UnitOfWork
@@ -59,14 +59,18 @@ class Container(containers.DeclarativeContainer):
 
     uow = providers.Singleton(UnitOfWork, db=db)
 
-    add_payment = providers.Factory(AddPayment, uow=uow)
-    add_product = providers.Factory(AddProduct, uow=uow)
-    cancel_payment = providers.Factory(CancelPayment, uow=uow)
-    cancel_product = providers.Factory(CancelProduct, uow=uow)
-    confirm_payment = providers.Factory(ConfirmPayment, uow=uow)
-    confirm_product = providers.Factory(ConfirmProduct, uow=uow)
-    reject_payment = providers.Factory(RejectPayment, uow=uow)
-    reject_product = providers.Factory(RejectProduct, uow=uow)
+    add_payment = providers.Factory(AddPayment, uow=uow, message_bus=message_bus)
+    add_product = providers.Factory(AddProduct, uow=uow, message_bus=message_bus)
+    cancel_payment = providers.Factory(CancelPayment, uow=uow, message_bus=message_bus)
+    cancel_product = providers.Factory(CancelProduct, uow=uow, message_bus=message_bus)
+    confirm_payment = providers.Factory(
+        ConfirmPayment, uow=uow, message_bus=message_bus
+    )
+    confirm_product = providers.Factory(
+        ConfirmProduct, uow=uow, message_bus=message_bus
+    )
+    reject_payment = providers.Factory(RejectPayment, uow=uow, message_bus=message_bus)
+    reject_product = providers.Factory(RejectProduct, uow=uow, message_bus=message_bus)
     reset_password = providers.Factory(
         SetPassword,
         uow=uow,
