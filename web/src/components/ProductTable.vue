@@ -51,7 +51,7 @@ const meStore = useMeStore();
 const { isSupplier } = storeToRefs(meStore);
 
 const computePayment = (product) => {
-  if (product.payment_type === "Fine") {
+  if (product.payment_type === "fine") {
     return `${product.payment_type} ${product.payment_weight}g @ ${product.payment_quality}% by ${product.payment_due_date}`;
   } else {
     return `${product.payment_type} ${product.payment_amount}₹ by ${product.payment_due_date}`;

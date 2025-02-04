@@ -25,7 +25,7 @@ DDB for activities:
 - [ ] build message inside event, rid of the factory
   - [x] message property 
   - [x] tests
-- [ ] remove factories
+- [x] remove factories
 - [ ] ensure use payment type slug in frontend
 - [ ] event = product + anything else related like action type
 - [ ] move actions to use cases
@@ -57,6 +57,7 @@ Deployment:
 
 Other:
 - [ ] cleanup plan
+- [ ] timezone - to container
 - [ ] add product/payment on home
 - [ ] comment for payment
 - [ ] use slug instead of label in payment type

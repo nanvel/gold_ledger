@@ -98,7 +98,7 @@ const tableRows = computed(() => {
     ["Rate", `${details.value.rate}₹/g`],
     [
       "Payment",
-      details.value.payment_type === "Fine"
+      details.value.payment_type === "fine"
         ? `${details.value.payment_type} ${details.value.payment_weight}g @ ${details.value.payment_quality}% by ${details.value.payment_due_date}`
         : `${details.value.payment_type} ${details.value.payment_amount}₹ by ${details.value.payment_due_date}`,
     ],
