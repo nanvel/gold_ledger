@@ -1,23 +1,5 @@
 # Plan
 
-Payments summary:
-- [x] study messages
-- [x] service for due
-- [x] due payments
-- [x] swap selector and table view in products
-- [ ] refactor logic, cache
-- [ ] filter by id/name
-- [ ] filter by overdue
-- [ ] filter by due today
-- [ ] order by overdue/due/amount
-- [ ] colors for overdue / amount
-- [ ] show overdue on home?
-- [ ] move language to container
-- [ ] move service to container
-- [ ] cache due for supplier/retailer
-- [ ] supplier/retailer cache
-- [ ] groupby due date for products
-
 DDB for activities:
 - [x] move creation to use cases
 - [x] make ProductDetails and PaymentDetails models
@@ -39,9 +21,29 @@ DDB for activities:
 - [ ] create activities in message bus handler
 - [ ] fix activities api
 
+Payments summary:
+- [x] study messages
+- [x] service for due
+- [x] due payments
+- [x] swap selector and table view in products
+- [ ] refactor logic, cache
+- [ ] filter by id/name
+- [ ] filter by overdue
+- [ ] filter by due today
+- [ ] order by overdue/due/amount
+- [ ] colors for overdue / amount
+- [ ] show overdue on home?
+- [ ] move language to container
+- [ ] move service to container
+- [ ] cache due for supplier/retailer
+- [ ] supplier/retailer cache
+- [ ] groupby due date for products
+
 UI more:
 - [ ] disallow past due dates
 - [ ] new payment/product right navbar
+  - [x] button
+  - [ ] refresh products/payments/activities
 - [ ] show pay n amount to by date
 
 Deployment:
@@ -155,6 +157,7 @@ Security:
 - confirm email
 - sending reports via email
 - download records
+- db replication
 
 Questions:
 - validation of product fields?
