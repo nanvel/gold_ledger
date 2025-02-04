@@ -24,22 +24,22 @@ DDB for activities:
   - [x] use them
 - [x] rid of activities pg table
 - [x] detail -> display
-- [ ] build message inside event, rid of the factory
+- [x] build message inside event, rid of the factory
   - [x] message property 
   - [x] tests
 - [x] remove factories
 - [x] ensure use payment type slug in frontend
 - [x] event = product + anything else related like action type
 - [x] move cancel/confirm/reject to use cases
-- [ ] push events in use cases
+- [x] push events in use cases
 - [ ] message bus
   - [x] check the architecture book
-  - [ ] event creation
-  - [ ] event handling
+  - [x] event creation
 - [ ] ddb table
 - [ ] ddb connection
 - [ ] new repo
-- [ ] refactor activities repo
+- [ ] create activities in message bus handler
+- [ ] activities api
 
 UI more:
 - [ ] disallow past due dates
