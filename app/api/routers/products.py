@@ -1,4 +1,3 @@
-from dataclasses import replace
 from datetime import date
 from decimal import Decimal
 from typing import Optional, Tuple
@@ -8,9 +7,12 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from pydantic import BaseModel, Field
 
 from app.container import Container
-from app.models import Activity, ActivityType, DisplayProduct, PaymentType, User
+from app.models import DisplayProduct, PaymentType, User
 from app.repos.uow import UnitOfWork
 from app.use_cases.add_product import AddProduct
+from app.use_cases.cancel_product import CancelProduct
+from app.use_cases.confirm_product import ConfirmProduct
+from app.use_cases.reject_product import RejectProduct
 from .auth import get_active_user
 
 router = APIRouter()
@@ -31,7 +33,7 @@ class ProductForm(BaseModel):
     image_id: Optional[int]
 
 
-class ProductResponse(BaseModel):
+class EmptyResponse(BaseModel):
     success: bool
 
 
@@ -41,7 +43,7 @@ def add_product(
     item: ProductForm,
     user: User = Depends(get_active_user),
     use_case: AddProduct = Depends(Provide[Container.add_product]),
-) -> ProductResponse:
+) -> EmptyResponse:
     if not user.is_supplier:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
@@ -107,7 +109,7 @@ def add_product(
         image_id=item.image_id,
     )
 
-    return ProductResponse(success=True)
+    return EmptyResponse(success=True)
 
 
 class ProductsResponse(BaseModel):
@@ -163,47 +165,16 @@ def get_product(
         return product_details
 
 
-class UpdateResponse(BaseModel):
-    success: bool
-
-
 @router.post("/products/{product_id}/confirm")
 @inject
 def confirm_product(
     product_id: int,
     user: User = Depends(get_active_user),
-    uow: UnitOfWork = Depends(Provide[Container.uow]),
-    activity_message_factory=Depends(Provide[Container.activity_message_factory]),
-) -> UpdateResponse:
-    with uow:
-        product = uow.products.by_id(product_id)
+    use_case: ConfirmProduct = Depends(Provide[Container.confirm_product]),
+) -> EmptyResponse:
+    use_case(user=user, product_id=product_id)
 
-        if not product or product.retailer_id != user.retailer_id:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail="The product was not found",
-            )
-
-        product = product.confirm(user)
-        uow.products.update(product)
-
-        activity = Activity(
-            id=0,
-            type=ActivityType.PRODUCT_CONFIRMED,
-            user_id=user.id,
-            supplier_id=product.supplier_id,
-            retailer_id=product.retailer_id,
-            product_id=product_id,
-            payment_id=None,
-            message="",
-        )
-        activity = replace(
-            activity,
-            message=activity_message_factory.from_activity(activity, uow=uow),
-        )
-        uow.activities.create(activity)
-
-    return UpdateResponse(success=True)
+    return EmptyResponse(success=True)
 
 
 @router.post("/products/{product_id}/reject")
@@ -211,38 +182,11 @@ def confirm_product(
 def reject_product(
     product_id: int,
     user: User = Depends(get_active_user),
-    uow: UnitOfWork = Depends(Provide[Container.uow]),
-    activity_message_factory=Depends(Provide[Container.activity_message_factory]),
-) -> UpdateResponse:
-    with uow:
-        product = uow.products.by_id(product_id)
+    use_case: RejectProduct = Depends(Provide[Container.reject_product]),
+) -> EmptyResponse:
+    use_case(user=user, product_id=product_id)
 
-        if not product or product.retailer_id != user.retailer_id:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail="The product was not found",
-            )
-
-        product = product.reject(user)
-        uow.products.update(product)
-
-        activity = Activity(
-            id=0,
-            type=ActivityType.PRODUCT_REJECTED,
-            user_id=user.id,
-            supplier_id=product.supplier_id,
-            retailer_id=product.retailer_id,
-            product_id=product_id,
-            payment_id=None,
-            message="",
-        )
-        activity = replace(
-            activity,
-            message=activity_message_factory.from_activity(activity, uow=uow),
-        )
-        uow.activities.create(activity)
-
-    return UpdateResponse(success=True)
+    return EmptyResponse(success=True)
 
 
 @router.post("/products/{product_id}/cancel")
@@ -250,35 +194,8 @@ def reject_product(
 def cancel_product(
     product_id: int,
     user: User = Depends(get_active_user),
-    uow: UnitOfWork = Depends(Provide[Container.uow]),
-    activity_message_factory=Depends(Provide[Container.activity_message_factory]),
-) -> UpdateResponse:
-    with uow:
-        product = uow.products.by_id(product_id)
+    user_case: CancelProduct = Depends(Provide[Container.cancel_product]),
+) -> EmptyResponse:
+    user_case(user=user, product_id=product_id)
 
-        if not product or product.supplier_id != user.supplier_id:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail="The product was not found",
-            )
-
-        product = product.cancel(user)
-        uow.products.update(product)
-
-        activity = Activity(
-            id=0,
-            type=ActivityType.PRODUCT_CANCELLED,
-            user_id=user.id,
-            supplier_id=product.supplier_id,
-            retailer_id=product.retailer_id,
-            product_id=product_id,
-            payment_id=None,
-            message="",
-        )
-        activity = replace(
-            activity,
-            message=activity_message_factory.from_activity(activity, uow=uow),
-        )
-        uow.activities.create(activity)
-
-    return UpdateResponse(success=True)
+    return EmptyResponse(success=True)

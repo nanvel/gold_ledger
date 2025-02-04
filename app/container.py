@@ -8,6 +8,9 @@ from app.repos.uow import UnitOfWork
 from app.services.images import ImagesService
 from app.use_cases.add_payment import AddPayment
 from app.use_cases.add_product import AddProduct
+from app.use_cases.cancel_product import CancelProduct
+from app.use_cases.confirm_product import ConfirmProduct
+from app.use_cases.reject_product import RejectProduct
 from app.use_cases.set_password import SetPassword
 
 
@@ -55,6 +58,9 @@ class Container(containers.DeclarativeContainer):
 
     add_payment = providers.Factory(AddPayment, uow=uow)
     add_product = providers.Factory(AddProduct, uow=uow)
+    cancel_product = providers.Factory(CancelProduct, uow=uow)
+    confirm_product = providers.Factory(ConfirmProduct, uow=uow)
+    reject_product = providers.Factory(RejectProduct, uow=uow)
     reset_password = providers.Factory(
         SetPassword,
         uow=uow,

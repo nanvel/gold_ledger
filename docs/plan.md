@@ -15,6 +15,8 @@ Payments summary:
 - [ ] move language to container
 - [ ] move service to container
 - [ ] cache due for supplier/retailer
+- [ ] supplier/retailer cache
+- [ ] groupby due date for products
 
 DDB for activities:
 - [x] move creation to use cases
@@ -26,9 +28,10 @@ DDB for activities:
   - [x] message property 
   - [x] tests
 - [x] remove factories
-- [ ] ensure use payment type slug in frontend
-- [ ] event = product + anything else related like action type
-- [ ] move actions to use cases
+- [x] ensure use payment type slug in frontend
+- [x] event = product + anything else related like action type
+- [ ] move cancel/confirm/reject to use cases
+- [ ] push events in use cases
 - [ ] message bus
   - [x] check the architecture book
   - [ ] event creation
@@ -37,8 +40,6 @@ DDB for activities:
 - [ ] ddb connection
 - [ ] new repo
 - [ ] refactor activities repo
-- [ ] supplier/retailer cache
-- [ ] groupby due date for products
 
 UI more:
 - [ ] disallow past due dates
