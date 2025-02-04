@@ -4,8 +4,9 @@ from typing import Optional
 
 from fastapi import HTTPException, status
 
+from app.events import PaymentEvent
 from app.message_bus import MessageBus
-from app.models import Payment, PaymentType
+from app.models import ActivityType, Payment, PaymentType
 from app.repos.uow import UnitOfWork
 
 
@@ -49,4 +50,13 @@ class AddPayment:
                 cancelled_by=None,
             )
             payment.validate()
-            self._uow.payments.create(payment)
+            payment_id = self._uow.payments.create(payment)
+
+            payment_display = self._uow.payments.display(payment_id)
+
+            self._message_bus.handle(
+                PaymentEvent(
+                    activity_type=ActivityType.PAYMENT_ADDED,
+                    payment=payment_display,
+                )
+            )

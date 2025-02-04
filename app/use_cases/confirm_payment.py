@@ -1,7 +1,8 @@
 from fastapi import HTTPException, status
 
+from app.events import PaymentEvent
 from app.message_bus import MessageBus
-from app.models import User
+from app.models import ActivityType, User
 from app.repos.uow import UnitOfWork
 
 
@@ -22,3 +23,12 @@ class ConfirmPayment:
 
             payment = payment.confirm(user)
             self._uow.payments.update(payment)
+
+            payment_display = self._uow.payments.display(payment_id)
+
+            self._message_bus.handle(
+                PaymentEvent(
+                    activity_type=ActivityType.PAYMENT_CONFIRMED,
+                    payment=payment_display,
+                )
+            )

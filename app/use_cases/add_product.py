@@ -5,8 +5,9 @@ from typing import Optional
 
 from fastapi import HTTPException, status
 
+from app.events import ProductEvent
 from app.message_bus import MessageBus
-from app.models import PaymentType, Product
+from app.models import ActivityType, PaymentType, Product
 from app.repos.uow import UnitOfWork
 
 
@@ -83,3 +84,12 @@ class AddProduct:
 
             if image:
                 self._uow.products.add_image(product, image)
+
+            product_display = self._uow.products.display(product_id)
+
+            self._message_bus.handle(
+                ProductEvent(
+                    activity_type=ActivityType.PRODUCT_ADDED,
+                    product=product_display,
+                )
+            )

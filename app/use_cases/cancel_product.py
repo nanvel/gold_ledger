@@ -1,7 +1,8 @@
 from fastapi import HTTPException, status
 
+from app.events.product import ProductEvent
 from app.message_bus import MessageBus
-from app.models import User
+from app.models import ActivityType, User
 from app.repos.uow import UnitOfWork
 
 
@@ -22,3 +23,12 @@ class CancelProduct:
 
             product = product.cancel(user)
             self._uow.products.update(product)
+
+            product_display = self._uow.products.display(product_id)
+
+            self._message_bus.handle(
+                ProductEvent(
+                    activity_type=ActivityType.PRODUCT_CANCELLED,
+                    product=product_display,
+                )
+            )
