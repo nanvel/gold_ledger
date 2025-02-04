@@ -35,11 +35,9 @@ DDB for activities:
 - [ ] message bus
   - [x] check the architecture book
   - [x] event creation
-- [ ] ddb table
-- [ ] ddb connection
-- [ ] new repo
+- [ ] put back the table and repo
 - [ ] create activities in message bus handler
-- [ ] activities api
+- [ ] fix activities api
 
 UI more:
 - [ ] disallow past due dates
