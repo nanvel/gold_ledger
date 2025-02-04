@@ -25,9 +25,11 @@ class RejectProduct:
             self._uow.products.update(product)
 
             product_display = self._uow.products.display(product_id)
+
             self._message_bus.handle(
                 ProductEvent(
                     activity_type=ActivityType.PRODUCT_REJECTED,
                     product=product_display,
+                    user_id=user.id,
                 )
             )

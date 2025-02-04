@@ -30,5 +30,6 @@ class ConfirmPayment:
                 PaymentEvent(
                     activity_type=ActivityType.PAYMENT_CONFIRMED,
                     payment=payment_display,
+                    user_id=user.id,
                 )
             )

@@ -58,5 +58,6 @@ class AddPayment:
                 PaymentEvent(
                     activity_type=ActivityType.PAYMENT_ADDED,
                     payment=payment_display,
+                    user_id=creator_id,
                 )
             )

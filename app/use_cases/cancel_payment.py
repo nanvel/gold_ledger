@@ -30,5 +30,6 @@ class CancelPayment:
                 PaymentEvent(
                     activity_type=ActivityType.PAYMENT_CANCELLED,
                     payment=payment_display,
+                    user_id=user.id,
                 )
             )

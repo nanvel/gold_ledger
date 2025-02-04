@@ -8,6 +8,7 @@ from .base import Event
 class PaymentEvent(Event):
     payment: DisplayPayment
     activity_type: ActivityType
+    user_id: int
 
     @property
     def message(self) -> str:

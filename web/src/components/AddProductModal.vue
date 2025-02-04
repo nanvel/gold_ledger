@@ -1,5 +1,8 @@
 <template>
-  <button class="btn btn-primary" onclick="add_product.showModal()">
+  <button
+    class="btn btn-primary no-animation"
+    onclick="add_product.showModal()"
+  >
     <svg
       xmlns="http://www.w3.org/2000/svg"
       fill="none"

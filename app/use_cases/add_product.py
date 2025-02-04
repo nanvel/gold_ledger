@@ -91,5 +91,6 @@ class AddProduct:
                 ProductEvent(
                     activity_type=ActivityType.PRODUCT_ADDED,
                     product=product_display,
+                    user_id=creator_id,
                 )
             )

@@ -30,5 +30,6 @@ class CancelProduct:
                 ProductEvent(
                     activity_type=ActivityType.PRODUCT_CANCELLED,
                     product=product_display,
+                    user_id=user.id,
                 )
             )

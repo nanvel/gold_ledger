@@ -1,3 +1,4 @@
+from .activities import ActivitiesRepo
 from .images import ImagesRepo
 from .payments import PaymentsRepo
 from .products import ProductsRepo
@@ -7,6 +8,7 @@ from .users import UsersRepo
 
 
 class UnitOfWork:
+    activities: ActivitiesRepo
     images: ImagesRepo
     payments: PaymentsRepo
     products: ProductsRepo
@@ -20,6 +22,7 @@ class UnitOfWork:
 
     def __enter__(self):
         self._session = self._db()
+        self.activities = ActivitiesRepo(self._session)
         self.images = ImagesRepo(self._session)
         self.payments = PaymentsRepo(self._session)
         self.products = ProductsRepo(self._session)

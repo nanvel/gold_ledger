@@ -1,5 +1,8 @@
 <template>
-  <button class="btn btn-primary" onclick="add_payment.showModal()">
+  <button
+    class="btn btn-primary no-animation"
+    onclick="add_payment.showModal()"
+  >
     <svg
       xmlns="http://www.w3.org/2000/svg"
       fill="none"

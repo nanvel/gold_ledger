@@ -47,8 +47,6 @@ class Container(containers.DeclarativeContainer):
     db = providers.Resource(init_db, db_uri=config.db_uri)
     s3_client = providers.Resource(init_s3, region=config.aws_region)
 
-    message_bus = providers.Singleton(MessageBus)
-
     images_service = providers.Singleton(
         ImagesService,
         s3_client=s3_client,
@@ -58,6 +56,8 @@ class Container(containers.DeclarativeContainer):
     )
 
     uow = providers.Singleton(UnitOfWork, db=db)
+
+    message_bus = providers.Singleton(MessageBus, uow=uow)
 
     add_payment = providers.Factory(AddPayment, uow=uow, message_bus=message_bus)
     add_product = providers.Factory(AddProduct, uow=uow, message_bus=message_bus)
