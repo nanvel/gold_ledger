@@ -7,6 +7,7 @@ from .display_product import DisplayProduct
 from .display_retailer import DisplayRetailer
 from .display_supplier import DisplaySupplier
 from .display_user import DisplayUser
+from .cache import Cache
 from .image import Image
 from .payment import Payment
 from .payment_order_by import PaymentOrderBy
@@ -35,6 +36,7 @@ __all__ = (
     "DisplaySupplier",
     "DisplayUser",
     "Image",
+    "Cache",
     "Payment",
     "PaymentOrderBy",
     "PaymentStatus",

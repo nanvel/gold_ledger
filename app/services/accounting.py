@@ -1,56 +1,65 @@
-from dataclasses import dataclass, replace
+from dataclasses import replace
 from datetime import date
 from decimal import Decimal
-from typing import Dict, List, Optional
+from typing import Dict
 
 from sqlalchemy import text
 
-from app.models import PaymentStatus, PaymentType, ProductStatus
-
-
-@dataclass(frozen=True)
-class AccountingState:
-    payment_type: PaymentType
-    payments: Decimal
-    products: Decimal
-    due_date: Optional[date]
-    amount: Optional[Decimal]
+from app.models import Cache, PaymentStatus, PaymentType, ProductStatus
 
 
 class AccountingService:
     def __init__(self, db):
         self._db = db
 
-    def compute(self, supplier_id: int, retailer_id: int) -> List[AccountingState]:
-        payment = self._payments(supplier_id=supplier_id, retailer_id=retailer_id)
-        res = []
+    def compute(self, supplier_id: int, retailer_id: int) -> Cache:
+        payments = self._payments(supplier_id=supplier_id, retailer_id=retailer_id)
+        cache = Cache(
+            supplier_id=supplier_id,
+            retailer_id=retailer_id,
+            cash_products=Decimal(0),
+            cash_payments=payments.get(PaymentType.CASH.value, Decimal(0)),
+            cash_due_date=None,
+            cash_to_pay=Decimal(0),
+            rtgs_products=Decimal(0),
+            rtgs_payments=payments.get(PaymentType.RTGS.value, Decimal(0)),
+            rtgs_due_date=None,
+            rtgs_to_pay=Decimal(0),
+            fine_products=Decimal(0),
+            fine_payments=payments.get(PaymentType.FINE.value, Decimal(0)),
+            fine_due_date=None,
+            fine_to_pay=Decimal(0),
+        )
+
         for payment_type in PaymentType:
             products = self._products(
                 supplier_id=supplier_id,
                 retailer_id=retailer_id,
                 payment_type=payment_type,
             )
-            state = AccountingState(
-                payment_type=payment_type,
-                payments=payment[payment_type.value],
-                products=sum(i for _, i in products) if products else Decimal(0),
-                due_date=None,
-                amount=None,
-            )
+            products_total = sum(i for _, i in products) if products else Decimal(0)
+            due_date = None
+            to_pay = Decimal(0)
 
             s = Decimal(0)
-            p = payment[payment_type.value]
-            for due_date, total_amount in products:
+            p = payments.get(payment_type.value, Decimal(0))
+            for dd, total_amount in products:
                 if s + total_amount > p:
-                    state = replace(
-                        state, due_date=due_date, amount=s + total_amount - p
-                    )
+                    due_date = dd
+                    to_pay = s + total_amount - p
                     break
                 s += total_amount
 
-            res.append(state)
+            cache = replace(
+                cache,
+                **{
+                    f"{payment_type.slug}_products": products_total,
+                    f"{payment_type.slug}_due_date": due_date,
+                    f"{payment_type.slug}_to_pay": to_pay,
+                },
+            )
 
-        return res
+        return cache
 
     def _payments(self, supplier_id: int, retailer_id: int) -> Dict[int, Decimal]:
         rows = self._db.execute(
@@ -73,10 +82,6 @@ class AccountingService:
         res = {}
         for payment_type, total_amount, total_fine in rows:
             res[payment_type] = total_amount or total_fine
-
-        for payment_type in PaymentType:
-            if payment_type not in res:
-                res[int(payment_type)] = Decimal(0)
 
         return res
 

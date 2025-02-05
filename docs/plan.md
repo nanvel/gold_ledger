@@ -5,21 +5,26 @@ Payments summary:
 - [x] service for due
 - [x] due payments
 - [x] swap selector and table view in products
-- [ ] refactor logic, cache
-  - [ ] refactor service
-  - [ ] cache db
+- [x] refactor logic, cache
+  - [x] refactor service
+  - [x] cache db
+- [x] move service to container
+- [ ] cache repo
+  - [ ] model
+- [ ] use case to calculate for supplier/retailer
+- [ ] use case for recalculate for all
+- [ ] use the use case in the message bus (for confirmed)
+- [ ] move timezone to container
+- [ ] refactor api
+
+Payments UI:
 - [ ] filter by id/name
 - [ ] filter by overdue
 - [ ] filter by due today
 - [ ] order by overdue/due/amount
 - [ ] colors for overdue / amount
 - [ ] show overdue on home?
-- [ ] move language to container
-- [ ] move service to container
 - [ ] cache due for supplier/retailer
-- [ ] supplier/retailer cache
-- [ ] groupby due date for products
-- [ ] timezone - to container
 
 UI more:
 - [ ] disallow past due dates
