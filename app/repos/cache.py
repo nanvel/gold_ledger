@@ -9,25 +9,33 @@ class CacheRepo:
         self._session = session
 
     def create_or_update(self, cache: Cache):
-        record = CacheTable(
-            supplier_id=cache.supplier_id,
-            retailer_id=cache.retailer_id,
-            cash_products=cache.cash_products,
-            cash_payments=cache.cash_payments,
-            cash_due_date=cache.cash_due_date,
-            cash_to_pay=cache.cash_to_pay,
-            rtgs_products=cache.rtgs_products,
-            rtgs_payments=cache.rtgs_payments,
-            rtgs_due_date=cache.rtgs_due_date,
-            rtgs_to_pay=cache.rtgs_to_pay,
-            fine_products=cache.fine_products,
-            fine_payments=cache.fine_payments,
-            fine_due_date=cache.fine_due_date,
-            fine_to_pay=cache.fine_to_pay,
+        record = (
+            self._session.query(CacheTable)
+            .filter(
+                CacheTable.supplier_id == cache.supplier_id,
+                CacheTable.retailer_id == cache.retailer_id,
+            )
+            .first()
         )
+
+        if not record:
+            record = CacheTable(
+                supplier_id=cache.supplier_id,
+                retailer_id=cache.retailer_id,
+            )
+
+        record.cash_products = cache.cash_products
+        record.cash_payments = cache.cash_payments
+        record.cash_due_date = cache.cash_due_date
+        record.cash_to_pay = cache.cash_to_pay
+        record.rtgs_products = cache.rtgs_products
+        record.rtgs_payments = cache.rtgs_payments
+        record.rtgs_due_date = cache.rtgs_due_date
+        record.rtgs_to_pay = cache.rtgs_to_pay
+        record.fine_products = cache.fine_products
+        record.fine_payments = cache.fine_payments
+        record.fine_due_date = cache.fine_due_date
+        record.fine_to_pay = cache.fine_to_pay
 
         self._session.add(record)
         self._session.commit()
-        self._session.refresh(record)
-
-        return record.id
