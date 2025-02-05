@@ -1,8 +1,8 @@
 """cache
 
-Revision ID: 7c839329004d
+Revision ID: 12dd310cd2e1
 Revises: 3505169e0808
-Create Date: 2025-02-05 18:27:46.795195
+Create Date: 2025-02-05 18:42:51.413794
 
 """
 
@@ -13,7 +13,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = "7c839329004d"
+revision: str = "12dd310cd2e1"
 down_revision: Union[str, None] = "3505169e0808"
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -28,15 +28,15 @@ def upgrade() -> None:
         sa.Column("retailer_id", sa.Integer(), nullable=False),
         sa.Column("cash_products", sa.DECIMAL(), nullable=False),
         sa.Column("cash_payments", sa.DECIMAL(), nullable=False),
-        sa.Column("cash_due_date", sa.DateTime(), nullable=True),
+        sa.Column("cash_due_date", sa.Date(), nullable=True),
         sa.Column("cash_to_pay", sa.DECIMAL(), nullable=False),
         sa.Column("rtgs_products", sa.DECIMAL(), nullable=False),
         sa.Column("rtgs_payments", sa.DECIMAL(), nullable=False),
-        sa.Column("rtgs_due_date", sa.DateTime(), nullable=True),
+        sa.Column("rtgs_due_date", sa.Date(), nullable=True),
         sa.Column("rtgs_to_pay", sa.DECIMAL(), nullable=False),
         sa.Column("fine_products", sa.DECIMAL(), nullable=False),
         sa.Column("fine_payments", sa.DECIMAL(), nullable=False),
-        sa.Column("fine_due_date", sa.DateTime(), nullable=True),
+        sa.Column("fine_due_date", sa.Date(), nullable=True),
         sa.Column("fine_to_pay", sa.DECIMAL(), nullable=False),
         sa.Column("version", sa.Integer(), server_default="1", nullable=False),
         sa.Column(

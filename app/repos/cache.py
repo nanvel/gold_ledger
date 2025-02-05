@@ -1,22 +1,29 @@
 from sqlalchemy.orm import Session
 
-from app.db import ActivityTable
-from app.models import Activity, ActivityType, DisplayActivity, Timestamp
+from app.db import CacheTable
+from app.models import Cache
 
 
 class CacheRepo:
     def __init__(self, session: Session):
         self._session = session
 
-    def create_or_update(self, activity: Activity) -> int:
-        record = ActivityTable(
-            type=activity.type.value,
-            user_id=activity.user_id,
-            supplier_id=activity.supplier_id,
-            retailer_id=activity.retailer_id,
-            product_id=activity.product_id,
-            payment_id=activity.payment_id,
-            message=activity.message,
+    def create_or_update(self, cache: Cache):
+        record = CacheTable(
+            supplier_id=cache.supplier_id,
+            retailer_id=cache.retailer_id,
+            cash_products=cache.cash_products,
+            cash_payments=cache.cash_payments,
+            cash_due_date=cache.cash_due_date,
+            cash_to_pay=cache.cash_to_pay,
+            rtgs_products=cache.rtgs_products,
+            rtgs_payments=cache.rtgs_payments,
+            rtgs_due_date=cache.rtgs_due_date,
+            rtgs_to_pay=cache.rtgs_to_pay,
+            fine_products=cache.fine_products,
+            fine_payments=cache.fine_payments,
+            fine_due_date=cache.fine_due_date,
+            fine_to_pay=cache.fine_to_pay,
         )
 
         self._session.add(record)

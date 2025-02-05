@@ -10,7 +10,7 @@ Payments summary:
   - [x] cache db
 - [x] move service to container
 - [ ] cache repo
-  - [ ] model
+  - [x] model
 - [ ] use case to calculate for supplier/retailer
 - [ ] use case for recalculate for all
 - [ ] use the use case in the message bus (for confirmed)
