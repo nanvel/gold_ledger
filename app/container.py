@@ -61,7 +61,11 @@ class Container(containers.DeclarativeContainer):
 
     accounting_service = providers.Singleton(AccountingService, db=db_readonly)
 
-    message_bus = providers.Singleton(MessageBus, uow=uow)
+    message_bus = providers.Singleton(
+        MessageBus,
+        uow=uow,
+        accounting_service=accounting_service,
+    )
 
     add_payment = providers.Factory(AddPayment, uow=uow, message_bus=message_bus)
     add_product = providers.Factory(AddProduct, uow=uow, message_bus=message_bus)

@@ -54,10 +54,10 @@ class AddPayment:
 
             payment_display = self._uow.payments.display(payment_id)
 
-            self._message_bus.handle(
-                PaymentEvent(
-                    activity_type=ActivityType.PAYMENT_ADDED,
-                    payment=payment_display,
-                    user_id=creator_id,
-                )
+        self._message_bus.handle(
+            PaymentEvent(
+                activity_type=ActivityType.PAYMENT_ADDED,
+                payment=payment_display,
+                user_id=creator_id,
             )
+        )

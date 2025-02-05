@@ -9,7 +9,7 @@ Payments summary:
   - [x] refactor service
   - [x] cache db
 - [x] move service to container
-- [ ] cache repo
+- [x] cache repo
   - [x] model
 - [ ] use case to calculate for supplier/retailer
 - [ ] use case for recalculate for all

@@ -26,10 +26,10 @@ class CancelProduct:
 
             product_display = self._uow.products.display(product_id)
 
-            self._message_bus.handle(
-                ProductEvent(
-                    activity_type=ActivityType.PRODUCT_CANCELLED,
-                    product=product_display,
-                    user_id=user.id,
-                )
+        self._message_bus.handle(
+            ProductEvent(
+                activity_type=ActivityType.PRODUCT_CANCELLED,
+                product=product_display,
+                user_id=user.id,
             )
+        )
