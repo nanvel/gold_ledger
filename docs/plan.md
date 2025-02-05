@@ -12,8 +12,7 @@ Payments summary:
 - [x] cache repo
   - [x] model
 - [x] use the use case in the message bus (for confirmed)
-- [ ] use case for recalculate for all
-- [ ] move timezone to container
+- [x] use case for recalculate for all
 - [ ] refactor api
 
 Payments UI:

@@ -1,7 +1,12 @@
 <template>
   <Navbar>
     <div v-for="row in data" :key="row.id" v-if="data" class="flex flex-col">
-      <div class="mt-2">{{ row.id }} : {{ row.name }}</div>
+      <div class="mt-2" v-if="isSupplier">
+        {{ row.retailer.id }} : {{ row.retailer.name }}
+      </div>
+      <div class="mt-2" v-else>
+        {{ row.supplier.id }} : {{ row.supplier.name }}
+      </div>
       <table class="table table-sm table-zebra max-w-xl">
         <thead>
           <tr>
@@ -15,37 +20,28 @@
           <tr>
             <td>Products</td>
             <td v-for="pt in paymentTypes" :key="pt">
-              {{ row[pt]?.products || "0" }}
+              {{ row[`${pt}_products`] }}
             </td>
           </tr>
           <tr>
-            <td>Confirmed</td>
+            <td>Payment</td>
             <td v-for="pt in paymentTypes" :key="pt">
-              {{ row[pt]?.confirmed || "0" }}
+              {{ row[`${pt}_payments`] }}
             </td>
           </tr>
           <tr>
             <td>Pending</td>
             <td v-for="pt in paymentTypes" :key="pt">
-              {{ row[pt]?.pending || "0" }}
+              {{
+                parseFloat(row[`${pt}_products`]) -
+                parseFloat(row[`${pt}_payments`])
+              }}
             </td>
           </tr>
           <tr>
-            <td>Sum</td>
+            <td>Next payment</td>
             <td v-for="pt in paymentTypes" :key="pt">
-              {{ row[pt]?.sum || "0" }}
-            </td>
-          </tr>
-          <tr>
-            <td>Overdue</td>
-            <td v-for="pt in paymentTypes" :key="pt">
-              {{ row[pt]?.overdue || "0" }}
-            </td>
-          </tr>
-          <tr>
-            <td>Due today</td>
-            <td v-for="pt in paymentTypes" :key="pt">
-              {{ row[pt]?.due_today || "0" }}
+              {{ row[`${pt}_due_date`] }} {{ row[`${pt}_to_pay`] }}
             </td>
           </tr>
         </tbody>
@@ -58,15 +54,21 @@
 import Navbar from "@/components/Navbar.vue";
 import { ref, onMounted } from "vue";
 import { httpClient } from "@/services/http.js";
+import { useMeStore } from "@/stores/index.js";
+import { storeToRefs } from "pinia";
 
 const data = ref(null);
+
+const meStore = useMeStore();
+
+const { isSupplier } = storeToRefs(meStore);
 
 const paymentTypes = ["cash", "rtgs", "fine"];
 
 onMounted(async () => {
   try {
     const response = await httpClient.get("/api/accounting");
-    data.value = response;
+    data.value = response.items;
   } catch (error) {
     console.error(error);
   }
