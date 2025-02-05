@@ -1,395 +1,114 @@
-from datetime import date, timedelta
-from typing import Optional
+from dataclasses import replace
+from datetime import date
+from decimal import Decimal
+from typing import Dict
 
-from sqlalchemy import func
-from sqlalchemy.orm import Session
+from sqlalchemy import text
 
-from app.models import PaymentStatus, PaymentType, ProductStatus
-from app.db import PaymentTable, ProductTable, RetailerTable, SupplierTable
+from app.models import Cache, PaymentStatus, PaymentType, ProductStatus
 
 
-class Accounting:
-    def __init__(self, session: Session):
-        self._session = session
+class AccountingService:
+    def __init__(self, db):
+        self._db = db
 
-    def for_supplier(self, supplier_id: int, today: date):
-        result = {}
+    def compute(self, supplier_id: int, retailer_id: int) -> Cache:
+        payments = self._payments(supplier_id=supplier_id, retailer_id=retailer_id)
+        cache = Cache(
+            supplier_id=supplier_id,
+            retailer_id=retailer_id,
+            cash_products=Decimal(0),
+            cash_payments=payments.get(PaymentType.CASH.value, Decimal(0)),
+            cash_due_date=None,
+            cash_to_pay=Decimal(0),
+            rtgs_products=Decimal(0),
+            rtgs_payments=payments.get(PaymentType.RTGS.value, Decimal(0)),
+            rtgs_due_date=None,
+            rtgs_to_pay=Decimal(0),
+            fine_products=Decimal(0),
+            fine_payments=payments.get(PaymentType.FINE.value, Decimal(0)),
+            fine_due_date=None,
+            fine_to_pay=Decimal(0),
+        )
 
-        for payment_type in (PaymentType.CASH, PaymentType.RTGS, PaymentType.FINE):
-            products = self._products_for_supplier(
+        for payment_type in PaymentType:
+            products = self._products(
                 supplier_id=supplier_id,
-                payment_type=payment_type,
-            )
-
-            for retailer_id, total in products:
-                result[retailer_id] = result.get(retailer_id) or {}
-                result[retailer_id][payment_type.slug] = {
-                    "products": total,
-                    "confirmed": 0,
-                    "pending": 0,
-                    "sum": 0,
-                    "due_tomorrow_or_later": 0,
-                    "due_today_or_later": 0,
-                    "overdue": 0,
-                    "due_today": 0,
-                }
-
-            payments_confirmed = self._payments_for_supplier(
-                supplier_id=supplier_id,
-                payment_type=payment_type,
-                status=PaymentStatus.CONFIRMED,
-            )
-            for retailer_id, total in payments_confirmed:
-                if retailer_id in result and payment_type.slug in result[retailer_id]:
-                    result[retailer_id][payment_type.slug]["confirmed"] = total
-                else:
-                    result[retailer_id] = result.get(retailer_id) or {}
-                    result[retailer_id][payment_type.slug] = {
-                        "products": 0,
-                        "confirmed": total,
-                        "pending": 0,
-                        "sum": 0,
-                        "due_tomorrow_or_later": 0,
-                        "due_today_or_later": 0,
-                        "overdue": 0,
-                        "due_today": 0,
-                    }
-
-            payments_pending = self._payments_for_supplier(
-                supplier_id=supplier_id,
-                payment_type=payment_type,
-                status=PaymentStatus.PENDING,
-            )
-            for retailer_id, total in payments_pending:
-                if retailer_id in result and payment_type.slug in result[retailer_id]:
-                    result[retailer_id][payment_type.slug]["pending"] = total
-                else:
-                    result[retailer_id] = result.get(retailer_id) or {}
-                    result[retailer_id][payment_type.slug] = {
-                        "products": 0,
-                        "confirmed": 0,
-                        "pending": total,
-                        "sum": 0,
-                        "due_tomorrow_or_later": 0,
-                        "due_today_or_later": 0,
-                        "overdue": 0,
-                        "due_today": 0,
-                    }
-
-            today_or_later = self._products_for_supplier(
-                supplier_id=supplier_id,
-                payment_type=payment_type,
-                due_date=today - timedelta(days=1),
-            )
-            if today_or_later:
-                tomorrow_or_later = self._products_for_supplier(
-                    supplier_id=supplier_id,
-                    payment_type=payment_type,
-                    due_date=today + timedelta(days=1),
-                )
-
-                for retailer_id, total in tomorrow_or_later:
-                    result[retailer_id][payment_type.slug][
-                        "due_tomorrow_or_later"
-                    ] = total
-                for retailer_id, total in today_or_later:
-                    result[retailer_id][payment_type.slug]["due_today_or_later"] = total
-
-            for retailer_id, retailer in result.items():
-                obj = retailer.get(payment_type.slug)
-                if not obj:
-                    continue
-                obj["sum"] = obj["confirmed"] + obj["pending"] - obj["products"]
-                if obj["sum"] < 0:
-                    overdue_tomorrow = obj["sum"] + obj["due_tomorrow_or_later"]
-                    if overdue_tomorrow < 0:
-                        overdue_today = obj["sum"] + obj["due_today_or_later"]
-                        if overdue_today < 0:
-                            obj["overdue"] = -(max(overdue_today, obj["sum"]))
-
-                        obj["due_today"] = min(
-                            overdue_today - overdue_tomorrow,
-                            -obj["sum"],
-                        )
-
-        if result:
-            retailer_names = self._get_retailers(supplier_id=supplier_id)
-            for retailer_id, retailer in result.items():
-                retailer["name"] = retailer_names.get(retailer_id)
-
-        return result
-
-    def for_retailer(self, retailer_id: int, today: date):
-        result = {}
-
-        for payment_type in (PaymentType.CASH, PaymentType.RTGS, PaymentType.FINE):
-            products = self._products_for_retailer(
                 retailer_id=retailer_id,
                 payment_type=payment_type,
             )
+            products_total = sum(i for _, i in products) if products else Decimal(0)
+            due_date = None
+            to_pay = Decimal(0)
 
-            for supplier_id, total in products:
-                result[supplier_id] = result.get(supplier_id) or {}
-                result[supplier_id][payment_type.slug] = {
-                    "products": total,
-                    "confirmed": 0,
-                    "pending": 0,
-                    "sum": 0,
-                    "due_tomorrow_or_later": 0,
-                    "due_today_or_later": 0,
-                    "overdue": 0,
-                    "due_today": 0,
-                }
+            s = Decimal(0)
+            p = payments.get(payment_type.value, Decimal(0))
+            for dd, total_amount in products:
+                if s + total_amount > p:
+                    due_date = dd
+                    to_pay = s + total_amount - p
+                    break
+                s += total_amount
 
-            payments_confirmed = self._payments_for_retailer(
-                retailer_id=retailer_id,
-                payment_type=payment_type,
-                status=PaymentStatus.CONFIRMED,
+            cache = replace(
+                cache,
+                **{
+                    f"{payment_type.slug}_products": products_total,
+                    f"{payment_type.slug}_due_date": due_date,
+                    f"{payment_type.slug}_to_pay": to_pay,
+                },
             )
-            for supplier_id, total in payments_confirmed:
-                if supplier_id in result and payment_type.slug in result[supplier_id]:
-                    result[supplier_id][payment_type.slug]["confirmed"] = total
-                else:
-                    result[supplier_id] = result.get(supplier_id) or {}
-                    result[supplier_id][payment_type.slug] = {
-                        "products": 0,
-                        "confirmed": total,
-                        "pending": 0,
-                        "sum": 0,
-                        "due_tomorrow_or_later": 0,
-                        "due_today_or_later": 0,
-                        "overdue": 0,
-                        "due_today": 0,
-                    }
 
-            payments_pending = self._payments_for_retailer(
-                retailer_id=retailer_id,
-                payment_type=payment_type,
-                status=PaymentStatus.PENDING,
-            )
-            for supplier_id, total in payments_pending:
-                if supplier_id in result and payment_type.slug in result[supplier_id]:
-                    result[supplier_id][payment_type.slug]["pending"] = total
-                else:
-                    result[supplier_id] = result.get(supplier_id) or {}
-                    result[supplier_id][payment_type.slug] = {
-                        "products": 0,
-                        "confirmed": 0,
-                        "pending": total,
-                        "sum": 0,
-                        "due_tomorrow_or_later": 0,
-                        "due_today_or_later": 0,
-                        "overdue": 0,
-                        "due_today": 0,
-                    }
+        return cache
 
-            today_or_later = self._products_for_retailer(
-                retailer_id=retailer_id,
-                payment_type=payment_type,
-                due_date=today - timedelta(days=1),
-            )
-            if today_or_later:
-                tomorrow_or_later = self._products_for_retailer(
-                    retailer_id=retailer_id,
-                    payment_type=payment_type,
-                    due_date=today + timedelta(days=1),
-                )
-
-                for supplier_id, total in tomorrow_or_later:
-                    result[supplier_id][payment_type.slug][
-                        "due_tomorrow_or_later"
-                    ] = total
-                for supplier_id, total in today_or_later:
-                    result[supplier_id][payment_type.slug]["due_today_or_later"] = total
-
-            for supplier_id, supplier in result.items():
-                obj = supplier.get(payment_type.slug)
-                if not obj:
-                    continue
-                obj["sum"] = obj["confirmed"] + obj["pending"] - obj["products"]
-                if obj["sum"] < 0:
-                    overdue_tomorrow = obj["sum"] + obj["due_tomorrow_or_later"]
-                    if overdue_tomorrow < 0:
-                        overdue_today = obj["sum"] + obj["due_today_or_later"]
-                        if overdue_today < 0:
-                            obj["overdue"] = -(max(overdue_today, obj["sum"]))
-
-                        obj["due_today"] = min(
-                            overdue_today - overdue_tomorrow,
-                            -obj["sum"],
-                        )
-
-        if result:
-            supplier_names = self._get_suppliers(retailer_id=retailer_id)
-            for supplier_id, supplier in result.items():
-                supplier["name"] = supplier_names.get(supplier_id)
-
-        return result
-
-    def _products_for_supplier(
-        self,
-        supplier_id: int,
-        payment_type: PaymentType,
-        due_date: Optional[date] = None,
-    ):
-        filters = [
-            ProductTable.status == ProductStatus.CONFIRMED.value,
-            ProductTable.payment_type == payment_type.value,
-            ProductTable.supplier_id == supplier_id,
-        ]
-        if due_date:
-            filters.append(ProductTable.payment_due_date > due_date)
-
-        query = (
-            self._session.query(
-                ProductTable.retailer_id,
-                (
-                    func.sum(
-                        ProductTable.payment_weight * ProductTable.quality / 100
-                    ).label("total")
-                    if payment_type == PaymentType.FINE
-                    else func.sum(ProductTable.payment_amount).label("total")
-                ),
-            )
-            .filter(*filters)
-            .group_by(ProductTable.retailer_id)
+    def _payments(self, supplier_id: int, retailer_id: int) -> Dict[int, Decimal]:
+        rows = self._db.execute(
+            text(
+                """SELECT type,
+                          sum(coalesce(amount, 0)) AS total_amount,
+                          sum(coalesce(weight, 0) * coalesce(quality, 0) / 100) AS total_fine
+                    FROM payments
+                    WHERE status = :status
+                      AND supplier_id = :supplier_id
+                      AND retailer_id = :retailer_id
+                    GROUP BY type;"""
+            ),
+            {
+                "supplier_id": supplier_id,
+                "retailer_id": retailer_id,
+                "status": PaymentStatus.CONFIRMED.value,
+            },
         )
+        res = {}
+        for payment_type, total_amount, total_fine in rows:
+            res[payment_type] = total_amount or total_fine
 
-        return [(row.retailer_id, row.total) for row in query]
-
-    def _products_for_retailer(
-        self,
-        retailer_id: int,
-        payment_type: PaymentType,
-        due_date: Optional[date] = None,
-    ):
-        filters = [
-            ProductTable.status == ProductStatus.CONFIRMED.value,
-            ProductTable.payment_type == payment_type.value,
-            ProductTable.retailer_id == retailer_id,
-        ]
-        if due_date:
-            filters.append(ProductTable.payment_due_date > due_date)
-
-        query = (
-            self._session.query(
-                ProductTable.supplier_id,
-                (
-                    func.sum(
-                        ProductTable.payment_weight * ProductTable.quality / 100
-                    ).label("total")
-                    if payment_type == PaymentType.FINE
-                    else func.sum(ProductTable.payment_amount).label("total")
-                ),
-            )
-            .filter(*filters)
-            .group_by(ProductTable.supplier_id)
-        )
-
-        return [(row.supplier_id, row.total) for row in query]
-
-    def _payments_for_supplier(
-        self,
-        supplier_id: int,
-        payment_type: PaymentType,
-        status: PaymentStatus = PaymentStatus.CONFIRMED,
-    ):
-        query = (
-            self._session.query(
-                PaymentTable.retailer_id,
-                (
-                    func.sum(PaymentTable.weight * PaymentTable.quality / 100).label(
-                        "total"
-                    )
-                    if payment_type == PaymentType.FINE
-                    else func.sum(PaymentTable.amount).label("total")
-                ),
-            )
-            .filter(
-                PaymentTable.status == status.value,
-                PaymentTable.type == payment_type.value,
-                PaymentTable.supplier_id == supplier_id,
-            )
-            .group_by(PaymentTable.retailer_id)
-        )
-
-        return [(row.retailer_id, row.total) for row in query]
-
-    def _payments_for_retailer(
-        self,
-        retailer_id: int,
-        payment_type: PaymentType,
-        status: PaymentStatus = PaymentStatus.CONFIRMED,
-    ):
-        query = (
-            self._session.query(
-                PaymentTable.supplier_id,
-                (
-                    func.sum(PaymentTable.weight * PaymentTable.quality / 100).label(
-                        "total"
-                    )
-                    if payment_type == PaymentType.FINE
-                    else func.sum(PaymentTable.amount).label("total")
-                ),
-            )
-            .filter(
-                PaymentTable.status == status.value,
-                PaymentTable.type == payment_type.value,
-                PaymentTable.retailer_id == retailer_id,
-            )
-            .group_by(PaymentTable.supplier_id)
-        )
-
-        return [(row.supplier_id, row.total) for row in query]
-
-    def _get_retailers(self, supplier_id):
-        rows = (
-            self._session.query(ProductTable.retailer_id, RetailerTable.name)
-            .join(RetailerTable, RetailerTable.id == ProductTable.retailer_id)
-            .filter(
-                ProductTable.supplier_id == supplier_id,
-                ProductTable.status == ProductStatus.CONFIRMED.value,
-            )
-            .distinct()
-        )
-        res = {row.retailer_id: row.name for row in rows}
-        rows = (
-            self._session.query(PaymentTable.retailer_id, RetailerTable.name)
-            .join(RetailerTable, RetailerTable.id == PaymentTable.retailer_id)
-            .filter(
-                PaymentTable.supplier_id == supplier_id,
-                PaymentTable.status.in_(
-                    (PaymentStatus.CONFIRMED.value, PaymentStatus.PENDING.value)
-                ),
-            )
-            .distinct()
-        )
-        for row in rows:
-            res[row.retailer_id] = row.name
         return res
 
-    def _get_suppliers(self, retailer_id):
-        rows = (
-            self._session.query(ProductTable.supplier_id, SupplierTable.name)
-            .join(SupplierTable, SupplierTable.id == ProductTable.supplier_id)
-            .filter(
-                ProductTable.retailer_id == retailer_id,
-                ProductTable.status == ProductStatus.CONFIRMED.value,
-            )
-            .distinct()
+    def _products(
+        self, supplier_id: int, retailer_id: int, payment_type: PaymentType
+    ) -> Dict[date, Decimal]:
+        rows = self._db.execute(
+            text(
+                """SELECT payment_due_date, sum({}) AS total_amount
+                    FROM products
+                    WHERE supplier_id = :supplier_id
+                      AND retailer_id = :retailer_id
+                      AND status = :status
+                      AND payment_type = :payment_type
+                    GROUP BY payment_due_date
+                    ORDER BY payment_due_date;""".format(
+                    "payment_weight * payment_quality / 100"
+                    if payment_type == PaymentType.FINE
+                    else "payment_amount"
+                )
+            ),
+            {
+                "supplier_id": supplier_id,
+                "retailer_id": retailer_id,
+                "status": ProductStatus.CONFIRMED.value,
+                "payment_type": payment_type.value,
+            },
         )
-        res = {row.supplier_id: row.name for row in rows}
-        rows = (
-            self._session.query(PaymentTable.supplier_id, SupplierTable.name)
-            .join(SupplierTable, SupplierTable.id == PaymentTable.supplier_id)
-            .filter(
-                PaymentTable.retailer_id == retailer_id,
-                PaymentTable.status.in_(
-                    (PaymentStatus.CONFIRMED.value, PaymentStatus.PENDING.value)
-                ),
-            )
-            .distinct()
-        )
-        for row in rows:
-            res[row.supplier_id] = row.name
-        return res
+
+        return [(due_date, total_amount) for due_date, total_amount in rows]

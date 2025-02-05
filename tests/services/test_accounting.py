@@ -2,13 +2,15 @@ from dataclasses import replace
 from datetime import date
 from decimal import Decimal
 
-from app.models import Payment, PaymentType, Product, Retailer, Supplier, User
+from sqlalchemy.orm import sessionmaker
+
+from app.models import Cache, Payment, PaymentType, Product, Retailer, Supplier, User
 from app.repos.payments import PaymentsRepo
 from app.repos.products import ProductsRepo
 from app.repos.retailers import RetailersRepo
 from app.repos.suppliers import SuppliersRepo
 from app.repos.users import UsersRepo
-from app.services.accounting import Accounting
+from app.services.accounting import AccountingService
 
 
 def create_records(session):
@@ -87,142 +89,26 @@ def create_records(session):
     return supplier_user_id, supplier_id, retailer_id
 
 
-def test_accounting(session):
+def test_accounting_service(conn):
+    session = sessionmaker(bind=conn)()
     user_id, supplier_id, retailer_id = create_records(session)
 
-    accounting = Accounting(session)
-    retailers = accounting._get_retailers(supplier_id)
-    assert retailers == {retailer_id: "Retailer"}
+    accounting = AccountingService(conn)
+    result = accounting.compute(supplier_id, retailer_id)
 
-    suppliers = accounting._get_suppliers(retailer_id)
-    assert suppliers == {supplier_id: "Supplier"}
-
-    products = accounting._products_for_supplier(
-        supplier_id,
-        payment_type=PaymentType.CASH,
+    assert result == Cache(
+        supplier_id=supplier_id,
+        retailer_id=retailer_id,
+        cash_products=Decimal("1"),
+        cash_payments=Decimal("0"),
+        cash_due_date=date(2021, 1, 1),
+        cash_to_pay=Decimal("1"),
+        rtgs_products=Decimal("0"),
+        rtgs_payments=Decimal("0"),
+        rtgs_due_date=None,
+        rtgs_to_pay=Decimal("0"),
+        fine_products=Decimal("0"),
+        fine_payments=Decimal("0.95000000000000000000"),
+        fine_due_date=None,
+        fine_to_pay=Decimal("0"),
     )
-    assert len(products) == 1
-
-    payments = accounting._payments_for_retailer(
-        retailer_id,
-        payment_type=PaymentType.CASH,
-    )
-    assert len(payments) == 0
-
-    payments = accounting._payments_for_retailer(
-        retailer_id,
-        payment_type=PaymentType.FINE,
-    )
-    assert payments == [(supplier_id, Decimal("0.95"))]
-
-    result = accounting.for_supplier(supplier_id, date(2020, 1, 1))
-
-    assert result == {
-        retailer_id: {
-            "cash": {
-                "products": Decimal("1"),
-                "confirmed": 0,
-                "pending": 0,
-                "sum": Decimal("-1"),
-                "due_tomorrow_or_later": Decimal("1"),
-                "due_today_or_later": Decimal("1"),
-                "overdue": 0,
-                "due_today": 0,
-            },
-            "fine": {
-                "products": 0,
-                "confirmed": Decimal("0.95000000000000000000"),
-                "pending": 0,
-                "sum": Decimal("0.95000000000000000000"),
-                "due_tomorrow_or_later": 0,
-                "due_today_or_later": 0,
-                "overdue": 0,
-                "due_today": 0,
-            },
-            "name": "Retailer",
-        }
-    }
-
-    result = accounting.for_supplier(supplier_id, date(2021, 1, 1))
-
-    assert result == {
-        retailer_id: {
-            "cash": {
-                "products": Decimal("1"),
-                "confirmed": 0,
-                "pending": 0,
-                "sum": Decimal("-1"),
-                "due_tomorrow_or_later": 0,
-                "due_today_or_later": Decimal("1"),
-                "overdue": 0,
-                "due_today": Decimal("1"),
-            },
-            "fine": {
-                "products": 0,
-                "confirmed": Decimal("0.95000000000000000000"),
-                "pending": 0,
-                "sum": Decimal("0.95000000000000000000"),
-                "due_tomorrow_or_later": 0,
-                "due_today_or_later": 0,
-                "overdue": 0,
-                "due_today": 0,
-            },
-            "name": "Retailer",
-        }
-    }
-
-    result = accounting.for_supplier(supplier_id, date(2021, 1, 2))
-
-    assert result == {
-        retailer_id: {
-            "cash": {
-                "products": Decimal("1"),
-                "confirmed": 0,
-                "pending": 0,
-                "sum": Decimal("-1"),
-                "due_tomorrow_or_later": 0,
-                "due_today_or_later": 0,
-                "overdue": Decimal("1"),
-                "due_today": Decimal("0"),
-            },
-            "fine": {
-                "products": 0,
-                "confirmed": Decimal("0.95000000000000000000"),
-                "pending": 0,
-                "sum": Decimal("0.95000000000000000000"),
-                "due_tomorrow_or_later": 0,
-                "due_today_or_later": 0,
-                "overdue": 0,
-                "due_today": 0,
-            },
-            "name": "Retailer",
-        }
-    }
-
-    result = accounting.for_retailer(retailer_id, date(2021, 1, 2))
-
-    assert result == {
-        supplier_id: {
-            "cash": {
-                "products": Decimal("1"),
-                "confirmed": 0,
-                "pending": 0,
-                "sum": Decimal("-1"),
-                "due_tomorrow_or_later": 0,
-                "due_today_or_later": 0,
-                "overdue": Decimal("1"),
-                "due_today": Decimal("0"),
-            },
-            "fine": {
-                "products": 0,
-                "confirmed": Decimal("0.95000000000000000000"),
-                "pending": 0,
-                "sum": Decimal("0.95000000000000000000"),
-                "due_tomorrow_or_later": 0,
-                "due_today_or_later": 0,
-                "overdue": 0,
-                "due_today": 0,
-            },
-            "name": "Supplier",
-        }
-    }

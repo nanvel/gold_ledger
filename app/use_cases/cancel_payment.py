@@ -26,10 +26,10 @@ class CancelPayment:
 
             payment_display = self._uow.payments.display(payment_id)
 
-            self._message_bus.handle(
-                PaymentEvent(
-                    activity_type=ActivityType.PAYMENT_CANCELLED,
-                    payment=payment_display,
-                    user_id=user.id,
-                )
+        self._message_bus.handle(
+            PaymentEvent(
+                activity_type=ActivityType.PAYMENT_CANCELLED,
+                payment=payment_display,
+                user_id=user.id,
             )
+        )

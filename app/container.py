@@ -2,9 +2,10 @@ from dependency_injector import containers, providers
 from passlib.context import CryptContext
 
 from app.message_bus import MessageBus
-from app.resources.database import init_db
+from app.resources.database import init_db, init_db_readonly
 from app.resources.s3_client import init_s3
 from app.repos.uow import UnitOfWork
+from app.services.accounting import AccountingService
 from app.services.images import ImagesService
 from app.use_cases.add_payment import AddPayment
 from app.use_cases.add_product import AddProduct
@@ -12,6 +13,7 @@ from app.use_cases.cancel_payment import CancelPayment
 from app.use_cases.cancel_product import CancelProduct
 from app.use_cases.confirm_payment import ConfirmPayment
 from app.use_cases.confirm_product import ConfirmProduct
+from app.use_cases.refresh_cache import RefreshCache
 from app.use_cases.reject_payment import RejectPayment
 from app.use_cases.reject_product import RejectProduct
 from app.use_cases.set_password import SetPassword
@@ -45,6 +47,7 @@ class Container(containers.DeclarativeContainer):
     )
 
     db = providers.Resource(init_db, db_uri=config.db_uri)
+    db_readonly = providers.Resource(init_db_readonly, db_uri=config.db_uri)
     s3_client = providers.Resource(init_s3, region=config.aws_region)
 
     images_service = providers.Singleton(
@@ -57,7 +60,13 @@ class Container(containers.DeclarativeContainer):
 
     uow = providers.Singleton(UnitOfWork, db=db)
 
-    message_bus = providers.Singleton(MessageBus, uow=uow)
+    accounting_service = providers.Singleton(AccountingService, db=db_readonly)
+
+    message_bus = providers.Singleton(
+        MessageBus,
+        uow=uow,
+        accounting_service=accounting_service,
+    )
 
     add_payment = providers.Factory(AddPayment, uow=uow, message_bus=message_bus)
     add_product = providers.Factory(AddProduct, uow=uow, message_bus=message_bus)
@@ -71,6 +80,11 @@ class Container(containers.DeclarativeContainer):
     )
     reject_payment = providers.Factory(RejectPayment, uow=uow, message_bus=message_bus)
     reject_product = providers.Factory(RejectProduct, uow=uow, message_bus=message_bus)
+    refresh_cache = providers.Factory(
+        RefreshCache,
+        uow=uow,
+        accounting_service=accounting_service,
+    )
     reset_password = providers.Factory(
         SetPassword,
         uow=uow,

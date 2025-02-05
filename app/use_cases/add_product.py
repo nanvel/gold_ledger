@@ -87,10 +87,10 @@ class AddProduct:
 
             product_display = self._uow.products.display(product_id)
 
-            self._message_bus.handle(
-                ProductEvent(
-                    activity_type=ActivityType.PRODUCT_ADDED,
-                    product=product_display,
-                    user_id=creator_id,
-                )
+        self._message_bus.handle(
+            ProductEvent(
+                activity_type=ActivityType.PRODUCT_ADDED,
+                product=product_display,
+                user_id=creator_id,
             )
+        )

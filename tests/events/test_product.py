@@ -36,14 +36,22 @@ def test_product_event():
         images=tuple(),
     )
 
-    event = ProductEvent(product=product, activity_type=ActivityType.PRODUCT_ADDED)
+    event = ProductEvent(
+        product=product, activity_type=ActivityType.PRODUCT_ADDED, user_id=1
+    )
     assert event.message == "User (1:Supplier) has added a product Product (10g 95%)"
 
-    event = ProductEvent(product=product, activity_type=ActivityType.PRODUCT_CANCELLED)
+    event = ProductEvent(
+        product=product, activity_type=ActivityType.PRODUCT_CANCELLED, user_id=1
+    )
     assert event.message == "User (1:Supplier) has cancelled Product (10g 95%)"
 
-    event = ProductEvent(product=product, activity_type=ActivityType.PRODUCT_CONFIRMED)
+    event = ProductEvent(
+        product=product, activity_type=ActivityType.PRODUCT_CONFIRMED, user_id=1
+    )
     assert event.message == "User (1:Retailer) has confirmed Product (10g 95%)"
 
-    event = ProductEvent(product=product, activity_type=ActivityType.PRODUCT_REJECTED)
+    event = ProductEvent(
+        product=product, activity_type=ActivityType.PRODUCT_REJECTED, user_id=1
+    )
     assert event.message == "User (1:Retailer) has rejected Product (10g 95%)"
