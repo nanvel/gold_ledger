@@ -1,32 +1,13 @@
 # Plan
 
-DDB for activities:
-- [x] move creation to use cases
-- [x] make ProductDetails and PaymentDetails models
-  - [x] use them
-- [x] rid of activities pg table
-- [x] detail -> display
-- [x] build message inside event, rid of the factory
-  - [x] message property 
-  - [x] tests
-- [x] remove factories
-- [x] ensure use payment type slug in frontend
-- [x] event = product + anything else related like action type
-- [x] move cancel/confirm/reject to use cases
-- [x] push events in use cases
-- [ ] message bus
-  - [x] check the architecture book
-  - [x] event creation
-- [ ] put back the table and repo
-- [ ] create activities in message bus handler
-- [ ] fix activities api
-
 Payments summary:
 - [x] study messages
 - [x] service for due
 - [x] due payments
 - [x] swap selector and table view in products
 - [ ] refactor logic, cache
+  - [ ] refactor service
+  - [ ] cache db
 - [ ] filter by id/name
 - [ ] filter by overdue
 - [ ] filter by due today
@@ -38,6 +19,7 @@ Payments summary:
 - [ ] cache due for supplier/retailer
 - [ ] supplier/retailer cache
 - [ ] groupby due date for products
+- [ ] timezone - to container
 
 UI more:
 - [ ] disallow past due dates
@@ -45,6 +27,8 @@ UI more:
   - [x] button
   - [ ] refresh products/payments/activities
 - [ ] show pay n amount to by date
+- [ ] note for payment
+- [ ] products/payments waiting for approval on dashboard
 
 Deployment:
 - [ ] connect sentry
@@ -58,11 +42,6 @@ Deployment:
 
 Other:
 - [ ] cleanup plan
-- [ ] timezone - to container
-- [ ] add product/payment on home
-- [ ] comment for payment
-- [ ] use slug instead of label in payment type
-- [ ] order table values by clicking on table header
 - [ ] compute due payments / products
 - [ ] overdue payments on the product page? (paid/not paid)
 - [ ] refine cards ui
@@ -175,3 +154,6 @@ Questions:
 - Write terms of use?
 - Landing page
 - support link (password loss, etc.)
+
+Enhancement:
+- [ ] order table values by clicking on table header

@@ -30,14 +30,22 @@ def test_payment_event():
         status=PaymentStatus.CONFIRMED.slug,
     )
 
-    event = PaymentEvent(payment=payment, activity_type=ActivityType.PAYMENT_ADDED)
+    event = PaymentEvent(
+        payment=payment, activity_type=ActivityType.PAYMENT_ADDED, user_id=1
+    )
     assert event.message == "User (1:Retailer) has added a payment of cash 100₹"
 
-    event = PaymentEvent(payment=payment, activity_type=ActivityType.PAYMENT_CANCELLED)
+    event = PaymentEvent(
+        payment=payment, activity_type=ActivityType.PAYMENT_CANCELLED, user_id=1
+    )
     assert event.message == "User (1:Retailer) has cancelled cash 100₹ payment"
 
-    event = PaymentEvent(payment=payment, activity_type=ActivityType.PAYMENT_CONFIRMED)
+    event = PaymentEvent(
+        payment=payment, activity_type=ActivityType.PAYMENT_CONFIRMED, user_id=1
+    )
     assert event.message == "User (1:Supplier) has confirmed cash 100₹ payment"
 
-    event = PaymentEvent(payment=payment, activity_type=ActivityType.PAYMENT_REJECTED)
+    event = PaymentEvent(
+        payment=payment, activity_type=ActivityType.PAYMENT_REJECTED, user_id=1
+    )
     assert event.message == "User (1:Supplier) has rejected cash 100₹ payment"

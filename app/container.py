@@ -2,9 +2,10 @@ from dependency_injector import containers, providers
 from passlib.context import CryptContext
 
 from app.message_bus import MessageBus
-from app.resources.database import init_db
+from app.resources.database import init_db, init_db_readonly
 from app.resources.s3_client import init_s3
 from app.repos.uow import UnitOfWork
+from app.services.accounting import AccountingService
 from app.services.images import ImagesService
 from app.use_cases.add_payment import AddPayment
 from app.use_cases.add_product import AddProduct
@@ -45,6 +46,7 @@ class Container(containers.DeclarativeContainer):
     )
 
     db = providers.Resource(init_db, db_uri=config.db_uri)
+    db_readonly = providers.Resource(init_db_readonly, db_uri=config.db_uri)
     s3_client = providers.Resource(init_s3, region=config.aws_region)
 
     images_service = providers.Singleton(
@@ -56,6 +58,8 @@ class Container(containers.DeclarativeContainer):
     )
 
     uow = providers.Singleton(UnitOfWork, db=db)
+
+    accounting_service = providers.Singleton(AccountingService, db=db_readonly)
 
     message_bus = providers.Singleton(MessageBus, uow=uow)
 

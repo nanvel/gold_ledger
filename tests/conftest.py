@@ -31,15 +31,19 @@ def data():
 
 
 @pytest.fixture
-def session_factory():
+def conn():
     settings = load_settings()
 
     engine = create_engine(settings.db_uri)
     with engine.connect() as connection:
         with connection.begin_nested() as transaction:
-            session_factory = sessionmaker(bind=connection)
-            yield session_factory
+            yield connection
             transaction.rollback()
+
+
+@pytest.fixture
+def session_factory(conn):
+    yield sessionmaker(bind=conn)
 
 
 @pytest.fixture

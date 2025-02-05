@@ -7,7 +7,7 @@ from fastapi import APIRouter, Depends
 from app.container import Container
 from app.models import User
 from app.repos.uow import UnitOfWork
-from app.services.accounting import Accounting
+from app.services.accounting import AccountingService
 from .auth import get_active_user
 
 router = APIRouter()
