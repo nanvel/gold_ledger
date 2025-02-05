@@ -24,6 +24,7 @@ dependencies = [
     "boto3>=1.36.2",
     "shortuuid>=1.0.13",
     "pytz>=2025.1",
+    "tqdm>=4.67.1",
 ]
 
 [dependency-groups]

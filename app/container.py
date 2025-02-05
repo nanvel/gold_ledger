@@ -13,6 +13,7 @@ from app.use_cases.cancel_payment import CancelPayment
 from app.use_cases.cancel_product import CancelProduct
 from app.use_cases.confirm_payment import ConfirmPayment
 from app.use_cases.confirm_product import ConfirmProduct
+from app.use_cases.refresh_cache import RefreshCache
 from app.use_cases.reject_payment import RejectPayment
 from app.use_cases.reject_product import RejectProduct
 from app.use_cases.set_password import SetPassword
@@ -79,6 +80,11 @@ class Container(containers.DeclarativeContainer):
     )
     reject_payment = providers.Factory(RejectPayment, uow=uow, message_bus=message_bus)
     reject_product = providers.Factory(RejectProduct, uow=uow, message_bus=message_bus)
+    refresh_cache = providers.Factory(
+        RefreshCache,
+        uow=uow,
+        accounting_service=accounting_service,
+    )
     reset_password = providers.Factory(
         SetPassword,
         uow=uow,

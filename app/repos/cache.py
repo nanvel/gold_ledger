@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 
-from app.db import CacheTable
-from app.models import Cache
+from app.db import CacheTable, PaymentTable, ProductTable
+from app.models import PaymentStatus, ProductStatus, Cache
 
 
 class CacheRepo:
@@ -39,3 +39,26 @@ class CacheRepo:
 
         self._session.add(record)
         self._session.commit()
+
+    def all_keys(self):
+        res = set()
+
+        rows = (
+            self._session.query(ProductTable.supplier_id, ProductTable.retailer_id)
+            .where(ProductTable.status == ProductStatus.CONFIRMED.value)
+            .distinct()
+        )
+
+        for row in rows:
+            res.add((row.supplier_id, row.retailer_id))
+
+        rows = (
+            self._session.query(PaymentTable.supplier_id, PaymentTable.retailer_id)
+            .where(PaymentTable.status == PaymentStatus.CONFIRMED.value)
+            .distinct()
+        )
+
+        for row in rows:
+            res.add((row.supplier_id, row.retailer_id))
+
+        return res

@@ -43,3 +43,9 @@ def set_password(username: str, password: str):
             password=password,
         )
         typer.echo(user)
+
+
+@app.command()
+def refresh_cache():
+    with _Container() as container:
+        user = container.refresh_cache()()

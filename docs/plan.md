@@ -11,9 +11,8 @@ Payments summary:
 - [x] move service to container
 - [x] cache repo
   - [x] model
-- [ ] use case to calculate for supplier/retailer
+- [x] use the use case in the message bus (for confirmed)
 - [ ] use case for recalculate for all
-- [ ] use the use case in the message bus (for confirmed)
 - [ ] move timezone to container
 - [ ] refactor api
 
