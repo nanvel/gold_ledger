@@ -2,7 +2,7 @@
   <Navbar>
     <div class="divider">
       <RouterLink to="/balance-sheet" class="link"
-        >Balance sheet (view all)</RouterLink
+        >Balance sheet (view details)</RouterLink
       >
     </div>
     <balance-sheet-summary />
