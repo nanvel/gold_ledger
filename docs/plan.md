@@ -13,19 +13,20 @@ Payments summary:
   - [x] model
 - [x] use the use case in the message bus (for confirmed)
 - [x] use case for recalculate for all
-- [ ] refactor api
+- [x] refactor api
 
 Payments UI:
+- [ ] disallow past due dates
 - [ ] filter by id/name
 - [ ] filter by overdue
 - [ ] filter by due today
 - [ ] order by overdue/due/amount
 - [ ] colors for overdue / amount
 - [ ] show overdue on home?
-- [ ] cache due for supplier/retailer
+- [ ] show pending payments/products on main?
+- [ ] rename handler 
 
 UI more:
-- [ ] disallow past due dates
 - [ ] new payment/product right navbar
   - [x] button
   - [ ] refresh products/payments/activities

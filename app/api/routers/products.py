@@ -47,7 +47,7 @@ def add_product(
     if not user.is_supplier:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
-            detail="The user is not a supplier.",
+            detail="The user is not a supplier",
         )
 
     if item.payment_type == PaymentType.FINE:
@@ -58,7 +58,7 @@ def add_product(
                     {
                         "type": "payment_quality_required",
                         "loc": ["body", "payment_quality"],
-                        "msg": "Payment quality is required for fine payment.",
+                        "msg": "Payment quality is required for fine payment",
                         "input": item.payment_quality,
                         "ctx": {},
                     }
@@ -71,7 +71,7 @@ def add_product(
                     {
                         "type": "payment_weight_required",
                         "loc": ["body", "payment_weight"],
-                        "msg": "Payment weight is required for fine payment.",
+                        "msg": "Payment weight is required for fine payment",
                         "input": item.payment_weight,
                         "ctx": {},
                     }
@@ -85,12 +85,26 @@ def add_product(
                     {
                         "type": "payment_amount_required",
                         "loc": ["body", "payment_amount"],
-                        "msg": "Payment amount is required for cash payment.",
+                        "msg": "Payment amount is required for cash payment",
                         "input": item.payment_amount,
                         "ctx": {},
                     }
                 ],
             )
+
+    if item.payment_due_date < item.date:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail=[
+                {
+                    "type": "payment_due_date_invalid",
+                    "loc": ["body", "payment_due_date"],
+                    "msg": "Due date must be greater than the date or equal",
+                    "input": item.payment_due_date.isoformat(),
+                    "ctx": {},
+                }
+            ],
+        )
 
     use_case(
         retailer_id=item.retailer_id,
