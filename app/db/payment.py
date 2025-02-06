@@ -26,20 +26,22 @@ class PaymentTable(Base):
     status: Mapped[int] = mapped_column(server_default="1")
 
     supplier: Mapped["SupplierTable"] = relationship(
-        "SupplierTable", foreign_keys=[supplier_id]
+        "SupplierTable", foreign_keys=[supplier_id], lazy="joined"
     )
     retailer: Mapped["RetailerTable"] = relationship(
-        "RetailerTable", foreign_keys=[retailer_id]
+        "RetailerTable", foreign_keys=[retailer_id], lazy="joined"
     )
-    creator: Mapped["UserTable"] = relationship("UserTable", foreign_keys=[creator_id])
+    creator: Mapped["UserTable"] = relationship(
+        "UserTable", foreign_keys=[creator_id], lazy="joined"
+    )
     confirmed_by_user: Mapped["UserTable"] = relationship(
-        "UserTable", foreign_keys=[confirmed_by]
+        "UserTable", foreign_keys=[confirmed_by], lazy="joined"
     )
     rejected_by_user: Mapped["UserTable"] = relationship(
-        "UserTable", foreign_keys=[rejected_by]
+        "UserTable", foreign_keys=[rejected_by], lazy="joined"
     )
     cancelled_by_user: Mapped["UserTable"] = relationship(
-        "UserTable", foreign_keys=[cancelled_by]
+        "UserTable", foreign_keys=[cancelled_by], lazy="joined"
     )
 
     created_at: Mapped[datetime] = mapped_column(server_default=func.now())

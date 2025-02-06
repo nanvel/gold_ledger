@@ -37,10 +37,10 @@ class CacheTable(Base):
     )
 
     supplier: Mapped["SupplierTable"] = relationship(
-        "SupplierTable", foreign_keys=[supplier_id]
+        "SupplierTable", foreign_keys=[supplier_id], lazy="joined"
     )
     retailer: Mapped["RetailerTable"] = relationship(
-        "RetailerTable", foreign_keys=[retailer_id]
+        "RetailerTable", foreign_keys=[retailer_id], lazy="joined"
     )
 
     __table_args__ = (

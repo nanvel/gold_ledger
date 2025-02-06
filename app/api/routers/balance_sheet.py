@@ -25,7 +25,8 @@ def get_balance_sheet(
 ) -> AccountingResponse:
     with uow:
         res = uow.cache.filter(
-            supplier_id=user.supplier_id, retailer_id=user.retailer_id
+            supplier_id=user.supplier_id,
+            retailer_id=user.retailer_id,
         )
 
     return AccountingResponse(items=res)
