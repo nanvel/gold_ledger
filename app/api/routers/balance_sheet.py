@@ -17,9 +17,9 @@ class AccountingResponse:
     items: List[DisplayCache]
 
 
-@router.get("/accounting")
+@router.get("/balance-sheet")
 @inject
-def get_accounting(
+def get_balance_sheet(
     user: User = Depends(get_active_user),
     uow: UnitOfWork = Depends(Provide[Container.uow]),
 ) -> AccountingResponse:

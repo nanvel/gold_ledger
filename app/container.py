@@ -24,9 +24,9 @@ class Container(containers.DeclarativeContainer):
 
     wiring_config = containers.WiringConfiguration(
         modules=[
-            "app.api.routers.accounting",
             "app.api.routers.activities",
             "app.api.routers.auth",
+            "app.api.routers.balance_sheet",
             "app.api.routers.images",
             "app.api.routers.me",
             "app.api.routers.payments",

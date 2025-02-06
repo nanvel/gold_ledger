@@ -16,7 +16,8 @@ Payments summary:
 - [x] refactor api
 
 Payments UI:
-- [ ] disallow past due dates
+- [x] disallow past due dates
+- [ ] rename to balance sheet
 - [ ] filter by id/name
 - [ ] filter by overdue
 - [ ] filter by due today

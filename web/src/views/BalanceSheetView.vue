@@ -67,7 +67,7 @@ const paymentTypes = ["cash", "rtgs", "fine"];
 
 onMounted(async () => {
   try {
-    const response = await httpClient.get("/api/accounting");
+    const response = await httpClient.get("/api/balance-sheet");
     data.value = response.items;
   } catch (error) {
     console.error(error);

@@ -1,6 +1,6 @@
 import { useAuthStore } from "@/stores/auth";
 import { createRouter, createWebHistory } from "vue-router";
-import DueView from "@/views/DueView.vue";
+import BalanceSheetView from "@/views/BalanceSheetView.vue";
 import HomeView from "@/views/HomeView.vue";
 import LoginView from "@/views/LoginView.vue";
 import PaymentsView from "@/views/PaymentsView.vue";
@@ -54,9 +54,9 @@ const router = createRouter({
       component: PaymentView,
     },
     {
-      path: "/due",
-      name: "due",
-      component: DueView,
+      path: "/balance-sheet",
+      name: "balance-sheet",
+      component: BalanceSheetView,
     },
   ],
 });
