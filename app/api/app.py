@@ -9,7 +9,7 @@ from fastapi.staticfiles import StaticFiles
 
 from app.container import Container
 
-from .routers import accounting
+from .routers import balance_sheet
 from .routers import activities
 from .routers import auth
 from .routers import images
@@ -35,9 +35,9 @@ def create_app(container: Container):
 
     app.mount("/static", StaticFiles(directory="static"), name="static")
 
-    app.include_router(accounting.router, prefix="/api")
     app.include_router(activities.router, prefix="/api")
     app.include_router(auth.router, prefix="/api")
+    app.include_router(balance_sheet.router, prefix="/api")
     app.include_router(images.router, prefix="/api")
     app.include_router(me.router, prefix="/api")
     app.include_router(payments.router, prefix="/api")

@@ -1,4 +1,4 @@
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, contains_eager
 from typing import List, Optional
 
 from app.db import CacheTable, PaymentTable, ProductTable
@@ -80,7 +80,7 @@ class CacheRepo:
             filters.append(CacheTable.supplier_id == supplier_id)
         if retailer_id:
             filters.append(CacheTable.retailer_id == retailer_id)
-        rows = self._session.query(CacheTable).filter(*filters).all()
+        rows = self._session.query(CacheTable).filter(*filters)
 
         return [
             DisplayCache(

@@ -16,15 +16,15 @@ Payments summary:
 - [x] refactor api
 
 Payments UI:
-- [ ] disallow past due dates
-- [ ] filter by id/name
-- [ ] filter by overdue
-- [ ] filter by due today
-- [ ] order by overdue/due/amount
+- [x] disallow past due dates
+- [x] rename to balance sheet
+- [x] filter by id/name
 - [ ] colors for overdue / amount
+- [ ] summary
 - [ ] show overdue on home?
 - [ ] show pending payments/products on main?
-- [ ] rename handler 
+- [ ] rename handler
+- [ ] version for meStore
 
 UI more:
 - [ ] new payment/product right navbar

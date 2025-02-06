@@ -35,7 +35,6 @@
             <!-- Navbar menu content here -->
             <li><RouterLink to="/products">Products</RouterLink></li>
             <li><RouterLink to="/payments">Payments</RouterLink></li>
-            <li><RouterLink to="/due">Due</RouterLink></li>
             <li><RouterLink to="/settings">Settings</RouterLink></li>
           </ul>
         </div>
@@ -56,7 +55,6 @@
         <!-- Sidebar content here -->
         <li><RouterLink to="/products">Products</RouterLink></li>
         <li><RouterLink to="/payments">Payments</RouterLink></li>
-        <li><RouterLink to="/due">Due</RouterLink></li>
         <li><RouterLink to="/settings">Settings</RouterLink></li>
       </ul>
     </div>

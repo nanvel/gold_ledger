@@ -17,15 +17,16 @@ class AccountingResponse:
     items: List[DisplayCache]
 
 
-@router.get("/accounting")
+@router.get("/balance-sheet")
 @inject
-def get_accounting(
+def get_balance_sheet(
     user: User = Depends(get_active_user),
     uow: UnitOfWork = Depends(Provide[Container.uow]),
 ) -> AccountingResponse:
     with uow:
         res = uow.cache.filter(
-            supplier_id=user.supplier_id, retailer_id=user.retailer_id
+            supplier_id=user.supplier_id,
+            retailer_id=user.retailer_id,
         )
 
     return AccountingResponse(items=res)
