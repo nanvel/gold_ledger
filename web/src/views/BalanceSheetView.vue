@@ -1,18 +1,26 @@
 <template>
   <Navbar>
-    <div class="flex flex-col space-y-4 py-4 flex-wrap">
+    <div class="flex flex-col space-y-4 flex-wrap">
       <div
         class="flex flex-col space-y-2 md:flex-row md:space-x-2 md:space-y-0"
-        v-if="summary"
+        v-if="summary && !loading"
       >
         <div v-for="pt in paymentTypes" :key="pt">
           <balance-sheet-row :row="summary" :payment-type="pt" />
         </div>
       </div>
+      <placeholder v-if="loading" loading />
+      <placeholder
+        v-else-if="!items?.length && !loading"
+        text="No confirmed transactions found"
+      />
 
-      <div class="divider"></div>
+      <div class="divider" v-if="items?.length && !loading"></div>
 
-      <div class="form-control w-full max-w-sm">
+      <div
+        class="form-control w-full max-w-sm"
+        v-if="items?.length && !loading"
+      >
         <div class="label">
           <span class="label-text">{{
             `Filter by ${isSupplier ? "retailer" : "supplier"}`
@@ -64,9 +72,11 @@ import { httpClient } from "@/services/http.js";
 import { useMeStore } from "@/stores/index.js";
 import { storeToRefs } from "pinia";
 import BalanceSheetRow from "@/components/BalanceSheetRow.vue";
+import Placeholder from "@/components/Placeholder.vue";
 
 const data = ref(null);
 const searchQuery = ref("");
+const loading = ref(false);
 
 const meStore = useMeStore();
 
@@ -79,7 +89,7 @@ const summary = computed(() => {
     return null;
   }
 
-  let res = {
+  const res = {
     cash_products: 0,
     cash_payments: 0,
     cash_due_date: null,
@@ -148,6 +158,7 @@ const items = computed(() => {
 });
 
 onMounted(async () => {
+  loading.value = true;
   try {
     const response = await httpClient.get("/api/balance-sheet");
     data.value = response.items.map((item) => {
@@ -166,6 +177,8 @@ onMounted(async () => {
     });
   } catch (error) {
     console.error(error);
+  } finally {
+    loading.value = false;
   }
 });
 </script>

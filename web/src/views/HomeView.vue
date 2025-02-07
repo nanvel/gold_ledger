@@ -1,13 +1,15 @@
 <template>
   <Navbar>
-    <div class="divider">
-      <RouterLink to="/balance-sheet" class="link"
-        >Balance sheet (view details)</RouterLink
-      >
+    <div class="flex flex-col space-y-4">
+      <div class="divider">
+        <RouterLink to="/balance-sheet" class="link"
+          >Balance sheet (view details)</RouterLink
+        >
+      </div>
+      <balance-sheet-summary />
+      <div class="divider">Activities</div>
+      <activities-table />
     </div>
-    <balance-sheet-summary />
-    <div class="divider">Activities</div>
-    <activities-table />
   </Navbar>
 </template>
 

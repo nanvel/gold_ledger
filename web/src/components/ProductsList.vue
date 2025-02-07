@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col space-y-4">
-    <div class="flex flex-row space-x-2 mt-8 justify-between">
+    <div class="flex flex-row space-x-2 justify-between">
       <div>
         <retailer-picker-modal v-if="isSupplier" v-on:selected="setRetailer" />
         <supplier-picker-modal v-else v-on:selected="setSupplier" />

@@ -19,20 +19,26 @@ Payments UI:
 - [x] disallow past due dates
 - [x] rename to balance sheet
 - [x] filter by id/name
-- [ ] colors for overdue / amount
-- [ ] summary
-- [ ] show overdue on home?
+- [x] colors for overdue / amount
+- [x] summary
+- [x] show overdue on home?
+- [x] rename handler
+- [x] what "due" is exactly?
+- [ ] loading states for balance sheet
 - [ ] show pending payments/products on main?
-- [ ] rename handler
-- [ ] version for meStore
+- [ ] version for meStore (refresh)
+- [ ] Show Due on (instead pay on)
 
 UI more:
+- [ ] resize navbar issue between settings and payments (fix)
 - [ ] new payment/product right navbar
   - [x] button
   - [ ] refresh products/payments/activities
 - [ ] show pay n amount to by date
 - [ ] note for payment
 - [ ] products/payments waiting for approval on dashboard
+- [ ] Gold Ledger on login/register
+- [ ] Free trial
 
 Deployment:
 - [ ] connect sentry
