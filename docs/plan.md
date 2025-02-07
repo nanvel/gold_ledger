@@ -24,10 +24,12 @@ Payments UI:
 - [x] show overdue on home?
 - [x] rename handler
 - [x] what "due" is exactly?
-- [ ] loading states for balance sheet
+- [x] loading states for balance sheet
 - [ ] show pending payments/products on main?
+  - [ ] add status filter in api 
 - [ ] version for meStore (refresh)
 - [ ] Show Due on (instead pay on)
+  - [ ] check latest messages
 
 UI more:
 - [ ] resize navbar issue between settings and payments (fix)
@@ -39,6 +41,7 @@ UI more:
 - [ ] products/payments waiting for approval on dashboard
 - [ ] Gold Ledger on login/register
 - [ ] Free trial
+- [ ] filter products/payments by status
 
 Deployment:
 - [ ] connect sentry

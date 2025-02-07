@@ -155,6 +155,7 @@ class ProductsRepo:
         self,
         supplier_id: Optional[int],
         retailer_id: Optional[int],
+        status: Optional[ProductStatus],
         limit: int,
         offset: int,
         order_by: ProductOrderBy = ProductOrderBy.CREATED,
@@ -166,6 +167,8 @@ class ProductsRepo:
             query = query.filter(ProductTable.supplier_id == supplier_id)
         if retailer_id:
             query = query.filter(ProductTable.retailer_id == retailer_id)
+        if status:
+            query = query.filter(ProductTable.status == status.value)
 
         total = query.count()
 

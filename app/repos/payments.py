@@ -128,6 +128,7 @@ class PaymentsRepo:
         self,
         supplier_id: Optional[int],
         retailer_id: Optional[int],
+        status: Optional[PaymentStatus],
         limit: int,
         offset: int,
         order_by: PaymentOrderBy = PaymentOrderBy.CREATED,
@@ -139,6 +140,8 @@ class PaymentsRepo:
             query = query.filter(PaymentTable.supplier_id == supplier_id)
         if retailer_id:
             query = query.filter(PaymentTable.retailer_id == retailer_id)
+        if status:
+            query = query.filter(PaymentTable.status == status.value)
 
         total = query.count()
 

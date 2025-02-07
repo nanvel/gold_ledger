@@ -7,7 +7,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from pydantic import BaseModel, Field
 
 from app.container import Container
-from app.models import PaymentType, DisplayPayment, User
+from app.models import PaymentStatus, PaymentType, DisplayPayment, User
 from app.repos.uow import UnitOfWork
 from app.use_cases.add_payment import AddPayment
 from app.use_cases.cancel_payment import CancelPayment
@@ -105,6 +105,7 @@ class PaymentsResponse(BaseModel):
 def get_payments(
     retailer_id: Optional[int] = None,
     supplier_id: Optional[int] = None,
+    status: Optional[PaymentStatus] = None,
     user: User = Depends(get_active_user),
     uow: UnitOfWork = Depends(Provide[Container.uow]),
     limit: int = 20,
@@ -119,6 +120,7 @@ def get_payments(
         total, items = uow.payments.filter(
             supplier_id=supplier_id,
             retailer_id=retailer_id,
+            status=status,
             limit=limit,
             offset=offset,
         )
