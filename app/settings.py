@@ -20,6 +20,8 @@ class Settings(BaseSettings):
     aws_region: str = "ap-southeast-1"
     s3_bucket: str = "gold-ledger-staging-bc6ab78"
 
+    sentry_dsn: str = ""
+
 
 def load_settings() -> Settings:
     env = os.environ.get("ENV", "development")

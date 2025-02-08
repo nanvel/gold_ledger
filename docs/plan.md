@@ -47,9 +47,6 @@ UI more:
     - [x] display change
   - [x] supplier/retailer neutral messages
 - [x] test photo upload on mobile
-- [ ] login page
-  - [ ] Free trial
-  - [ ] Gold Ledger on login/register
 
 Deployment:
 - [ ] connect sentry
@@ -63,6 +60,9 @@ Deployment:
 
 Other:
 - [ ] cleanup plan
+- [ ] login page
+  - [ ] Free trial
+  - [ ] Gold Ledger on login/register
 - [ ] compute due payments / products
 - [ ] overdue payments on the product page? (paid/not paid)
 - [ ] refine cards ui

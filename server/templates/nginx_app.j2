@@ -9,11 +9,11 @@ map $http_upgrade $connection_upgrade {
 
 server {
     listen 80;
-    server_name goldledger.nanvel.com;
+    server_name goldledger.in;
 
     client_max_body_size 5M;
 
-    if ($host !~* ^(goldledger.nanvel.com)$) {
+    if ($host !~* ^(goldledger.in)$) {
         return 444;
     }
 

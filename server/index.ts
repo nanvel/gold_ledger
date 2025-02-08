@@ -63,7 +63,7 @@ const wwwRecord = new aws.route53.Record("glRecordWww", {
 
 export const serverIp = eip.publicIp;
 
-const bucket = new aws.s3.Bucket("gold-ledger-staging");
+const bucket = new aws.s3.Bucket("gold-ledger");
 
 const glBucketOwnershipControls = new aws.s3.BucketOwnershipControls(
   "aclBucketOwnershipControls",

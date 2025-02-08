@@ -25,6 +25,7 @@ dependencies = [
     "shortuuid>=1.0.13",
     "pytz>=2025.1",
     "tqdm>=4.67.1",
+    "sentry-sdk[fastapi]>=2.20.0",
 ]
 
 [dependency-groups]

@@ -4,6 +4,7 @@ from passlib.context import CryptContext
 from app.message_bus import MessageBus
 from app.resources.database import init_db, init_db_readonly
 from app.resources.s3_client import init_s3
+from app.resources.sentry import init_sentry
 from app.repos.uow import UnitOfWork
 from app.services.accounting import AccountingService
 from app.services.images import ImagesService
@@ -49,6 +50,7 @@ class Container(containers.DeclarativeContainer):
     db = providers.Resource(init_db, db_uri=config.db_uri)
     db_readonly = providers.Resource(init_db_readonly, db_uri=config.db_uri)
     s3_client = providers.Resource(init_s3, region=config.aws_region)
+    sentry = providers.Resource(init_sentry, dsn=config.sentry_dsn)
 
     images_service = providers.Singleton(
         ImagesService,
