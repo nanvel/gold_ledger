@@ -24,6 +24,7 @@ class PaymentForm(BaseModel):
     weight: Optional[Decimal] = Field(None, gt=0)
     quality: Optional[Decimal] = Field(None, gt=0, le=100)
     amount: Optional[Decimal] = Field(None, gt=0)
+    note: Optional[str] = Field(None, max_length=120)
     supplier_id: int
 
 
@@ -90,6 +91,7 @@ def add_payment(
         weight=item.weight,
         quality=item.quality,
         amount=item.amount,
+        note=item.note,
     )
 
     return EmptyResponse(success=True)

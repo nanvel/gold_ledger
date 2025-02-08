@@ -27,6 +27,7 @@ class PaymentsRepo:
             weight=payment.weight,
             quality=payment.quality,
             amount=payment.amount,
+            note=payment.note,
             supplier_id=payment.supplier_id,
             retailer_id=payment.retailer_id,
             creator_id=payment.creator_id,
@@ -61,6 +62,7 @@ class PaymentsRepo:
                 weight=record.weight,
                 quality=record.quality,
                 amount=record.amount,
+                note=record.note,
                 supplier_id=record.supplier_id,
                 retailer_id=record.retailer_id,
                 creator_id=record.creator_id,
@@ -80,6 +82,7 @@ class PaymentsRepo:
                 weight=record.weight,
                 quality=record.quality,
                 amount=record.amount,
+                note=record.note,
                 supplier=DisplaySupplier(
                     id=record.supplier.id, name=record.supplier.name
                 ),
@@ -164,6 +167,7 @@ class PaymentsRepo:
                     weight=record.weight,
                     quality=record.quality,
                     amount=record.amount,
+                    note=record.note,
                     created_at=int(Timestamp.from_datetime(record.created_at)),
                     status=PaymentStatus(record.status).slug,
                     retailer=DisplayRetailer(

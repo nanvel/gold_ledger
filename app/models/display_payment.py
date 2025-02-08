@@ -16,6 +16,7 @@ class DisplayPayment:
     weight: Optional[Decimal]
     quality: Optional[Decimal]
     amount: Optional[Decimal]
+    note: Optional[str]
     supplier: DisplaySupplier
     retailer: DisplayRetailer
     creator: DisplayUser

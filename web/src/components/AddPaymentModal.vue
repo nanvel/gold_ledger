@@ -127,6 +127,19 @@
               <span class="label-text-alt text-error">{{ amountError }}</span>
             </div>
           </div>
+          <div class="form-control w-full">
+            <div class="label">
+              <span class="label-text">Note (optional)</span>
+            </div>
+            <input
+              type="text"
+              class="input input-bordered w-full input-md text-lg"
+              v-model="note"
+            />
+            <div class="label" v-if="noteError">
+              <span class="label-text-alt text-error">{{ noteError }}</span>
+            </div>
+          </div>
         </form>
         <div v-if="error" class="mt-4 whitespace-pre-line text-error text-sm">
           {{ error }}
@@ -168,6 +181,8 @@ const quality = ref(0);
 const qualityError = ref(null);
 const amount = ref(0);
 const amountError = ref(null);
+const note = ref("");
+const noteError = ref(null);
 const loading = ref(false);
 const error = ref(null);
 
@@ -190,6 +205,7 @@ const clearFields = () => {
   weight.value = 0;
   quality.value = 0;
   amount.value = 0;
+  note.value = "";
   error.value = null;
   typeError.value = null;
   dateError.value = null;
@@ -212,6 +228,7 @@ watch([type, date, weight, quality, amount], () => {
   weightError.value = null;
   qualityError.value = null;
   amountError.value = null;
+  noteError.value = null;
 });
 
 const addPayment = async () => {
@@ -227,6 +244,10 @@ const addPayment = async () => {
     data["amount"] = amount.value;
   }
 
+  if (note.value?.length) {
+    data["note"] = note.value;
+  }
+
   loading.value = true;
   try {
     await httpClient.post(`/api/payments`, data, null, { showToast: false });
@@ -240,6 +261,7 @@ const addPayment = async () => {
     weightError.value = parseError(e, "weight");
     qualityError.value = parseError(e, "quality");
     amountError.value = parseError(e, "amount");
+    noteError.value = parseError(e, "note");
   } finally {
     loading.value = false;
   }

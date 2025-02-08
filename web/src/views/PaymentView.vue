@@ -90,6 +90,10 @@ const tableRows = computed(() => {
     res.push(["Amount", `${details.value.amount}₹`]);
   }
 
+  if (details.value.note) {
+    res.push(["Note", details.value.note]);
+  }
+
   res.push([
     "Created by",
     details.value.creator.name || details.value.creator.email,

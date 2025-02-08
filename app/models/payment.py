@@ -16,6 +16,7 @@ class Payment:
     weight: Optional[Decimal]
     quality: Optional[Decimal]
     amount: Optional[Decimal]
+    note: Optional[str]
     supplier_id: int
     retailer_id: int
     creator_id: int

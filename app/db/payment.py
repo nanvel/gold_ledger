@@ -17,6 +17,7 @@ class PaymentTable(Base):
     weight: Mapped[Decimal] = mapped_column(type_=sa.DECIMAL, nullable=True)
     quality: Mapped[Decimal] = mapped_column(type_=sa.DECIMAL, nullable=True)
     amount: Mapped[Decimal] = mapped_column(type_=sa.DECIMAL, nullable=True)
+    note: Mapped[str] = mapped_column(sa.Text(), nullable=True)
     supplier_id: Mapped[int] = mapped_column(sa.ForeignKey("suppliers.id"))
     retailer_id: Mapped[int] = mapped_column(sa.ForeignKey("retailers.id"), index=True)
     creator_id: Mapped[int] = mapped_column(sa.ForeignKey("users.id"))

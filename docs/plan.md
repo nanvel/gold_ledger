@@ -31,20 +31,21 @@ Payments UI:
 - [x] version for meStore (refresh)
 
 UI more:
-- [ ] scrolling issue on mobile
+- [x] scrolling issue on mobile
+- [x] resize navbar issue between settings and payments (fix)
+- [x] new payment/product right navbar
+  - [x] button
+  - [x] refresh products/payments/activities
+- [x] products/payments waiting for approval on dashboard
+- [ ] note for payment
+- [ ] filter products/payments by status
 - [ ] Show Due on (instead pay on)
   - [ ] check latest messages
-- [ ] resize navbar issue between settings and payments (fix)
-- [ ] new payment/product right navbar
-  - [x] button
-  - [ ] refresh products/payments/activities
-- [ ] show pay n amount to by date
-- [ ] note for payment
-- [ ] products/payments waiting for approval on dashboard
-- [ ] Gold Ledger on login/register
-- [ ] Free trial
-- [ ] filter products/payments by status
+  - [ ] show pay n amount to by date
 - [ ] test photo upload on mobile
+- [ ] login page
+  - [ ] Free trial
+  - [ ] Gold Ledger on login/register
 
 Deployment:
 - [ ] connect sentry

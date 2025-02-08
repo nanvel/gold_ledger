@@ -25,6 +25,7 @@ class AddPayment:
         weight: Optional[Decimal],
         quality: Optional[Decimal],
         amount: Optional[Decimal],
+        note: Optional[str],
     ):
         with self._uow:
             supplier = self._uow.suppliers.by_id(supplier_id)
@@ -42,6 +43,7 @@ class AddPayment:
                 weight=weight,
                 quality=quality,
                 amount=amount,
+                note=note,
                 retailer_id=retailer_id,
                 supplier_id=supplier.id,
                 creator_id=creator_id,
