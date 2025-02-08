@@ -37,7 +37,7 @@ UI more:
   - [x] button
   - [x] refresh products/payments/activities
 - [x] products/payments waiting for approval on dashboard
-- [ ] note for payment
+- [x] note for payment
 - [ ] filter products/payments by status
 - [ ] Show Due on (instead pay on)
   - [ ] check latest messages

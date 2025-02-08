@@ -1,9 +1,22 @@
 <template>
   <div class="flex flex-col space-y-4">
     <div class="flex flex-row space-x-2 justify-between">
-      <div>
+      <div
+        class="flex flex-col space-y-2 sm:flex-row sm:space-x-2 sm:space-y-0"
+      >
         <retailer-picker-modal v-if="isSupplier" v-on:selected="setRetailer" />
         <supplier-picker-modal v-else v-on:selected="setSupplier" />
+
+        <select
+          class="select select-bordered select-sm w-full max-w-xs"
+          v-model="status"
+        >
+          <option selected :value="0">Status - all</option>
+          <option :value="1">Status - pending</option>
+          <option :value="2">Status - confirmed</option>
+          <option :value="3">Status - rejected</option>
+          <option :value="4">Status - canceled</option>
+        </select>
       </div>
       <div class="join">
         <button
@@ -57,7 +70,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref, computed } from "vue";
+import { onMounted, ref, computed, watch } from "vue";
 import { httpClient } from "@/services/http.js";
 import ProductTable from "@/components/ProductTable.vue";
 import ProductCards from "@/components/ProductCards.vue";
@@ -78,6 +91,7 @@ const loading = ref(false);
 const retailerId = ref(props.retailerId);
 const supplierId = ref(props.supplierId);
 const productsView = ref(localStorage.getItem("products_view") || "table");
+const status = ref(0);
 
 const isSupplier = computed(() => props.supplierId);
 
@@ -96,6 +110,9 @@ const loadPage = async (p) => {
   }
   if (supplierId.value) {
     q += `&supplier_id=${supplierId.value}`;
+  }
+  if (status.value) {
+    q += `&status=${status.value}`;
   }
   loading.value = true;
   try {
@@ -116,6 +133,10 @@ const setSupplier = (supplier) => {
   supplierId.value = supplier?.id;
   loadPage(1);
 };
+
+watch([status], () => {
+  loadPage(1);
+});
 
 onMounted(async () => {
   await loadPage(1);
