@@ -40,7 +40,7 @@
         </tbody>
       </table>
     </div>
-    <div class="join mt-8" v-if="!loading && total > 0">
+    <div class="join" v-if="!loading && total > 0">
       <button
         class="join-item btn"
         v-if="page > 1"

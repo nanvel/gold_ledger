@@ -34,25 +34,25 @@
       :products="products"
       v-if="products?.length && !loading && productsView === 'cards'"
     />
-  </div>
-  <div class="join mt-8" v-if="!loading && total > 0">
-    <button
-      class="join-item btn"
-      v-if="page > 1"
-      v-on:click="loadPage(page - 1)"
-    >
-      «
-    </button>
-    <button class="join-item btn">
-      Page {{ page }} / {{ pages }} <small>Total: {{ total }}</small>
-    </button>
-    <button
-      class="join-item btn"
-      v-if="page < pages"
-      v-on:click="loadPage(page + 1)"
-    >
-      »
-    </button>
+    <div class="join" v-if="!loading && total > 0">
+      <button
+        class="join-item btn"
+        v-if="page > 1"
+        v-on:click="loadPage(page - 1)"
+      >
+        «
+      </button>
+      <button class="join-item btn">
+        Page {{ page }} / {{ pages }} <small>Total: {{ total }}</small>
+      </button>
+      <button
+        class="join-item btn"
+        v-if="page < pages"
+        v-on:click="loadPage(page + 1)"
+      >
+        »
+      </button>
+    </div>
   </div>
 </template>
 

@@ -1,5 +1,5 @@
 <template>
-  <div class="drawer box-border h-dvh overflow-y-scroll">
+  <div class="drawer box-border">
     <input id="nav-drawer" type="checkbox" class="drawer-toggle" />
     <div class="drawer-content flex flex-col">
       <!-- Navbar -->
