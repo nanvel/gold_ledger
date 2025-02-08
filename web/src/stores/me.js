@@ -14,6 +14,7 @@ export const useMeStore = defineStore("me", () => {
   const storeOwnerId = ref(null);
   const supplierId = ref(null);
   const retailerId = ref(null);
+  const version = ref(0);
 
   const isSupplier = computed(() => supplierId.value !== null);
   const isRetailer = computed(() => retailerId.value !== null);
@@ -61,6 +62,14 @@ export const useMeStore = defineStore("me", () => {
     retailerId.value = resp.retailer_id;
   };
 
+  const incrementVersion = () => {
+    version.value = version.value + 1;
+  };
+
+  const refreshKey = computed(() => {
+    return `r-${version.value}`;
+  });
+
   return {
     selectedTheme,
     myEmail,
@@ -71,10 +80,12 @@ export const useMeStore = defineStore("me", () => {
     isOwner,
     supplierId,
     retailerId,
+    refreshKey,
     load,
     reset,
     setTheme,
     setName,
     setStoreName,
+    incrementVersion,
   };
 });

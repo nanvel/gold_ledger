@@ -38,8 +38,11 @@
             <li><RouterLink to="/settings">Settings</RouterLink></li>
           </ul>
         </div>
-        <add-product-modal v-if="isSupplier" />
-        <add-payment-modal v-else />
+        <add-product-modal
+          v-if="isSupplier"
+          v-on:product-added="store.incrementVersion"
+        />
+        <add-payment-modal v-else v-on:payment-added="store.incrementVersion" />
       </div>
       <div class="overflow-y-scroll p-2">
         <slot></slot>

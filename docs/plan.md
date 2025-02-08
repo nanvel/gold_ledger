@@ -25,12 +25,12 @@ Payments UI:
 - [x] rename handler
 - [x] what "due" is exactly?
 - [x] loading states for balance sheet
-- [ ] show pending payments/products on main?
-  - [ ] add status filter in api 
+- [x] show pending payments/products on main?
+  - [x] add status filter in api
+- [x] fix payment creation
 - [ ] version for meStore (refresh)
 - [ ] Show Due on (instead pay on)
   - [ ] check latest messages
-- [ ] fix payment creation
 
 UI more:
 - [ ] resize navbar issue between settings and payments (fix)

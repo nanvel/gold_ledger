@@ -24,7 +24,7 @@
         v-on:setTotal="onTotalToConfirm"
       />
       <div class="divider">Activities</div>
-      <activities-table />
+      <activities-table :key="refreshKey" />
     </div>
   </Navbar>
 </template>
@@ -48,5 +48,5 @@ const onTotalToConfirm = (total) => {
   totalToConfirm.value = total;
 };
 
-const { isSupplier } = storeToRefs(meStore);
+const { isSupplier, refreshKey } = storeToRefs(meStore);
 </script>
