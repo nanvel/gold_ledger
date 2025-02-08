@@ -1,11 +1,11 @@
 <template>
   <div class="flex flex-row flex-wrap justify-start">
     <div
-      class="card bg-base-100 border-neutral border-2 w-96 mx-2 my-2"
+      class="card bg-base-100 border-base-300 border-2 w-96 mx-2 my-2"
       v-for="product in props.products"
       :key="product.id"
     >
-      <div class="card-body">
+      <div class="card-body" style="padding: 1rem">
         <h2 class="card-title">
           <RouterLink :to="`/products/${product.id}`">{{
             product.name

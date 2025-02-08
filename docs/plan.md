@@ -38,10 +38,14 @@ UI more:
   - [x] refresh products/payments/activities
 - [x] products/payments waiting for approval on dashboard
 - [x] note for payment
-- [ ] filter products/payments by status
+- [x] filter products/payments by status
 - [ ] Show Due on (instead pay on)
-  - [ ] check latest messages
-  - [ ] show pay n amount to by date
+  - [x] check latest messages
+  - [ ] show all pay by
+    - [ ] bl change
+    - [ ] db change
+    - [ ] display change
+  - [ ] supplier/retailer neutral messages
 - [ ] test photo upload on mobile
 - [ ] login page
   - [ ] Free trial

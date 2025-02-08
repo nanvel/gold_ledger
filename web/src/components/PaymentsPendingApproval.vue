@@ -34,7 +34,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref, defineEmits } from "vue";
+import { onMounted, ref } from "vue";
 import { httpClient } from "@/services/http.js";
 import Placeholder from "@/components/Placeholder.vue";
 import { RouterLink } from "vue-router";
