@@ -8,6 +8,7 @@ from .display_product import DisplayProduct
 from .display_retailer import DisplayRetailer
 from .display_supplier import DisplaySupplier
 from .display_user import DisplayUser
+from .due_payment import DuePayment
 from .cache import Cache
 from .image import Image
 from .payment import Payment
@@ -37,6 +38,7 @@ __all__ = (
     "DisplayRetailer",
     "DisplaySupplier",
     "DisplayUser",
+    "DuePayment",
     "Image",
     "Cache",
     "Payment",

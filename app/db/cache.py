@@ -1,4 +1,4 @@
-from datetime import date, datetime
+from datetime import datetime
 from decimal import Decimal
 
 import sqlalchemy as sa
@@ -17,16 +17,11 @@ class CacheTable(Base):
 
     cash_products: Mapped[Decimal] = mapped_column(type_=sa.DECIMAL)
     cash_payments: Mapped[Decimal] = mapped_column(type_=sa.DECIMAL)
-    cash_due_date: Mapped[date] = mapped_column(nullable=True)
-    cash_to_pay: Mapped[Decimal] = mapped_column(type_=sa.DECIMAL)
     rtgs_products: Mapped[Decimal] = mapped_column(type_=sa.DECIMAL)
     rtgs_payments: Mapped[Decimal] = mapped_column(type_=sa.DECIMAL)
-    rtgs_due_date: Mapped[date] = mapped_column(nullable=True)
-    rtgs_to_pay: Mapped[Decimal] = mapped_column(type_=sa.DECIMAL)
     fine_products: Mapped[Decimal] = mapped_column(type_=sa.DECIMAL)
     fine_payments: Mapped[Decimal] = mapped_column(type_=sa.DECIMAL)
-    fine_due_date: Mapped[date] = mapped_column(nullable=True)
-    fine_to_pay: Mapped[Decimal] = mapped_column(type_=sa.DECIMAL)
+    due_payments: Mapped[list] = mapped_column(type_=sa.JSON, server_default="[]")
 
     version: Mapped[int] = mapped_column(server_default="1")
 
