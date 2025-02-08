@@ -330,9 +330,13 @@ const onFileChanged = async (event) => {
   try {
     const body = new FormData();
     body.append("file", event.target.files[0]);
-    const result = await httpClient.post(`/api/images/upload`, null, body);
+    const result = await httpClient.post(`/api/images/upload`, null, body, {
+      showToast: false,
+    });
     imageId.value = result["id"];
     imageThumb.value = result["thumb_url"];
+  } catch (e) {
+    imageIdError.value = parseError(e, "file") || parseError(e);
   } finally {
     imageLoading.value = false;
   }

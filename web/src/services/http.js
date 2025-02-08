@@ -79,6 +79,8 @@ async function handleResponse(response, args) {
       // get error message from body or default to response status
       if (response.status === 500) {
         toast.error("Internal server error");
+      } else if (response.status === 413) {
+        toast.error("File size should less than 5MB");
       } else {
         toast.error(
           (data?.detail &&
@@ -88,6 +90,10 @@ async function handleResponse(response, args) {
             response.status.toString(),
         );
       }
+    }
+
+    if (response.status === 413) {
+      return Promise.reject({ detail: "File size should less than 5MB" });
     }
 
     return Promise.reject(data);

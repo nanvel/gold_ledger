@@ -11,6 +11,8 @@ server {
     listen 80;
     server_name goldledger.nanvel.com;
 
+    client_max_body_size 5M;
+
     if ($host !~* ^(goldledger.nanvel.com)$) {
         return 444;
     }

@@ -39,14 +39,14 @@ UI more:
 - [x] products/payments waiting for approval on dashboard
 - [x] note for payment
 - [x] filter products/payments by status
-- [ ] Show Due on (instead pay on)
+- [x] Show Due on (instead pay on)
   - [x] check latest messages
-  - [ ] show all pay by
-    - [ ] bl change
+  - [x] show all pay by
+    - [x] bl change
     - [x] db change
-    - [ ] display change
-  - [ ] supplier/retailer neutral messages
-- [ ] test photo upload on mobile
+    - [x] display change
+  - [x] supplier/retailer neutral messages
+- [x] test photo upload on mobile
 - [ ] login page
   - [ ] Free trial
   - [ ] Gold Ledger on login/register

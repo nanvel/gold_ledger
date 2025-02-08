@@ -4,7 +4,7 @@ from typing import List
 
 from .display_retailer import DisplayRetailer
 from .display_supplier import DisplaySupplier
-from .due_payment import DuePayment
+from .display_due_payment import DisplayDuePayment
 
 
 @dataclass(frozen=True)
@@ -17,4 +17,4 @@ class DisplayCache:
     rtgs_payments: Decimal
     fine_products: Decimal
     fine_payments: Decimal
-    due_payments: List[DuePayment]
+    due_payments: List[DisplayDuePayment]
