@@ -28,11 +28,12 @@ Payments UI:
 - [x] show pending payments/products on main?
   - [x] add status filter in api
 - [x] fix payment creation
-- [ ] version for meStore (refresh)
-- [ ] Show Due on (instead pay on)
-  - [ ] check latest messages
+- [x] version for meStore (refresh)
 
 UI more:
+- [ ] scrolling issue on mobile
+- [ ] Show Due on (instead pay on)
+  - [ ] check latest messages
 - [ ] resize navbar issue between settings and payments (fix)
 - [ ] new payment/product right navbar
   - [x] button
@@ -43,6 +44,7 @@ UI more:
 - [ ] Gold Ledger on login/register
 - [ ] Free trial
 - [ ] filter products/payments by status
+- [ ] test photo upload on mobile
 
 Deployment:
 - [ ] connect sentry

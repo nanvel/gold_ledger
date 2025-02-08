@@ -1,5 +1,5 @@
 <template>
-  <div class="overflow-x-auto">
+  <div class="overflow-x-auto mt-4">
     <placeholder v-if="loading" loading />
     <table class="table table-sm table-zebra" v-if="staff.length && !loading">
       <thead>

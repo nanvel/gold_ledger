@@ -13,9 +13,11 @@
     }"
   >
     <div class="flex-row space-x-4">
-      <span v-if="props.text" class="text-sm text-base-content">{{
-        props.text
-      }}</span>
+      <span
+        v-if="props.text?.length || props.loading"
+        class="text-sm text-base-content"
+        >{{ props.loading ? "Loading..." : props.text }}</span
+      >
     </div>
   </div>
 </template>

@@ -39,17 +39,17 @@
     </div>
     <div
       v-if="!searchQuery.length && recent.length"
-      class="flex flex-row space-x-2 mt-2"
+      class="flex flex-row flex-wrap space-x-2"
     >
       <span
         v-for="s in recent.slice().reverse()"
         :key="s.id"
         v-on:click="selectSupplier(s)"
-        class="rounded-md bg-base-200 px-2 cursor-pointer"
+        class="rounded-md bg-base-200 cursor-pointer py-1 px-2 mt-2"
         >{{ s.id }} : {{ s.name }}</span
       >
       <span
-        class="rounded-md px-2 cursor-pointer bg-base-200"
+        class="rounded-md cursor-pointer bg-base-200 py-1 px-2 mt-2"
         v-if="props.allowNone"
         v-on:click="selectSupplier(null)"
         >None</span

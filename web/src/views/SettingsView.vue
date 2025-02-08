@@ -1,21 +1,24 @@
 <template>
   <Navbar>
-    <article class="prose lg:prose-xl py-4 px-2">
-      <h2>Settings</h2>
-      <h3 class="text-2xl font-semibold">Account</h3>
-      <div class="py-2">
-        <template v-if="myName?.length">{{ myName }} |</template> {{ myEmail }}
+    <div class="flex flex-col space-y-8 pb-8">
+      <div class="divider">Account</div>
+      <template v-if="myName?.length">{{ myName }} |</template> {{ myEmail }}
+      <div
+        class="flex flex-col space-y-4 sm:flex-row sm:space-y-0 sm:space-x-2"
+        v-if="myEmail"
+      >
+        <div>
+          <button class="btn btn-sm btn-primary" v-on:click="logout">
+            Log out
+          </button>
+        </div>
+        <div><change-password-modal /></div>
+        <div>
+          <ChangeNameModal :name="myName" v-on:name-changed="onNameChanged" />
+        </div>
       </div>
 
-      <div class="flex flex-row space-x-4" v-if="myEmail">
-        <button class="btn btn-sm btn-primary" v-on:click="logout">
-          Log out
-        </button>
-        <change-password-modal />
-        <ChangeNameModal :name="myName" v-on:name-changed="onNameChanged" />
-      </div>
-
-      <h3 class="text-2xl font-semibold">Theme</h3>
+      <div class="divider">Theme</div>
       <div class="join join-horizontal mt-2">
         <input
           type="radio"
@@ -30,7 +33,7 @@
         />
       </div>
 
-      <h3 class="text-2xl font-semibold" v-if="isOwner">Store</h3>
+      <div class="divider" v-if="isOwner">Store</div>
       <div class="flex flex-row space-x-4" v-if="isOwner">
         <ChangeStoreNameModal
           :name="storeName"
@@ -38,13 +41,12 @@
         />
       </div>
 
-      <h3 class="text-2xl font-semibold" v-if="isOwner">Staff</h3>
-      <add-staff-modal
-        v-if="isOwner"
-        v-on:staff-added="staffListVersion += 1"
-      />
-      <staff-list v-if="isOwner" :key="staffListVersion" />
-    </article>
+      <div class="divider" v-if="isOwner">Staff</div>
+      <div v-if="isOwner">
+        <add-staff-modal v-on:staff-added="staffListVersion += 1" />
+        <staff-list :key="staffListVersion" />
+      </div>
+    </div>
   </Navbar>
 </template>
 

@@ -1,10 +1,12 @@
 <template>
   <navbar>
-    <payments-list
-      :supplier-id="supplierId"
-      :retailer-id="retailerId"
-      :key="refreshKey"
-    />
+    <div class="py-4">
+      <payments-list
+        :supplier-id="supplierId"
+        :retailer-id="retailerId"
+        :key="refreshKey"
+      />
+    </div>
   </navbar>
 </template>
 

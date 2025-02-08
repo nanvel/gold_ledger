@@ -1,9 +1,9 @@
 <template>
-  <div class="drawer h-dvh">
+  <div class="drawer box-border h-dvh overflow-y-scroll">
     <input id="nav-drawer" type="checkbox" class="drawer-toggle" />
-    <div class="drawer-content flex flex-col h-full overflow-scroll">
+    <div class="drawer-content flex flex-col">
       <!-- Navbar -->
-      <div class="navbar bg-base-300 w-full shadow-md">
+      <div class="navbar bg-base-300 w-full shadow-md fixed z-10">
         <div class="flex-none lg:hidden">
           <label
             for="nav-drawer"
@@ -44,7 +44,7 @@
         />
         <add-payment-modal v-else v-on:payment-added="store.incrementVersion" />
       </div>
-      <div class="overflow-y-scroll p-2">
+      <div class="p-2 relative mt-20">
         <slot></slot>
       </div>
     </div>
@@ -54,7 +54,7 @@
         aria-label="close sidebar"
         class="drawer-overlay"
       ></label>
-      <ul class="menu bg-base-200 min-h-full w-80 p-4">
+      <ul class="menu bg-base-200 min-h-full w-80 p-4 pt-20">
         <!-- Sidebar content here -->
         <li><RouterLink to="/products">Products</RouterLink></li>
         <li><RouterLink to="/payments">Payments</RouterLink></li>
