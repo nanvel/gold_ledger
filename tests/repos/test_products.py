@@ -49,6 +49,7 @@ def test_products(container):
         result = uow.products.filter(
             supplier_id=supplier_id,
             retailer_id=retailer_id,
+            status=None,
             offset=0,
             limit=1,
         )

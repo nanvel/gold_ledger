@@ -13,10 +13,11 @@
       {{ row.payments }}{{ unit }}
       <span class="text-sm">payments</span>
     </div>
-    <div v-if="row.dueDate" class="m-1 border-t text-secondary border-base-300">
-      Pay {{ row.toPay }}{{ unit }} by {{ row.dueDate
-      }}<span v-if="row.dueToday" class="text-warning pl-2">due today</span
-      ><span v-if="row.overdue" class="text-error pl-2">overdue!</span>
+    <div
+      v-for="payment in duePayments"
+      :class="['m-1', 'border-t', 'border-base-300', dueColor(payment.date)]"
+    >
+      {{ payment.amount }}{{ unit }} by {{ payment.date }}
     </div>
   </div>
 </template>
@@ -33,24 +34,34 @@ const unit = computed(() => {
   return props.paymentType === "fine" ? "g" : "₹";
 });
 
+const duePayments = computed(() => {
+  if (!props.row?.due_payments) return [];
+  return [
+    ...props.row.due_payments.filter(
+      (payment) => payment.type === props.paymentType,
+    ),
+  ];
+});
+
+const dueColor = (d) => {
+  const today = new Date();
+  const due = new Date(d);
+  const diff = due - today;
+  const daysRemain = Math.ceil(diff / (1000 * 60 * 60 * 24));
+
+  if (daysRemain < 0) return "text-error";
+  if (daysRemain < 3) return "text-warning";
+  return "text-secondary";
+};
+
 const row = computed(() => {
   const products = props.row[`${props.paymentType}_products`];
   const payments = props.row[`${props.paymentType}_payments`];
-  const d = new Date();
-  const yyyy = d.getFullYear();
-  const mm = String(d.getMonth() + 1).padStart(2, "0");
-  const dd = String(d.getDate()).padStart(2, "0");
-  const today = `${yyyy}-${mm}-${dd}`;
-  const dueDate = props.row[`${props.paymentType}_due_date`];
   return {
     products: products,
     payments: payments,
     pending: products - payments,
-    dueDate: dueDate,
-    toPay: props.row[`${props.paymentType}_to_pay`],
-    shouldShow: products + payments > 0,
-    dueToday: dueDate ? dueDate === today : null,
-    overdue: dueDate ? dueDate < today : null,
+    shouldShow: products || payments,
   };
 });
 </script>

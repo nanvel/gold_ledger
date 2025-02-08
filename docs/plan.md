@@ -43,7 +43,7 @@ UI more:
   - [x] check latest messages
   - [ ] show all pay by
     - [ ] bl change
-    - [ ] db change
+    - [x] db change
     - [ ] display change
   - [ ] supplier/retailer neutral messages
 - [ ] test photo upload on mobile

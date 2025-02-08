@@ -2,6 +2,7 @@ from .activity import Activity
 from .activity_type import ActivityType
 from .display_activity import DisplayActivity
 from .display_cache import DisplayCache
+from .display_due_payment import DisplayDuePayment
 from .display_image import DisplayImage
 from .display_payment import DisplayPayment
 from .display_product import DisplayProduct
@@ -32,6 +33,7 @@ __all__ = (
     "ActivityType",
     "DisplayActivity",
     "DisplayCache",
+    "DisplayDuePayment",
     "DisplayImage",
     "DisplayPayment",
     "DisplayProduct",

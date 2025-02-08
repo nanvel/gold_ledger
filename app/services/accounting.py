@@ -5,7 +5,7 @@ from typing import Dict
 
 from sqlalchemy import text
 
-from app.models import Cache, PaymentStatus, PaymentType, ProductStatus
+from app.models import Cache, DuePayment, PaymentStatus, PaymentType, ProductStatus
 
 
 class AccountingService:
@@ -19,17 +19,14 @@ class AccountingService:
             retailer_id=retailer_id,
             cash_products=Decimal(0),
             cash_payments=payments.get(PaymentType.CASH.value, Decimal(0)),
-            cash_due_date=None,
-            cash_to_pay=Decimal(0),
             rtgs_products=Decimal(0),
             rtgs_payments=payments.get(PaymentType.RTGS.value, Decimal(0)),
-            rtgs_due_date=None,
-            rtgs_to_pay=Decimal(0),
             fine_products=Decimal(0),
             fine_payments=payments.get(PaymentType.FINE.value, Decimal(0)),
-            fine_due_date=None,
-            fine_to_pay=Decimal(0),
+            due_payments=[],
         )
+
+        due_payments = []
 
         for payment_type in PaymentType:
             products = self._products(
@@ -38,28 +35,30 @@ class AccountingService:
                 payment_type=payment_type,
             )
             products_total = sum(i for _, i in products) if products else Decimal(0)
-            due_date = None
-            to_pay = Decimal(0)
 
             s = Decimal(0)
             p = payments.get(payment_type.value, Decimal(0))
             for dd, total_amount in products:
                 if s + total_amount > p:
-                    due_date = dd
                     to_pay = s + total_amount - p
-                    break
+                    due_payments.append(
+                        DuePayment(
+                            type=payment_type,
+                            date=dd,
+                            amount=s + total_amount - p,
+                        )
+                    )
+                    s -= to_pay
                 s += total_amount
 
             cache = replace(
                 cache,
                 **{
                     f"{payment_type.slug}_products": products_total,
-                    f"{payment_type.slug}_due_date": due_date,
-                    f"{payment_type.slug}_to_pay": to_pay,
                 },
             )
 
-        return cache
+        return replace(cache, due_payments=due_payments)
 
     def _payments(self, supplier_id: int, retailer_id: int) -> Dict[int, Decimal]:
         rows = self._db.execute(

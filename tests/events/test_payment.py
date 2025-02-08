@@ -28,6 +28,7 @@ def test_payment_event():
         cancelled_by=DisplayUser(id=4, name="User", email="cancelled@mail.com"),
         created_at=1614556800,
         status=PaymentStatus.CONFIRMED.slug,
+        note=None,
     )
 
     event = PaymentEvent(

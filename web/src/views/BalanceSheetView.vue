@@ -1,6 +1,6 @@
 <template>
   <Navbar>
-    <div class="flex flex-col space-y-4 flex-wrap">
+    <div class="flex flex-col space-y-4 flex-wrap pb-8">
       <div
         class="flex flex-col space-y-2 md:flex-row md:space-x-2 md:space-y-0 mt-4"
         v-if="summary && !loading"
@@ -92,33 +92,47 @@ const summary = computed(() => {
   const res = {
     cash_products: 0,
     cash_payments: 0,
-    cash_due_date: null,
-    cash_to_pay: 0,
     rtgs_products: 0,
     rtgs_payments: 0,
-    rtgs_due_date: null,
-    rtgs_to_pay: 0,
     fine_products: 0,
     fine_payments: 0,
-    fine_due_date: null,
-    fine_to_pay: 0,
+    due_payments: [],
   };
 
   data.value.forEach((item) => {
     for (const pt of paymentTypes) {
       res[`${pt}_products`] += item[`${pt}_products`];
       res[`${pt}_payments`] += item[`${pt}_payments`];
-      if (!res[`${pt}_due_date`]) {
-        res[`${pt}_due_date`] = item[`${pt}_due_date`];
-        res[`${pt}_to_pay`] += item[`${pt}_to_pay`];
-      } else if (item[`${pt}_due_date`] === res[`${pt}_due_date`]) {
-        res[`${pt}_to_pay`] += item[`${pt}_to_pay`];
-      } else if (item[`${pt}_due_date`] < res[`${pt}_due_date`]) {
-        res[`${pt}_due_date`] = item[`${pt}_due_date`];
-        res[`${pt}_to_pay`] = item[`${pt}_to_pay`];
-      }
     }
+    item.due_payments.forEach((payment) => {
+      res.due_payments.push({ ...payment });
+    });
   });
+
+  // find sum of amounts for each type and date
+  const sum = {
+    cash: {},
+    rtgs: {},
+    fine: {},
+  };
+  res.due_payments.forEach((payment) => {
+    if (!sum[payment.type][payment.date]) {
+      sum[payment.type][payment.date] = 0;
+    }
+    sum[payment.type][payment.date] += payment.amount;
+  });
+  // back to array
+  res.due_payments = Object.keys(sum)
+    .map((type) => {
+      return Object.keys(sum[type]).map((date) => {
+        return {
+          type,
+          date,
+          amount: sum[type][date],
+        };
+      });
+    })
+    .flat();
 
   return res;
 });

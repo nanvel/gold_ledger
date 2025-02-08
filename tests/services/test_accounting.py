@@ -4,7 +4,16 @@ from decimal import Decimal
 
 from sqlalchemy.orm import sessionmaker
 
-from app.models import Cache, Payment, PaymentType, Product, Retailer, Supplier, User
+from app.models import (
+    Cache,
+    DuePayment,
+    Payment,
+    PaymentType,
+    Product,
+    Retailer,
+    Supplier,
+    User,
+)
 from app.repos.payments import PaymentsRepo
 from app.repos.products import ProductsRepo
 from app.repos.retailers import RetailersRepo
@@ -83,6 +92,7 @@ def create_records(session):
         confirmed_by=supplier_user_id,
         rejected_by=None,
         cancelled_by=None,
+        note=None,
     )
     payment_id = PaymentsRepo(session).create(payment)
 
@@ -96,19 +106,22 @@ def test_accounting_service(conn):
     accounting = AccountingService(conn)
     result = accounting.compute(supplier_id, retailer_id)
 
+    print(result)
+
     assert result == Cache(
         supplier_id=supplier_id,
         retailer_id=retailer_id,
         cash_products=Decimal("1"),
         cash_payments=Decimal("0"),
-        cash_due_date=date(2021, 1, 1),
-        cash_to_pay=Decimal("1"),
         rtgs_products=Decimal("0"),
         rtgs_payments=Decimal("0"),
-        rtgs_due_date=None,
-        rtgs_to_pay=Decimal("0"),
         fine_products=Decimal("0"),
         fine_payments=Decimal("0.95000000000000000000"),
-        fine_due_date=None,
-        fine_to_pay=Decimal("0"),
+        due_payments=[
+            DuePayment(
+                type=PaymentType.CASH,
+                date=date(2021, 1, 1),
+                amount=Decimal("1"),
+            )
+        ],
     )

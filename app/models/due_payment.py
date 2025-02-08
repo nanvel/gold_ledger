@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from datetime import date
 from decimal import Decimal
 
 from .payment_type import PaymentType
@@ -6,6 +7,6 @@ from .payment_type import PaymentType
 
 @dataclass(frozen=True)
 class DuePayment:
-    payment_type: PaymentType
-    date: str
+    type: PaymentType
+    date: date
     amount: Decimal
