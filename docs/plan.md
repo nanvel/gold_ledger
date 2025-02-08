@@ -30,6 +30,7 @@ Payments UI:
 - [ ] version for meStore (refresh)
 - [ ] Show Due on (instead pay on)
   - [ ] check latest messages
+- [ ] fix payment creation
 
 UI more:
 - [ ] resize navbar issue between settings and payments (fix)

@@ -1,10 +1,7 @@
 <template>
   <div class="flex flex-col space-y-4">
-    <placeholder
-      v-if="!activities?.length && !loading"
-      text="There were no activities recorded"
-    />
-    <placeholder v-if="loading" loading text="Loading" />
+    <placeholder v-if="!activities?.length && !loading" text="-" />
+    <placeholder v-if="loading" loading />
     <div class="overflow-x-auto" v-if="activities?.length && !loading">
       <table class="table table-zebra">
         <thead>
@@ -94,8 +91,6 @@
 import { onMounted, ref, computed } from "vue";
 import { httpClient } from "@/services/http.js";
 import Timestamp from "@/components/Timestamp.vue";
-import { useMeStore } from "@/stores/index.js";
-import { storeToRefs } from "pinia";
 import { RouterLink } from "vue-router";
 import Placeholder from "@/components/Placeholder.vue";
 
@@ -118,13 +113,10 @@ const props = defineProps({
   },
 });
 
-const meStore = useMeStore();
-const { isSupplier, isRetailer } = storeToRefs(meStore);
-
 const activities = ref([]);
 const total = ref(0);
 const page = ref(1);
-const limit = ref(20);
+const limit = ref(10);
 const loading = ref(false);
 
 const pages = computed(() => Math.ceil(total.value / limit.value));

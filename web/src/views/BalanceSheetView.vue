@@ -2,7 +2,7 @@
   <Navbar>
     <div class="flex flex-col space-y-4 flex-wrap">
       <div
-        class="flex flex-col space-y-2 md:flex-row md:space-x-2 md:space-y-0"
+        class="flex flex-col space-y-2 md:flex-row md:space-x-2 md:space-y-0 mt-4"
         v-if="summary && !loading"
       >
         <div v-for="pt in paymentTypes" :key="pt">

@@ -3,7 +3,7 @@ from decimal import Decimal
 from typing import Optional, Tuple
 
 from dependency_injector.wiring import Provide, inject
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status as status_codes
 from pydantic import BaseModel, Field
 
 from app.container import Container
@@ -40,14 +40,14 @@ def add_payment(
 ) -> EmptyResponse:
     if not user.is_retailer:
         raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
+            status_code=status_codes.HTTP_403_FORBIDDEN,
             detail="The user is not a retailer.",
         )
 
-    if item.type == PaymentType.CASH:
+    if item.type == PaymentType.FINE:
         if item.weight is None:
             raise HTTPException(
-                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                status_code=status_codes.HTTP_422_UNPROCESSABLE_ENTITY,
                 detail=[
                     {
                         "type": "weight_required",
@@ -59,7 +59,7 @@ def add_payment(
 
         if item.quality is None:
             raise HTTPException(
-                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                status_code=status_codes.HTTP_422_UNPROCESSABLE_ENTITY,
                 detail=[
                     {
                         "type": "quality_required",
@@ -71,7 +71,7 @@ def add_payment(
     else:
         if item.amount is None:
             raise HTTPException(
-                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                status_code=status_codes.HTTP_422_UNPROCESSABLE_ENTITY,
                 detail=[
                     {
                         "type": "amount_required",
@@ -143,7 +143,7 @@ def get_payment(
             and payment_details.retailer.id != user.retailer_id
         ):
             raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
+                status_code=status_codes.HTTP_404_NOT_FOUND,
                 detail="The payment was not found",
             )
 

@@ -3,11 +3,11 @@ from decimal import Decimal
 from typing import Optional, Tuple
 
 from dependency_injector.wiring import Provide, inject
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status as status_codes
 from pydantic import BaseModel, Field
 
 from app.container import Container
-from app.models import DisplayProduct, PaymentType, ProductStatus, User
+from app.models import DisplayProduct, PaymentType, ProductOrderBy, ProductStatus, User
 from app.repos.uow import UnitOfWork
 from app.use_cases.add_product import AddProduct
 from app.use_cases.cancel_product import CancelProduct
@@ -46,14 +46,14 @@ def add_product(
 ) -> EmptyResponse:
     if not user.is_supplier:
         raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
+            status_code=status_codes.HTTP_403_FORBIDDEN,
             detail="The user is not a supplier",
         )
 
     if item.payment_type == PaymentType.FINE:
         if item.payment_quality is None:
             raise HTTPException(
-                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                status_code=status_codes.HTTP_422_UNPROCESSABLE_ENTITY,
                 detail=[
                     {
                         "type": "payment_quality_required",
@@ -66,7 +66,7 @@ def add_product(
             )
         elif item.payment_weight is None:
             raise HTTPException(
-                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                status_code=status_codes.HTTP_422_UNPROCESSABLE_ENTITY,
                 detail=[
                     {
                         "type": "payment_weight_required",
@@ -80,7 +80,7 @@ def add_product(
     else:
         if item.payment_amount is None:
             raise HTTPException(
-                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                status_code=status_codes.HTTP_422_UNPROCESSABLE_ENTITY,
                 detail=[
                     {
                         "type": "payment_amount_required",
@@ -94,7 +94,7 @@ def add_product(
 
     if item.payment_due_date < item.date:
         raise HTTPException(
-            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            status_code=status_codes.HTTP_422_UNPROCESSABLE_ENTITY,
             detail=[
                 {
                     "type": "payment_due_date_invalid",
@@ -137,6 +137,8 @@ def get_products(
     retailer_id: Optional[int] = None,
     supplier_id: Optional[int] = None,
     status: Optional[ProductStatus] = None,
+    order_by: Optional[ProductOrderBy] = ProductOrderBy.CREATED,
+    reverse: bool = True,
     user: User = Depends(get_active_user),
     uow: UnitOfWork = Depends(Provide[Container.uow]),
     limit: int = 20,
@@ -152,6 +154,8 @@ def get_products(
             supplier_id=supplier_id,
             retailer_id=retailer_id,
             status=status,
+            order_by=order_by,
+            reverse=reverse,
             limit=limit,
             offset=offset,
         )
@@ -174,7 +178,7 @@ def get_product(
             and product_details.retailer.id != user.retailer_id
         ):
             raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
+                status_code=status_codes.HTTP_404_NOT_FOUND,
                 detail="The product was not found",
             )
 

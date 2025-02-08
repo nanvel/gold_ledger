@@ -23,11 +23,8 @@
       </div>
     </div>
 
-    <Placeholder
-      v-if="!products?.length && !loading"
-      text="No products found"
-    />
-    <Placeholder v-if="loading" loading text="Loading" />
+    <Placeholder v-if="!products?.length && !loading" text="-" />
+    <Placeholder v-if="loading" loading />
 
     <ProductTable
       :products="products"

@@ -11,10 +11,7 @@
     />
   </div>
   <placeholder v-if="loading" loading />
-  <placeholder
-    v-else-if="!summary && !loading"
-    text="No confirmed transactions found"
-  />
+  <placeholder v-else-if="!summary && !loading" text="-" />
 </template>
 
 <script setup>
@@ -68,13 +65,12 @@ const summary = computed(() => {
   });
 
   if (
-    summary.cash_products +
-      summary.cash_payments +
-      summary.rtgs_products +
-      summary.rtgs_payments +
-      summary.fine_products +
-      summary.fine_payments >
-    0
+    res.cash_products ||
+    res.cash_payments ||
+    res.rtgs_products ||
+    res.rtgs_payments ||
+    res.fine_products ||
+    res.fine_payments
   ) {
     return res;
   }

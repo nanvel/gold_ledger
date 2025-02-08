@@ -6,11 +6,8 @@
         <supplier-picker-modal v-else v-on:selected="setSupplier" />
       </div>
     </div>
-    <placeholder
-      v-if="!payments?.length && !loading"
-      text="No payments found"
-    />
-    <placeholder v-if="loading" loading text="Loading" />
+    <placeholder v-if="!payments?.length && !loading" text="-" />
+    <placeholder v-if="loading" loading />
     <div class="overflow-x-auto" v-if="payments?.length && !loading">
       <table class="table table-zebra">
         <thead>

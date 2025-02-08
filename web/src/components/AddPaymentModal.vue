@@ -218,13 +218,13 @@ const addPayment = async () => {
   const data = {
     type: type.value,
     date: dateToStr(date.value),
-    amount: amount.value,
     supplier_id: supplier.value.id,
   };
   if (type.value === 3) {
     data["weight"] = weight.value;
     data["quality"] = quality.value;
-    data["amount"] = (weight.value * quality.value) / 100;
+  } else {
+    data["amount"] = amount.value;
   }
 
   loading.value = true;
