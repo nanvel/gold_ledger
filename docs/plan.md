@@ -1,180 +1,57 @@
 # Plan
 
-Payments summary:
-- [x] study messages
-- [x] service for due
-- [x] due payments
-- [x] swap selector and table view in products
-- [x] refactor logic, cache
-  - [x] refactor service
-  - [x] cache db
-- [x] move service to container
-- [x] cache repo
-  - [x] model
-- [x] use the use case in the message bus (for confirmed)
-- [x] use case for recalculate for all
-- [x] refactor api
-
-Payments UI:
-- [x] disallow past due dates
-- [x] rename to balance sheet
-- [x] filter by id/name
-- [x] colors for overdue / amount
-- [x] summary
-- [x] show overdue on home?
-- [x] rename handler
-- [x] what "due" is exactly?
-- [x] loading states for balance sheet
-- [x] show pending payments/products on main?
-  - [x] add status filter in api
-- [x] fix payment creation
-- [x] version for meStore (refresh)
-
-UI more:
-- [x] scrolling issue on mobile
-- [x] resize navbar issue between settings and payments (fix)
-- [x] new payment/product right navbar
-  - [x] button
-  - [x] refresh products/payments/activities
-- [x] products/payments waiting for approval on dashboard
-- [x] note for payment
-- [x] filter products/payments by status
-- [x] Show Due on (instead pay on)
-  - [x] check latest messages
-  - [x] show all pay by
-    - [x] bl change
-    - [x] db change
-    - [x] display change
-  - [x] supplier/retailer neutral messages
-- [x] test photo upload on mobile
-
-Deployment:
-- [ ] connect sentry
-- [ ] encode secrets
-- [ ] refactor server folder
-  - [ ] storage options? 
-- [ ] use the new domain
-  - [ ] docs.goldledger.in?
-- [ ] Mumbai region
-- [ ] ensure debug mode is disable in tastypie, no api exposure
-
-Other:
-- [ ] cleanup plan
-- [ ] login page
-  - [ ] Free trial
-  - [ ] Gold Ledger on login/register
-- [ ] compute due payments / products
-- [ ] overdue payments on the product page? (paid/not paid)
-- [ ] refine cards ui
-- [ ] refine tables ui
-- [ ] refine products page
-- [ ] refine payments page
-- [ ] refine product page
-- [ ] refine payment page
-- [ ] color circles for status
-- [ ] show retailer and supplier in payments and products
-- [ ] improve recent on small screen
-- [ ] cancel payment / product
-- [ ] due payments page
-- [ ] message bus
-  - [ ] record IPs for activities
-- [ ] move business logic into models
-  - [ ] validate user has either supplier or retailer id
-  - [ ] set confirmed / rejected
-- [ ] reset -> set password
-- [ ] retailer page
-  - [ ] make sure we show ids 
-  - [ ] only show for suppliers
-- [ ] products filtering
-- [ ] payments filtering
-- [ ] supplier page
-  - [ ] only show for retailers
-- [ ] make sure showing all data
-  - [ ] show activities for product
-  - [ ] show activities for payment
-- [ ] statuses for payment
-  - [ ] color circles for status
-  - [ ] compute status in model
-- [ ] improve cards and tables display
-- [ ] UI improvements
-  - [ ] show empty list placeholder (don't show table/cards placeholder)
-  - [ ] image input
-  - [ ] make navbar sticky
-  - [ ] add ruppy, gramm
-- [ ] received product
-- [ ] paid / unpaid transactions
-- [ ] make sure store is visible after login
-- [ ] pg full text search
-- [ ] make sure only either supplier or retailer is specified
-- [ ] custom fields
-- [ ] limit number of users and products per hr
-- [ ] highlight selected menu?
-- [ ] validate login/register input inside js
-- [ ] add more input components, label - div
-- [ ] autocalculate amount for goods payment?
-- [ ] use message bus for activities
-- [ ] cancel transaction
-- [ ] try adding image from phone
-- [ ] send email on each trasaction
-  - [ ] message bus
-- [ ] incremental log on dynamodb
-- [ ] tablist component
-- [ ] email updates
-- [ ] Mumbai region
-- [ ] filter by status (products and payments)
-
-Other:
-- [ ] Security
-  - [ ] DB backups
-  - [ ] sentry
-- [ ] UI improvements
-  - [ ] icon
-  - [ ] mobile
-  - [ ] keep the tab that was selected last time
-  - [ ] pick up color scheme / theme switch
-  - [ ] show errors under fields in the form
-- [ ] Company / Legal
-- [ ] Landing page
-- [ ] download products as csv
-- [ ] Products
-  - [ ] ordering
-  - [ ] filtering
-- [ ] disable/reenable staff
-- [ ] add message about 2 moths trial free
-- [ ] terms of use
-- [ ] auto reload activities
-  - [ ] sound on updates
-- [ ] outstanding payments per retailer
-- [ ] docs pages: What is Gold Ledger, Terms of use, prices
-- [ ] move activities to DDB
-- [ ] pg replication
-- [ ] card view for payments
+Next:
+- [ ] remove staging
+  - [ ] remove files in the s3 bucket!
+  - [ ] remove dev from pulumi
+- [ ] download products/payments/activities csv
 
 Security:
-- limit number of registrations
-- limit images upload
-- block IPs
+- [ ] backup secrets and keys
+- [ ] encode secret and move it to supervisor
+- [ ] storage options?
+  - [ ] increase disk size?
+- [ ] ensure debug mode is disable in tastypie, no api exposure
+- [ ] limit number of users and products per hr
+- [ ] db replication
+- [ ] traffic monitoring (waf?)
+  - block IPs
+- [ ] limit image uploads
+- [ ] registration by invite (QR code?)
 - confirm email
-- sending reports via email
-- download records
-- db replication
 
-Questions:
-- validation of product fields?
-- Dashboard: not received, paid, confirmed, outstanding per retailer?
-- Dashboard: updates for products
-- What is Date in product?
-- new domain?
-- icons in forms
-- separate page for new product instead of modal?
-- sent -> (canceled, received) -> paid -> payment confirmed
-- show not paid, confirmed, etc.
-- setup CI tests on github
+UI:
+- [ ] improve recent on small screen
+- [ ] card view for payments?
+
+Pages:
+- [ ] terms of use
+- [ ] prices
+- [ ] support
+- [ ] docs pages: What is Gold Ledger, Terms of use, prices
+- [ ] customer support
+
+Refactor:
+- [ ] server folder
+  - [ ] database owner to gold_ledger
+  - [ ] README
+- [ ] image input component
+- [ ] tablist component
+
+Other:
+- [ ] docs.goldledger.in?
+- [ ] logo on login page
+- [ ] record IPs for activities
+- [ ] pg full text search
+- [ ] custom fields
+- [ ] highlight selected menu?
+- [ ] send email on each transaction
+- [ ] Company / Legal
+- [ ] payments https://onboarding.payu.in/
+- [ ] Landing page
+- [ ] disable/reenable staff
+- [ ] auto reload activities
+  - [ ] sound on updates
+- [ ] referral program
+- [ ] setup CI tests on github
 - do we need a photo for payment?
-- how the store id looks like?
-- Write terms of use?
-- Landing page
-- support link (password loss, etc.)
-
-Enhancement:
-- [ ] order table values by clicking on table header

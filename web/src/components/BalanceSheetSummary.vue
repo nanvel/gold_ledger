@@ -1,7 +1,7 @@
 <template>
   <div
     class="flex flex-col space-y-2 md:flex-row md:space-x-2 md:space-y-0"
-    v-if="summary && !loading"
+    v-if="shouldShow && !loading"
   >
     <balance-sheet-row
       :row="summary"
@@ -11,7 +11,7 @@
     />
   </div>
   <placeholder v-if="loading" loading />
-  <placeholder v-else-if="!summary && !loading" text="-" />
+  <placeholder v-else-if="!shouldShow && !loading" text="-" />
 </template>
 
 <script setup>
@@ -76,6 +76,19 @@ const summary = computed(() => {
     .flat();
 
   return res;
+});
+
+const shouldShow = computed(() => {
+  const s = summary.value;
+  return (
+    s &&
+    (s.cash_payments ||
+      s.rtgs_payments ||
+      s.fine_payments ||
+      s.cash_products ||
+      s.rtgs_products ||
+      s.fine_products)
+  );
 });
 
 onMounted(async () => {
