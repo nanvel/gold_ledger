@@ -14,7 +14,8 @@ export default defineConfig({
   },
   server: {
     proxy: {
-      "/api": "http://0.0.0.0:8000",
+      /* "/api": "http://0.0.0.0:8000", */
+      "/api": "https://goldledger.in",
     },
   },
 });

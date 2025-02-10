@@ -5,6 +5,8 @@ Next:
   - [ ] remove files in the s3 bucket!
   - [ ] remove dev from pulumi
 - [ ] download products/payments/activities csv
+- [ ] do not allow payment if there is no products yet
+- [ ] description in index.html
 
 Security:
 - [ ] backup secrets and keys
@@ -54,4 +56,5 @@ Other:
   - [ ] sound on updates
 - [ ] referral program
 - [ ] setup CI tests on github
-- do we need a photo for payment?
+- [ ] do we need a photo for payment?
+- [ ] translate to India language

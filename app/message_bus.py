@@ -33,8 +33,7 @@ class MessageBus:
                             supplier_id=event.payment.supplier.id,
                             retailer_id=event.payment.retailer.id,
                         )
-                        with self._uow:
-                            self._uow.cache.create_or_update(cache)
+                        self._uow.cache.create_or_update(cache)
 
             elif isinstance(event, ProductEvent):
                 activity = Activity(
@@ -54,8 +53,7 @@ class MessageBus:
                             supplier_id=event.product.supplier.id,
                             retailer_id=event.product.retailer.id,
                         )
-                        with self._uow:
-                            self._uow.cache.create_or_update(cache)
+                        self._uow.cache.create_or_update(cache)
 
         except Exception:
             logger.exception(f"{type(event)} event error.")
