@@ -60,7 +60,7 @@ class Container(containers.DeclarativeContainer):
         thumb_size=320,
     )
 
-    uow = providers.Singleton(UnitOfWork, db=db)
+    uow = providers.Factory(UnitOfWork, db=db)
 
     accounting_service = providers.Singleton(AccountingService, db=db_readonly)
 

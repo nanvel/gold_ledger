@@ -100,13 +100,16 @@ onMounted(async () => {
         ...item,
         cash_products: parseFloat(item.cash_products),
         cash_payments: parseFloat(item.cash_payments),
-        cash_to_pay: parseFloat(item.cash_to_pay),
         rtgs_products: parseFloat(item.rtgs_products),
         rtgs_payments: parseFloat(item.rtgs_payments),
-        rtgs_to_pay: parseFloat(item.rtgs_to_pay),
         fine_products: parseFloat(item.fine_products),
         fine_payments: parseFloat(item.fine_payments),
-        fine_to_pay: parseFloat(item.fine_to_pay),
+        due_payments: item.due_payments.map((payment) => {
+          return {
+            ...payment,
+            amount: parseFloat(payment.amount),
+          };
+        }),
       };
     });
   } catch (error) {

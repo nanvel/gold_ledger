@@ -16,7 +16,7 @@ def init_db_readonly(db_uri):
     engine = create_engine(db_uri)
     try:
         with engine.connect().execution_options(
-            isolation_level="SERIALIZABLE",
+            isolation_level="READ COMMITTED",
             postgresql_readonly=True,
             postgresql_deferrable=True,
         ) as conn:
