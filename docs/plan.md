@@ -4,7 +4,16 @@ Next:
 - [x] remove staging
   - [x] remove files in the s3 bucket!
   - [x] remove dev from pulumi
-- [ ] change secret, change db password, backup secrets
+- [x] fix transaction error
+- [ ] retailers and suppliers pages
+  - [ ] add retailer/supplier
+  - [ ] db (connection, invite)
+  - [ ] invites repo 
+  - [ ] link view
+    - [ ] link api 
+  - [ ] limit searches
+  - [ ] ui
+  - [ ] connect modal
 - [ ] download products/payments/activities csv
 - [ ] do not allow payment if there is no products yet
 - [ ] connect to retailer/supplier, retailer/supplier list
@@ -16,6 +25,7 @@ Next:
 - [ ] remove rate when fine is selected
 
 Security:
+- [ ] change secret, change db password, backup secrets
 - [ ] backup secrets and keys
 - [ ] encode secret and move it to supervisor
 - [ ] storage options?

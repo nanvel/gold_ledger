@@ -12,6 +12,7 @@ from .display_user import DisplayUser
 from .due_payment import DuePayment
 from .cache import Cache
 from .image import Image
+from .invite import Invite
 from .payment import Payment
 from .payment_order_by import PaymentOrderBy
 from .payment_status import PaymentStatus
@@ -42,6 +43,7 @@ __all__ = (
     "DisplayUser",
     "DuePayment",
     "Image",
+    "Invite",
     "Cache",
     "Payment",
     "PaymentOrderBy",
