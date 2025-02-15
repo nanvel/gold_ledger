@@ -23,7 +23,7 @@ class UnitOfWork:
         self._session = None
 
     def __enter__(self):
-        self._session = self._db()
+        self._session = self._db.session().__enter__()
         self.activities = ActivitiesRepo(self._session)
         self.cache = CacheRepo(self._session)
         self.images = ImagesRepo(self._session)
@@ -36,9 +36,4 @@ class UnitOfWork:
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        if exc_type is None:
-            self._session.commit()
-        else:
-            self._session.rollback()
-
-        self._session.close()
+        self._session.__exit__(exc_type, exc_val, exc_tb)

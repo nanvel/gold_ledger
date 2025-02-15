@@ -13,55 +13,61 @@ class AccountingService:
         self._db = db
 
     def compute(self, supplier_id: int, retailer_id: int) -> Cache:
-        payments = self._payments(supplier_id=supplier_id, retailer_id=retailer_id)
-        cache = Cache(
-            supplier_id=supplier_id,
-            retailer_id=retailer_id,
-            cash_products=Decimal(0),
-            cash_payments=payments.get(PaymentType.CASH.value, Decimal(0)),
-            rtgs_products=Decimal(0),
-            rtgs_payments=payments.get(PaymentType.RTGS.value, Decimal(0)),
-            fine_products=Decimal(0),
-            fine_payments=payments.get(PaymentType.FINE.value, Decimal(0)),
-            due_payments=[],
-        )
-
-        due_payments = []
-
-        for payment_type in PaymentType:
-            products = self._products(
+        with self._db.session() as session:
+            payments = self._payments(
+                session, supplier_id=supplier_id, retailer_id=retailer_id
+            )
+            cache = Cache(
                 supplier_id=supplier_id,
                 retailer_id=retailer_id,
-                payment_type=payment_type,
+                cash_products=Decimal(0),
+                cash_payments=payments.get(PaymentType.CASH.value, Decimal(0)),
+                rtgs_products=Decimal(0),
+                rtgs_payments=payments.get(PaymentType.RTGS.value, Decimal(0)),
+                fine_products=Decimal(0),
+                fine_payments=payments.get(PaymentType.FINE.value, Decimal(0)),
+                due_payments=[],
             )
-            products_total = sum(i for _, i in products) if products else Decimal(0)
 
-            s = Decimal(0)
-            p = payments.get(payment_type.value, Decimal(0))
-            for dd, total_amount in products:
-                if s + total_amount > p:
-                    to_pay = s + total_amount - p
-                    due_payments.append(
-                        DuePayment(
-                            type=payment_type,
-                            date=dd,
-                            amount=s + total_amount - p,
+            due_payments = []
+
+            for payment_type in PaymentType:
+                products = self._products(
+                    session,
+                    supplier_id=supplier_id,
+                    retailer_id=retailer_id,
+                    payment_type=payment_type,
+                )
+                products_total = sum(i for _, i in products) if products else Decimal(0)
+
+                s = Decimal(0)
+                p = payments.get(payment_type.value, Decimal(0))
+                for dd, total_amount in products:
+                    if s + total_amount > p:
+                        to_pay = s + total_amount - p
+                        due_payments.append(
+                            DuePayment(
+                                type=payment_type,
+                                date=dd,
+                                amount=s + total_amount - p,
+                            )
                         )
-                    )
-                    s -= to_pay
-                s += total_amount
+                        s -= to_pay
+                    s += total_amount
 
-            cache = replace(
-                cache,
-                **{
-                    f"{payment_type.slug}_products": products_total,
-                },
-            )
+                cache = replace(
+                    cache,
+                    **{
+                        f"{payment_type.slug}_products": products_total,
+                    },
+                )
 
         return replace(cache, due_payments=due_payments)
 
-    def _payments(self, supplier_id: int, retailer_id: int) -> Dict[int, Decimal]:
-        rows = self._db.execute(
+    def _payments(
+        self, session, supplier_id: int, retailer_id: int
+    ) -> Dict[int, Decimal]:
+        rows = session.execute(
             text(
                 """SELECT type,
                           sum(coalesce(amount, 0)) AS total_amount,
@@ -85,9 +91,9 @@ class AccountingService:
         return res
 
     def _products(
-        self, supplier_id: int, retailer_id: int, payment_type: PaymentType
+        self, session, supplier_id: int, retailer_id: int, payment_type: PaymentType
     ) -> Dict[date, Decimal]:
-        rows = self._db.execute(
+        rows = session.execute(
             text(
                 """SELECT payment_due_date, sum({}) AS total_amount
                     FROM products

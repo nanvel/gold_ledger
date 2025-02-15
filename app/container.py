@@ -2,7 +2,7 @@ from dependency_injector import containers, providers
 from passlib.context import CryptContext
 
 from app.message_bus import MessageBus
-from app.resources.database import init_db, init_db_readonly
+from app.resources.database import Database
 from app.resources.s3_client import init_s3
 from app.resources.sentry import init_sentry
 from app.repos.uow import UnitOfWork
@@ -47,8 +47,7 @@ class Container(containers.DeclarativeContainer):
         deprecated="auto",
     )
 
-    db = providers.Resource(init_db, db_uri=config.db_uri)
-    db_readonly = providers.Resource(init_db_readonly, db_uri=config.db_uri)
+    db = providers.Resource(Database, db_uri=config.db_uri)
     s3_client = providers.Resource(init_s3, region=config.aws_region)
     sentry = providers.Resource(init_sentry, dsn=config.sentry_dsn)
 
@@ -62,7 +61,7 @@ class Container(containers.DeclarativeContainer):
 
     uow = providers.Factory(UnitOfWork, db=db)
 
-    accounting_service = providers.Singleton(AccountingService, db=db_readonly)
+    accounting_service = providers.Singleton(AccountingService, db=db)
 
     message_bus = providers.Singleton(
         MessageBus,

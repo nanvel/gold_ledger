@@ -1,25 +1,31 @@
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
+import logging
+from contextlib import AbstractContextManager, contextmanager
+from typing import Callable
+
+from sqlalchemy import create_engine, orm
+
+logger = logging.getLogger(__name__)
 
 
-def init_db(db_uri):
-    engine = create_engine(db_uri)
-    try:
-        with engine.connect().execution_options(isolation_level="AUTOCOMMIT") as conn:
-            yield sessionmaker(conn)
-            conn.commit()
-    finally:
-        engine.dispose()
+class Database:
+    def __init__(self, db_uri: str):
+        self._engine = create_engine(db_uri)
+        self._session_factory = orm.scoped_session(
+            orm.sessionmaker(
+                autocommit=False,
+                autoflush=False,
+                bind=self._engine,
+            ),
+        )
 
-
-def init_db_readonly(db_uri):
-    engine = create_engine(db_uri)
-    try:
-        with engine.connect().execution_options(
-            isolation_level="READ COMMITTED",
-            postgresql_readonly=True,
-            postgresql_deferrable=True,
-        ) as conn:
-            yield conn
-    finally:
-        engine.dispose()
+    @contextmanager
+    def session(self) -> Callable[..., AbstractContextManager[orm.Session]]:
+        session: orm.Session = self._session_factory()
+        try:
+            yield session
+        except Exception:
+            logger.exception("Session rollback because of exception")
+            session.rollback()
+            raise
+        finally:
+            session.close()

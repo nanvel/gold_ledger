@@ -1,12 +1,19 @@
 # Plan
 
 Next:
-- [ ] remove staging
-  - [ ] remove files in the s3 bucket!
-  - [ ] remove dev from pulumi
+- [x] remove staging
+  - [x] remove files in the s3 bucket!
+  - [x] remove dev from pulumi
+- [ ] change secret, change db password, backup secrets
 - [ ] download products/payments/activities csv
 - [ ] do not allow payment if there is no products yet
+- [ ] connect to retailer/supplier, retailer/supplier list
 - [ ] description in index.html
+- [ ] landing page
+  - [ ] how to use the software
+- [ ] recaptcha on registration
+- [ ] note for product
+- [ ] remove rate when fine is selected
 
 Security:
 - [ ] backup secrets and keys
@@ -20,11 +27,14 @@ Security:
   - block IPs
 - [ ] limit image uploads
 - [ ] registration by invite (QR code?)
-- confirm email
+- [ ] confirm email
+- [ ] AWS waf?
 
 UI:
 - [ ] improve recent on small screen
 - [ ] card view for payments?
+- [ ] note for product
+- [ ] navbar glass?
 
 Pages:
 - [ ] terms of use
@@ -58,3 +68,11 @@ Other:
 - [ ] setup CI tests on github
 - [ ] do we need a photo for payment?
 - [ ] translate to India language
+- [ ] sending messages
+
+Company:
+- LLP
+- neutral name (not gold ledger)
+- Open AWS account
+- Open PayU account
+- Open Google account (support@goldledger.com)
