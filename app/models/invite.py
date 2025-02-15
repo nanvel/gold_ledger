@@ -12,4 +12,4 @@ class Invite:
 
     @classmethod
     def generate_code(cls) -> str:
-        return token_urlsafe(16)
+        return token_urlsafe(16)[:16]

@@ -6,13 +6,15 @@ Next:
   - [x] remove dev from pulumi
 - [x] fix transaction error
 - [ ] retailers and suppliers pages
-  - [ ] add retailer/supplier
-  - [ ] db (connection, invite)
-  - [ ] invites repo 
-  - [ ] link view
-    - [ ] link api 
+  - [x] db (connection, invite)
+  - [x] invites repo 
+  - [x] link view
+    - [x] link api 
+  - [ ] UI
+    - [ ] generate url
+    - [ ] show QR + url + message
   - [ ] limit searches
-  - [ ] ui
+  - [ ] add retailer/supplier
   - [ ] connect modal
 - [ ] download products/payments/activities csv
 - [ ] do not allow payment if there is no products yet

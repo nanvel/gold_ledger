@@ -8,6 +8,7 @@ import PaymentView from "@/views/PaymentView.vue";
 import ProductsView from "@/views/ProductsView.vue";
 import ProductView from "@/views/ProductView.vue";
 import RegisterView from "@/views/RegisterView.vue";
+import RetailersView from "@/views/RetailersView.vue";
 import SettingsView from "@/views/SettingsView.vue";
 
 const router = createRouter({
@@ -47,6 +48,11 @@ const router = createRouter({
       path: "/payments",
       name: "payments",
       component: PaymentsView,
+    },
+    {
+      path: "/retailers",
+      name: "retailers",
+      component: RetailersView,
     },
     {
       path: "/payments/:id",
