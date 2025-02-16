@@ -35,8 +35,13 @@ class AddProduct:
     ):
         with self._uow:
             retailer = self._uow.retailers.by_id(retailer_id)
+            connection = (
+                self._uow.connections.get(supplier_id, retailer_id)
+                if retailer
+                else None
+            )
 
-            if retailer is None:
+            if retailer is None or connection is None:
                 raise HTTPException(
                     status_code=status.HTTP_404_NOT_FOUND,
                     detail="The retailer store was not found",

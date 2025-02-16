@@ -13,11 +13,14 @@ Next:
   - [ ] UI
     - [x] generate url
     - [x] show QR + url + message
-    - [ ] copy url button
+    - [x] copy url button
     - [ ] show retailers/suppliers
+      - [ ] api
     - [ ] the same thing for retailer
     - [ ] add to navbar
     - [ ] refactor recents
+    - [ ] check connection when creating product/payment
+    - [ ] "Add suppliers/retailers at ..."
   - [ ] update migration to add connections
   - [ ] limit searches
   - [ ] add retailer/supplier

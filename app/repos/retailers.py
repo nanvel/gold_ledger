@@ -4,7 +4,7 @@ from typing import Optional, Tuple
 
 from sqlalchemy.orm import Session
 
-from app.db import RetailerTable
+from app.db import ConnectionTable, RetailerTable
 from app.models import Retailer, RetailerOrderBy, Timestamp
 
 STORE_ID_RE = re.compile(r"^\d+$")
@@ -50,20 +50,26 @@ class RetailersRepo:
 
     def filter(
         self,
+        supplier_id: int,
         q: Optional[str] = None,
         order_by: RetailerOrderBy = RetailerOrderBy.CREATED,
         reverse: bool = True,
         offset: int = 0,
         limit: int = 20,
     ) -> Tuple[int, Tuple[RetailerSearchItem, ...]]:
-        query = self._session.query(RetailerTable)
-
+        filters = [ConnectionTable.supplier_id == supplier_id]
         if q:
             q = q.strip()
             if STORE_ID_RE.match(q):
-                query = query.filter(RetailerTable.id == int(q))
+                filters.append(RetailerTable.id == int(q))
             else:
-                query = query.filter(RetailerTable.name.ilike(f"%{q}%"))
+                filters.append(RetailerTable.name.ilike(f"%{q}%"))
+
+        query = (
+            self._session.query(RetailerTable)
+            .join(ConnectionTable, ConnectionTable.retailer_id == Retailer.id)
+            .filter(*filters)
+        )
 
         total = query.count()
 

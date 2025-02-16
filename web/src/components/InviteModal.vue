@@ -26,7 +26,7 @@
         >
           Close
         </button>
-        <div class="btn btn-primary">
+        <div class="btn btn-primary" v-on:click.prevent="copyCode">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -52,6 +52,7 @@
 import { ref, computed } from "vue";
 import { httpClient } from "@/services/http.js";
 import QrcodeVue from "qrcode.vue";
+import { useToast } from "vue-toastification";
 
 const code = ref(null);
 
@@ -76,6 +77,13 @@ const showModal = async () => {
   } finally {
     loading.value = false;
   }
+};
+
+const copyCode = () => {
+  const toast = useToast();
+  navigator.clipboard.writeText(inviteUrl.value);
+  closeModal();
+  toast.success("Copied to clipboard!");
 };
 
 const inviteUrl = computed(
