@@ -14,12 +14,14 @@ Next:
     - [x] generate url
     - [x] show QR + url + message
     - [x] copy url button
-    - [ ] show retailers/suppliers
-      - [ ] api
+    - [x] check connection when creating product/payment
+    - [x] show retailers/suppliers
+      - [x] api
+    - [x] retailers table
+    - [ ] join with cache
     - [ ] the same thing for retailer
     - [ ] add to navbar
     - [ ] refactor recents
-    - [ ] check connection when creating product/payment
     - [ ] "Add suppliers/retailers at ..."
   - [ ] update migration to add connections
   - [ ] limit searches

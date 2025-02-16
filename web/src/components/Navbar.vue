@@ -35,6 +35,12 @@
             <!-- Navbar menu content here -->
             <li><RouterLink to="/products">Products</RouterLink></li>
             <li><RouterLink to="/payments">Payments</RouterLink></li>
+            <li v-if="isSupplier">
+              <RouterLink to="/retailers">Retailers</RouterLink>
+            </li>
+            <li v-if="!isSupplier">
+              <RouterLink to="/suppliers">Suppliers</RouterLink>
+            </li>
             <li><RouterLink to="/settings">Settings</RouterLink></li>
           </ul>
         </div>
@@ -58,6 +64,12 @@
         <!-- Sidebar content here -->
         <li><RouterLink to="/products">Products</RouterLink></li>
         <li><RouterLink to="/payments">Payments</RouterLink></li>
+        <li v-if="isSupplier">
+          <RouterLink to="/retailers">Retailers</RouterLink>
+        </li>
+        <li v-if="!isSupplier">
+          <RouterLink to="/suppliers">Suppliers</RouterLink>
+        </li>
         <li><RouterLink to="/settings">Settings</RouterLink></li>
       </ul>
     </div>

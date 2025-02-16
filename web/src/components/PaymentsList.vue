@@ -75,7 +75,6 @@
 <script setup>
 import { onMounted, ref, computed, watch } from "vue";
 import { httpClient } from "@/services/http.js";
-import Timestamp from "@/components/Timestamp.vue";
 import RetailerPickerModal from "@/components/RetailerPickerModal.vue";
 import SupplierPickerModal from "@/components/SupplierPickerModal.vue";
 import Placeholder from "@/components/Placeholder.vue";

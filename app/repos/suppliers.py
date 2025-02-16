@@ -14,7 +14,7 @@ STORE_ID_RE = re.compile(r"^\d+$")
 class SupplierSearchItem:
     id: int
     name: str
-    created_at: int
+    added_at: int
 
 
 class SuppliersRepo:
@@ -67,7 +67,11 @@ class SuppliersRepo:
                 filters.append(SupplierTable.name.ilike(f"%{q}%"))
 
         query = (
-            self._session.query(SupplierTable)
+            self._session.query(
+                SupplierTable.id,
+                SupplierTable.name,
+                ConnectionTable.created_at,
+            )
             .join(ConnectionTable, ConnectionTable.supplier_id == SupplierTable.id)
             .filter(*filters)
         )
@@ -90,7 +94,7 @@ class SuppliersRepo:
             SupplierSearchItem(
                 id=record.id,
                 name=record.name,
-                created_at=int(Timestamp.from_datetime(record.created_at)),
+                added_at=int(Timestamp.from_datetime(record.created_at)),
             )
             for record in records
         )

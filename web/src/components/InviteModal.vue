@@ -1,6 +1,6 @@
 <template>
-  <div class="btn btn-secondary btn-sm" v-on:click.prevent="showModal">
-    Add a Retailer
+  <div class="btn btn-primary btn-sm" v-on:click.prevent="showModal">
+    Add a {{ props.target }}
   </div>
   <dialog id="invite_modal" class="modal">
     <div class="modal-box">
@@ -9,7 +9,10 @@
           ✕
         </button>
       </form>
-      <div class="mt-8">Show this QR code to the retailer</div>
+      <div class="mt-8">
+        <span class="capitalize">{{ props.target }}</span> has to follow this
+        link in order to connect
+      </div>
       <div
         class="border rounded-md border-base-300 p-2 flex flex-col items-center mt-2"
       >
@@ -53,6 +56,10 @@ import { ref, computed } from "vue";
 import { httpClient } from "@/services/http.js";
 import QrcodeVue from "qrcode.vue";
 import { useToast } from "vue-toastification";
+
+const props = defineProps({
+  target: String,
+});
 
 const code = ref(null);
 
