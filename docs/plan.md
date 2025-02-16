@@ -10,7 +10,7 @@ Next:
   - [x] invites repo 
   - [x] link view
     - [x] link api 
-  - [ ] UI
+  - [x] UI
     - [x] generate url
     - [x] show QR + url + message
     - [x] copy url button
@@ -18,14 +18,13 @@ Next:
     - [x] show retailers/suppliers
       - [x] api
     - [x] retailers table
-    - [ ] join with cache
-    - [ ] the same thing for retailer
-    - [ ] add to navbar
-    - [ ] refactor recents
-    - [ ] "Add suppliers/retailers at ..."
-  - [ ] update migration to add connections
-  - [ ] limit searches
-  - [ ] add retailer/supplier
+    - [x] the same thing for retailer
+    - [x] add to navbar
+  - [x] update migration to add connections
+  - [x] limit searches
+  - [ ] refactor recents
+    - [ ] load all initially 
+  - [ ] "Add suppliers/retailers at ..."
 - [ ] download products/payments/activities csv
 - [ ] do not allow payment if there is no products yet
 - [ ] connect to retailer/supplier, retailer/supplier list
