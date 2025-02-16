@@ -1,9 +1,12 @@
+import csv
 from datetime import date
 from decimal import Decimal
+from io import StringIO
 from typing import Optional, Tuple
 
 from dependency_injector.wiring import Provide, inject
 from fastapi import APIRouter, Depends, HTTPException, status as status_codes
+from fastapi.responses import StreamingResponse
 from pydantic import BaseModel, Field
 
 from app.container import Container
@@ -161,6 +164,50 @@ def get_products(
         )
 
     return ProductsResponse(total=total, items=items)
+
+
+@router.get("/products-csv")
+@inject
+def get_products_csv(
+    retailer_id: Optional[int] = None,
+    supplier_id: Optional[int] = None,
+    status: Optional[ProductStatus] = None,
+    user: User = Depends(get_active_user),
+    uow: UnitOfWork = Depends(Provide[Container.uow]),
+) -> StreamingResponse:
+    if user.is_supplier:
+        supplier_id = user.supplier_id
+    else:
+        retailer_id = user.retailer_id
+
+    with uow:
+        total, items = uow.products.filter(
+            supplier_id=supplier_id,
+            retailer_id=retailer_id,
+            status=status,
+            order_by=ProductOrderBy.CREATED,
+            reverse=True,
+            limit=1000,
+            offset=0,
+        )
+
+        io = StringIO()
+        if items:
+            writer = csv.DictWriter(io, fieldnames=items[0].to_dict().keys())
+            writer.writeheader()
+            for item in items:
+                writer.writerow(item.to_dict())
+        io.seek(0)
+
+    return StreamingResponse(
+        io,
+        media_type="text/csv",
+        headers={
+            "Content-Disposition": 'attachment; filename="products-{}.csv"'.format(
+                date.today().isoformat()
+            )
+        },
+    )
 
 
 @router.get("/products/{product_id}")

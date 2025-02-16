@@ -24,7 +24,7 @@ Next:
   - [x] limit searches
   - [x] refactor recents
     - [x] load all initially 
-  - [ ] "Add suppliers/retailers at ..."
+  - [x] "Add suppliers/retailers at ..."
 - [ ] download products/payments/activities csv
 - [ ] do not allow payment if there is no products yet
 - [ ] connect to retailer/supplier, retailer/supplier list

@@ -101,3 +101,24 @@ async function handleResponse(response, args) {
 
   return data;
 }
+
+export async function downloadFile(url) {
+  const res = await fetch(url, { headers: authHeader(url) });
+  const disposition = res.headers.get("Content-Disposition");
+  let filename = disposition.split(/;(.+)/)[1].split(/=(.+)/)[1];
+  if (filename.toLowerCase().startsWith("utf-8''")) {
+    filename = decodeURIComponent(filename.replace(/utf-8''/i, ""));
+  } else {
+    filename = filename.replace(/['"]/g, "");
+  }
+  const objectUrl = window.URL.createObjectURL(await res.blob());
+  const a = document.createElement("a");
+  try {
+    a.href = objectUrl;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+  } finally {
+    a.remove();
+  }
+}

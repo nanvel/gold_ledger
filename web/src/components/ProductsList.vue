@@ -18,21 +18,42 @@
           <option :value="4">Status - canceled</option>
         </select>
       </div>
-      <div class="join">
-        <button
-          class="btn btn-sm join-item"
-          :disabled="productsView === 'table'"
-          v-on:click="setProductsView('table')"
-        >
-          Table
-        </button>
-        <button
-          class="btn btn-sm join-item"
-          :disabled="productsView === 'cards'"
-          v-on:click="setProductsView('cards')"
-        >
-          Cards
-        </button>
+      <div
+        class="flex flex-col space-y-2 sm:flex-row sm:space-x-2 sm:space-y-0"
+      >
+        <div class="btn btn-neutral btn-sm" v-on:click.prevent="downloadCsv">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            height="1em"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3"
+            />
+          </svg>
+          CSV
+        </div>
+        <div class="join">
+          <button
+            class="btn btn-sm join-item"
+            :disabled="productsView === 'table'"
+            v-on:click="setProductsView('table')"
+          >
+            Table
+          </button>
+          <button
+            class="btn btn-sm join-item"
+            :disabled="productsView === 'cards'"
+            v-on:click="setProductsView('cards')"
+          >
+            Cards
+          </button>
+        </div>
       </div>
     </div>
 
@@ -71,7 +92,7 @@
 
 <script setup>
 import { onMounted, ref, computed, watch } from "vue";
-import { httpClient } from "@/services/http.js";
+import { httpClient, downloadFile } from "@/services/http.js";
 import ProductTable from "@/components/ProductTable.vue";
 import ProductCards from "@/components/ProductCards.vue";
 import SupplierPickerModal from "@/components/SupplierPickerModal.vue";
@@ -100,6 +121,20 @@ const pages = computed(() => Math.ceil(total.value / limit.value));
 const setProductsView = (view) => {
   productsView.value = view;
   localStorage.setItem("products_view", view);
+};
+
+const downloadCsv = async () => {
+  const q = [];
+  if (retailerId.value) {
+    q.push(`retailer_id=${retailerId.value}`);
+  }
+  if (supplierId.value) {
+    q.push(`&supplier_id=${supplierId.value}`);
+  }
+  if (status.value) {
+    q.push(`&status=${status.value}`);
+  }
+  await downloadFile(`/api/products-csv${q.length ? "?" + q.join("&") : ""}`);
 };
 
 const loadPage = async (p) => {
