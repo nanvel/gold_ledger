@@ -72,6 +72,9 @@ def upgrade() -> None:
         sa.PrimaryKeyConstraint("id"),
     )
     op.create_index(op.f("ix_invites_code"), "invites", ["code"], unique=True)
+    op.execute(
+        "INSERT INTO connections (supplier_id, retailer_id) SELECT supplier_id, retailer_id FROM cache;"
+    )
     # ### end Alembic commands ###
 
 

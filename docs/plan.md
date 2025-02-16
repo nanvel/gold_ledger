@@ -11,11 +11,16 @@ Next:
   - [x] link view
     - [x] link api 
   - [ ] UI
-    - [ ] generate url
-    - [ ] show QR + url + message
+    - [x] generate url
+    - [x] show QR + url + message
+    - [ ] copy url button
+    - [ ] show retailers/suppliers
+    - [ ] the same thing for retailer
+    - [ ] add to navbar
+    - [ ] refactor recents
+  - [ ] update migration to add connections
   - [ ] limit searches
   - [ ] add retailer/supplier
-  - [ ] connect modal
 - [ ] download products/payments/activities csv
 - [ ] do not allow payment if there is no products yet
 - [ ] connect to retailer/supplier, retailer/supplier list
