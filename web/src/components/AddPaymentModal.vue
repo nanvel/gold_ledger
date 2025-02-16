@@ -1,8 +1,5 @@
 <template>
-  <button
-    class="btn btn-primary no-animation"
-    onclick="add_payment.showModal()"
-  >
+  <button class="btn btn-primary no-animation" v-on:click.prevent="showModal">
     <svg
       xmlns="http://www.w3.org/2000/svg"
       fill="none"
@@ -27,7 +24,7 @@
         </button>
       </form>
       <template v-if="!supplier">
-        <supplier-picker v-on:selected="setSupplier" />
+        <supplier-picker v-on:selected="setSupplier" :visible="!supplier" />
       </template>
       <template v-if="supplier">
         <div class="btn btn-neutral" v-on:click="supplier = null">
@@ -220,6 +217,10 @@ const setSupplier = (r) => {
 
 const closeModal = () => {
   add_payment.close();
+};
+
+const showModal = () => {
+  add_payment.showModal();
 };
 
 watch([type, date, weight, quality, amount], () => {

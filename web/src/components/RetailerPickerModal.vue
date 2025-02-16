@@ -1,5 +1,5 @@
 <template>
-  <div class="btn btn-neutral btn-sm" onclick="select_retailer.showModal()">
+  <div class="btn btn-neutral btn-sm" v-on:click.prevent="showModal">
     <span v-if="retailer">
       Retailer {{ retailer.id }} : {{ retailer.name }}</span
     >
@@ -12,7 +12,11 @@
           ✕
         </button>
       </form>
-      <retailer-picker v-on:selected="setRetailer" allow-none />
+      <retailer-picker
+        v-on:selected="setRetailer"
+        allow-none
+        :visible="isVisible"
+      />
     </div>
   </dialog>
 </template>
@@ -22,11 +26,17 @@ import { ref } from "vue";
 import RetailerPicker from "@/components/RetailerPicker.vue";
 
 const retailer = ref(null);
+const isVisible = ref(false);
 
 const emit = defineEmits(["selected"]);
 
 const closeModal = () => {
   select_retailer.close();
+};
+
+const showModal = () => {
+  select_retailer.showModal();
+  isVisible.value = true;
 };
 
 const setRetailer = async (r) => {

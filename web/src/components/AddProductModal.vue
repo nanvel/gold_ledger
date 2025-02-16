@@ -1,8 +1,5 @@
 <template>
-  <button
-    class="btn btn-primary no-animation"
-    onclick="add_product.showModal()"
-  >
+  <button class="btn btn-primary no-animation" v-on:click.prevent="showModal">
     <svg
       xmlns="http://www.w3.org/2000/svg"
       fill="none"
@@ -27,7 +24,7 @@
         </button>
       </form>
       <template v-if="!retailer">
-        <retailer-picker v-on:selected="setRetailer" />
+        <retailer-picker v-on:selected="setRetailer" :visible="!retailer" />
       </template>
       <template v-if="retailer">
         <div class="btn btn-neutral" v-on:click="retailer = null">
@@ -348,6 +345,10 @@ const setRetailer = (r) => {
 
 const closeModal = () => {
   add_product.close();
+};
+
+const showModal = () => {
+  add_product.showModal();
 };
 
 watch(
