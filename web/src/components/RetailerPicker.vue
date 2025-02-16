@@ -24,12 +24,34 @@
         <span class="label-text-alt" v-else>Loading...</span>
       </div>
     </div>
-    <div
-      class="overflow-x-auto flex flex-col space-y-2 max-w-2xl"
-      v-if="retailers.length"
-    >
+    <div v-if="allEmpty" class="text-primary flex flex-col items-center py-4">
+      <div>
+        No retailers found,
+        <RouterLink to="/retailers" class="link">add one here</RouterLink>
+      </div>
+    </div>
+    <div class="overflow-x-auto flex flex-col space-y-2 max-w-2xl">
+      <span
+        class="bg-base-200 p-4 rounded-lg cursor-pointer"
+        v-if="props.allowNone && !allEmpty"
+        v-on:click="selectRetailer(null)"
+        >None</span
+      >
+      <div class="divider" v-if="props.allowNone && !allEmpty"></div>
       <div
-        v-for="retailer in retailers"
+        v-for="retailer in recentRetailers"
+        :key="retailers.id"
+        class="bg-base-200 p-4 rounded-lg cursor-pointer"
+        v-on:click="selectRetailer(retailer)"
+      >
+        {{ retailer.id }} : {{ retailer.name }}
+      </div>
+      <div
+        class="divider"
+        v-if="recentRetailers.length && otherRetailers.length"
+      ></div>
+      <div
+        v-for="retailer in otherRetailers"
         :key="retailers.id"
         class="bg-base-200 p-4 rounded-lg cursor-pointer"
         v-on:click="selectRetailer(retailer)"
@@ -37,35 +59,21 @@
         {{ retailer.id }} : {{ retailer.name }}
       </div>
     </div>
-    <div
-      v-if="!searchQuery.length && recent.length"
-      class="flex flex-row space-x-2 mt-2"
-    >
-      <span
-        v-for="r in recent.slice().reverse()"
-        :key="r.id"
-        v-on:click="selectRetailer(r)"
-        class="rounded-md bg-base-200 px-2 cursor-pointer"
-        >{{ r.id }} : {{ r.name }}</span
-      >
-      <span
-        class="rounded-md px-2 cursor-pointer bg-base-200"
-        v-if="props.allowNone"
-        v-on:click="selectRetailer(null)"
-        >None</span
-      >
-    </div>
   </div>
 </template>
 
 <script setup>
-import { onMounted, ref, watch } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 import { httpClient } from "@/services/http.js";
+import { RouterLink } from "vue-router";
 
 const loading = ref(false);
 const retailers = ref([]);
 const total = ref(0);
 const recent = ref([]);
+const all = ref([]);
+const allCount = ref(0);
+const allEmpty = ref(true);
 
 let searchTimer = null;
 let searchQuery = ref("");
@@ -75,9 +83,20 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  visible: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const emit = defineEmits(["selected"]);
+
+const recentRetailers = computed(() => [
+  ...retailers.value.filter((s) => recent.value.includes(s.id)),
+]);
+const otherRetailers = computed(() => [
+  ...retailers.value.filter((s) => !recent.value.includes(s.id)),
+]);
 
 const loadRetailers = async () => {
   loading.value = true;
@@ -100,8 +119,8 @@ watch(searchQuery, async (query) => {
     searchTimer = null;
   }
   if (!query?.length) {
-    retailers.value = [];
-    total.value = 0;
+    retailers.value = [...all.value];
+    total.value = allCount.value;
     return;
   }
   searchTimer = setTimeout(async () => {
@@ -113,16 +132,16 @@ const addRecent = (retailer) => {
   if (!retailer) {
     return;
   }
-  const r = [...recent.value.filter((r) => r.id !== retailer.id)];
-  r.push(retailer);
+  const r = [...recent.value.filter((r) => r !== retailer.id)];
+  r.push(retailer.id);
   recent.value = r.slice(-4);
   localStorage.setItem("recent_retailers", JSON.stringify(recent.value));
 };
 
 const selectRetailer = (retailer) => {
   searchQuery.value = "";
-  retailers.value = [];
-  total.value = 0;
+  retailers.value = [...all.value];
+  total.value = allCount.value;
   addRecent(retailer);
   emit("selected", retailer);
 };
@@ -138,7 +157,31 @@ const loadRecent = () => {
   }
 };
 
+const loadAll = async () => {
+  const response = await httpClient.get("/api/retailers?limit=10", null, null);
+  all.value = response["items"];
+  allCount.value = response["total"];
+  allEmpty.value = !all.value.length;
+};
+
+watch(
+  () => props.visible,
+  async (visible) => {
+    if (visible && !all.value.length) {
+      await loadAll();
+      retailers.value = [...all.value];
+      total.value = allCount.value;
+      loadRecent();
+    }
+  },
+);
+
 onMounted(async () => {
-  loadRecent();
+  if (props.visible && !all.value.length) {
+    await loadAll();
+    retailers.value = [...all.value];
+    total.value = allCount.value;
+    loadRecent();
+  }
 });
 </script>

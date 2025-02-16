@@ -1,5 +1,5 @@
 <template>
-  <div class="btn btn-neutral btn-sm" onclick="select_supplier.showModal()">
+  <div class="btn btn-neutral btn-sm" v-on:click.prevent="showModal">
     <span v-if="supplier">
       Supplier {{ supplier.id }} : {{ supplier.name }}</span
     >
@@ -12,7 +12,11 @@
           ✕
         </button>
       </form>
-      <supplier-picker v-on:selected="setSupplier" allow-none />
+      <supplier-picker
+        v-on:selected="setSupplier"
+        allow-none
+        :visible="isVisible"
+      />
     </div>
   </dialog>
 </template>
@@ -22,11 +26,17 @@ import { ref } from "vue";
 import SupplierPicker from "@/components/SupplierPicker.vue";
 
 const supplier = ref(null);
+const isVisible = ref(false);
 
 const emit = defineEmits(["selected"]);
 
 const closeModal = () => {
   select_supplier.close();
+};
+
+const showModal = () => {
+  select_supplier.showModal();
+  isVisible.value = true;
 };
 
 const setSupplier = async (s) => {

@@ -29,8 +29,13 @@ class AddPayment:
     ):
         with self._uow:
             supplier = self._uow.suppliers.by_id(supplier_id)
+            connection = (
+                self._uow.connections.get(supplier_id, retailer_id)
+                if supplier
+                else None
+            )
 
-            if supplier is None:
+            if supplier is None or connection is None:
                 raise HTTPException(
                     status_code=status.HTTP_404_NOT_FOUND,
                     detail="The supplier store was not found.",

@@ -28,6 +28,7 @@ class Container(containers.DeclarativeContainer):
             "app.api.routers.activities",
             "app.api.routers.auth",
             "app.api.routers.balance_sheet",
+            "app.api.routers.connections",
             "app.api.routers.images",
             "app.api.routers.me",
             "app.api.routers.payments",

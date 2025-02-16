@@ -4,7 +4,7 @@ from typing import Optional, Tuple
 
 from sqlalchemy.orm import Session
 
-from app.db import SupplierTable
+from app.db import ConnectionTable, SupplierTable
 from app.models import Supplier, SupplierOrderBy, Timestamp
 
 STORE_ID_RE = re.compile(r"^\d+$")
@@ -14,7 +14,7 @@ STORE_ID_RE = re.compile(r"^\d+$")
 class SupplierSearchItem:
     id: int
     name: str
-    created_at: int
+    added_at: int
 
 
 class SuppliersRepo:
@@ -50,20 +50,31 @@ class SuppliersRepo:
 
     def filter(
         self,
+        retailer_id: int,
         q: Optional[str] = None,
         order_by: SupplierOrderBy = SupplierOrderBy.CREATED,
         reverse: bool = True,
         offset: int = 0,
         limit: int = 20,
     ) -> Tuple[int, Tuple[SupplierSearchItem, ...]]:
-        query = self._session.query(SupplierTable)
+        filters = [ConnectionTable.retailer_id == retailer_id]
 
         if q:
             q = q.strip()
             if STORE_ID_RE.match(q):
-                query = query.filter(SupplierTable.id == int(q))
+                filters.append(SupplierTable.id == int(q))
             else:
-                query = query.filter(SupplierTable.name.ilike(f"%{q}%"))
+                filters.append(SupplierTable.name.ilike(f"%{q}%"))
+
+        query = (
+            self._session.query(
+                SupplierTable.id,
+                SupplierTable.name,
+                ConnectionTable.created_at,
+            )
+            .join(ConnectionTable, ConnectionTable.supplier_id == SupplierTable.id)
+            .filter(*filters)
+        )
 
         total = query.count()
 
@@ -83,7 +94,7 @@ class SuppliersRepo:
             SupplierSearchItem(
                 id=record.id,
                 name=record.name,
-                created_at=int(Timestamp.from_datetime(record.created_at)),
+                added_at=int(Timestamp.from_datetime(record.created_at)),
             )
             for record in records
         )

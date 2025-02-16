@@ -5,7 +5,7 @@ from fastapi import APIRouter, Depends
 from pydantic import BaseModel
 
 from app.container import Container
-from app.models import RetailerOrderBy
+from app.models import RetailerOrderBy, User
 from app.repos.uow import UnitOfWork
 from app.repos.retailers import RetailerSearchItem
 from .auth import get_active_user
@@ -18,18 +18,20 @@ class ResponseItem(BaseModel):
     total: int
 
 
-@router.get("/retailers", dependencies=[Depends(get_active_user)])
+@router.get("/retailers")
 @inject
 def filter_retailers(
-    uow: UnitOfWork = Depends(Provide[Container.uow]),
     q: Optional[str] = None,
     offset: int = 0,
     limit: int = 20,
     order_by: RetailerOrderBy = RetailerOrderBy.CREATED,
     reverse: bool = True,
+    user: User = Depends(get_active_user),
+    uow: UnitOfWork = Depends(Provide[Container.uow]),
 ) -> ResponseItem:
     with uow:
         total, items = uow.retailers.filter(
+            supplier_id=user.supplier_id,
             q=q,
             order_by=order_by,
             reverse=reverse,

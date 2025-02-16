@@ -4,7 +4,27 @@ Next:
 - [x] remove staging
   - [x] remove files in the s3 bucket!
   - [x] remove dev from pulumi
-- [ ] change secret, change db password, backup secrets
+- [x] fix transaction error
+- [ ] retailers and suppliers pages
+  - [x] db (connection, invite)
+  - [x] invites repo 
+  - [x] link view
+    - [x] link api 
+  - [x] UI
+    - [x] generate url
+    - [x] show QR + url + message
+    - [x] copy url button
+    - [x] check connection when creating product/payment
+    - [x] show retailers/suppliers
+      - [x] api
+    - [x] retailers table
+    - [x] the same thing for retailer
+    - [x] add to navbar
+  - [x] update migration to add connections
+  - [x] limit searches
+  - [x] refactor recents
+    - [x] load all initially 
+  - [ ] "Add suppliers/retailers at ..."
 - [ ] download products/payments/activities csv
 - [ ] do not allow payment if there is no products yet
 - [ ] connect to retailer/supplier, retailer/supplier list
@@ -16,6 +36,7 @@ Next:
 - [ ] remove rate when fine is selected
 
 Security:
+- [ ] change secret, change db password, backup secrets
 - [ ] backup secrets and keys
 - [ ] encode secret and move it to supervisor
 - [ ] storage options?
@@ -35,6 +56,7 @@ UI:
 - [ ] card view for payments?
 - [ ] note for product
 - [ ] navbar glass?
+- [x] default theme - light 
 
 Pages:
 - [ ] terms of use
