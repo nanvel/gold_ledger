@@ -24,14 +24,20 @@
         <span class="label-text-alt" v-else>Loading...</span>
       </div>
     </div>
+    <div v-if="allEmpty" class="text-primary flex flex-col items-center">
+      <div>
+        No suppliers found,
+        <RouterLink to="/suppliers" class="link">add one here</RouterLink>
+      </div>
+    </div>
     <div class="overflow-x-auto flex flex-col space-y-2 max-w-2xl">
       <span
         class="bg-base-200 p-4 rounded-lg cursor-pointer"
-        v-if="props.allowNone"
+        v-if="props.allowNone && !allEmpty"
         v-on:click="selectSupplier(null)"
         >None</span
       >
-      <div class="divider" v-if="props.allowNone"></div>
+      <div class="divider" v-if="props.allowNone && !allEmpty"></div>
       <div
         v-for="supplier in recentSuppliers"
         :key="supplier.id"
@@ -59,6 +65,7 @@
 <script setup>
 import { computed, onMounted, ref, watch } from "vue";
 import { httpClient } from "@/services/http.js";
+import { RouterLink } from "vue-router";
 
 const loading = ref(false);
 const suppliers = ref([]);
@@ -66,6 +73,7 @@ const total = ref(0);
 const recent = ref([]);
 const all = ref([]);
 const allCount = ref(0);
+const allEmpty = ref(false);
 
 let searchTimer = null;
 let searchQuery = ref("");
@@ -153,6 +161,7 @@ const loadAll = async () => {
   const resp = await httpClient.get("/api/suppliers?limit=10", null, null);
   all.value = resp["items"];
   allCount.value = resp["total"];
+  allEmpty.value = !all.value.length;
 };
 
 watch(

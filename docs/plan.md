@@ -22,8 +22,8 @@ Next:
     - [x] add to navbar
   - [x] update migration to add connections
   - [x] limit searches
-  - [ ] refactor recents
-    - [ ] load all initially 
+  - [x] refactor recents
+    - [x] load all initially 
   - [ ] "Add suppliers/retailers at ..."
 - [ ] download products/payments/activities csv
 - [ ] do not allow payment if there is no products yet
@@ -56,6 +56,7 @@ UI:
 - [ ] card view for payments?
 - [ ] note for product
 - [ ] navbar glass?
+- [x] default theme - light 
 
 Pages:
 - [ ] terms of use
