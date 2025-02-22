@@ -1,14 +1,5 @@
 <script setup>
-import { ref, onMounted } from "vue";
 import heroImage from "@/assets/landing/saas-hero.png";
-import Card3d from "card3d";
-
-const effectRef = ref(null);
-onMounted(() => {
-  if (effectRef.value) {
-    new Card3d(effectRef.value, { perspective: 1000, fullPageListening: true });
-  }
-});
 </script>
 
 <template>
@@ -38,11 +29,7 @@ onMounted(() => {
 
         <div>
           <div
-            class="rounded-2xl bg-gradient-to-r from-indigo-200 via-red-200 to-purple-300 p-3"
-            ref="effectRef"
-            data-card3d=""
-            data-card3d-perspective="1000"
-            data-card3d-full-page-listening="true"
+            class="rounded-2xl bg-gradient-to-r from-amber-700 via-amber-500 to-amber-300 p-2"
           >
             <img alt="SaaS" class="rounded-lg" :src="heroImage" />
           </div>

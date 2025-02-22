@@ -14,6 +14,7 @@ import lightThemeImage from "@/assets/screens/light_theme.png";
 import darkThemeImage from "@/assets/screens/dark_theme.png";
 import productsListImage from "@/assets/screens/products_list.png";
 import paymentsListImage from "@/assets/screens/payments_list.png";
+import themesImage from "@/assets/screens/themes.png";
 </script>
 
 <template>
@@ -309,17 +310,12 @@ import paymentsListImage from "@/assets/screens/payments_list.png";
 
         <div class="order-first lg:order-last">
           <div
-            class="overflow-hidden rounded-lg bg-base-200 shadow-md transition-all hover:shadow-xl flex flex-row space-x-2"
+            class="overflow-hidden rounded-lg bg-base-200 shadow-md transition-all hover:shadow-xl"
           >
             <img
               alt="saas img"
               class="overflow-hidden rounded-ss-lg"
-              :src="lightThemeImage"
-            />
-            <img
-              alt="saas img"
-              class="overflow-hidden rounded-ss-lg"
-              :src="darkThemeImage"
+              :src="themesImage"
             />
           </div>
         </div>
