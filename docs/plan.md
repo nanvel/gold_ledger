@@ -5,7 +5,7 @@ Next:
   - [x] remove files in the s3 bucket!
   - [x] remove dev from pulumi
 - [x] fix transaction error
-- [ ] retailers and suppliers pages
+- [x] retailers and suppliers pages
   - [x] db (connection, invite)
   - [x] invites repo 
   - [x] link view
@@ -25,15 +25,23 @@ Next:
   - [x] refactor recents
     - [x] load all initially 
   - [x] "Add suppliers/retailers at ..."
-- [ ] download products/payments/activities csv
+- [x] download products/payments/activities csv
+- [ ] record who accepted the invite
 - [ ] do not allow payment if there is no products yet
-- [ ] connect to retailer/supplier, retailer/supplier list
-- [ ] description in index.html
+- [ ] refactor suppliers/retailer loading, try to use v-show instead
 - [ ] landing page
-  - [ ] how to use the software
+  - [x] how to use the software
+  - [ ] https://daisyui.lemonsqueezy.com/checkout
+  - [ ] description in index.html
+  - [ ] Terms of use
 - [ ] recaptcha on registration
 - [ ] note for product
 - [ ] remove rate when fine is selected
+- [ ] guide around the app
+- [ ] default value for due date - 1 week
+- [ ] support email?
+  - [ ] https://www.spaceship.com/business-email/
+- [ ] image when sharing in index.html
 
 Security:
 - [ ] change secret, change db password, backup secrets
@@ -73,6 +81,10 @@ Refactor:
 - [ ] tablist component
 
 Other:
+- [ ] apps
+  - [ ] progressive web app
+  - [ ] ios
+  - [ ] android
 - [ ] docs.goldledger.in?
 - [ ] logo on login page
 - [ ] record IPs for activities

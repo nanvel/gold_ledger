@@ -49,7 +49,7 @@ const tableRows = (product) => {
     ["Date", product.date],
     ["Weight", `${product.weight}g`],
     ["Quality", `${product.quality}%`],
-    ["Rate", `${product.quality}₹/g`],
+    ["Rate", `${product.rate}₹/g`],
   ];
   if (isSupplier) {
     res.push(["Retailer", `${product.retailer.id} : ${product.retailer.name}`]);
